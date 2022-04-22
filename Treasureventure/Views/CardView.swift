@@ -30,7 +30,7 @@ struct CardView: View {
                         .frame(maxWidth: 120, alignment: .leading)
                 }
                 Spacer()
-                VStack(alignment: .leading, spacing: 10){
+                VStack(alignment: .center, spacing: 10){
                     Text(location.name)
                         .font(.title2)
                     Text(location.address)
