@@ -9,16 +9,47 @@
 /* Begin PBXBuildFile section */
 		8B8C18CF280FA8C500D94AF5 /* TreasureventureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C18CE280FA8C500D94AF5 /* TreasureventureApp.swift */; };
 		8B8C18D1280FA8C500D94AF5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C18D0280FA8C500D94AF5 /* ContentView.swift */; };
-		8B8C18D3280FA8C700D94AF5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B8C18D2280FA8C700D94AF5 /* Assets.xcassets */; };
 		8B8C18D6280FA8C700D94AF5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B8C18D5280FA8C700D94AF5 /* Preview Assets.xcassets */; };
+		8B8C19122810882200D94AF5 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C19112810882200D94AF5 /* Location.swift */; };
+		8B8C191628108FF700D94AF5 /* LocationsDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C191528108FF700D94AF5 /* LocationsDataService.swift */; };
+		8B8C19182810957500D94AF5 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C19172810957500D94AF5 /* LocationsViewModel.swift */; };
+		8B8C191A28109BF000D94AF5 /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C191928109BF000D94AF5 /* LocationsView.swift */; };
+		8B8C191F28109DAC00D94AF5 /* LocationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C191B28109DAC00D94AF5 /* LocationDetailView.swift */; };
+		8B8C192028109DAC00D94AF5 /* LocationMapAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C191C28109DAC00D94AF5 /* LocationMapAnnotationView.swift */; };
+		8B8C192128109DAC00D94AF5 /* LocationPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C191D28109DAC00D94AF5 /* LocationPreviewView.swift */; };
+		8B8C192228109DAC00D94AF5 /* LocationsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C191E28109DAC00D94AF5 /* LocationsListView.swift */; };
+		8BCF20A2281200F1008DD809 /* CaptureImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF20A1281200F1008DD809 /* CaptureImageView.swift */; };
+		8BCF20A428120304008DD809 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF20A328120304008DD809 /* Coordinator.swift */; };
+		8BCF20A828122A19008DD809 /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF20A728122A19008DD809 /* SuccessView.swift */; };
+		8BF68ADF2810D675006C1AED /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF68ADE2810D675006C1AED /* CardView.swift */; };
+		8BF68AE12810E5D8006C1AED /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF68AE02810E5D8006C1AED /* RatingView.swift */; };
+		8BF68AE42810FBD9006C1AED /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF68AE32810FBD9006C1AED /* StartView.swift */; };
+		8BF68AE628110A3B006C1AED /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF68AE528110A3B006C1AED /* SliderView.swift */; };
+		8BF68AE82811A6EA006C1AED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BF68AE72811A6EA006C1AED /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8B8C18CB280FA8C500D94AF5 /* Treasureventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Treasureventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B8C18CE280FA8C500D94AF5 /* TreasureventureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureventureApp.swift; sourceTree = "<group>"; };
 		8B8C18D0280FA8C500D94AF5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		8B8C18D2280FA8C700D94AF5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B8C18D5280FA8C700D94AF5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8B8C19112810882200D94AF5 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		8B8C191528108FF700D94AF5 /* LocationsDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsDataService.swift; sourceTree = "<group>"; };
+		8B8C19172810957500D94AF5 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
+		8B8C191928109BF000D94AF5 /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
+		8B8C191B28109DAC00D94AF5 /* LocationDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationDetailView.swift; sourceTree = "<group>"; };
+		8B8C191C28109DAC00D94AF5 /* LocationMapAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationMapAnnotationView.swift; sourceTree = "<group>"; };
+		8B8C191D28109DAC00D94AF5 /* LocationPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPreviewView.swift; sourceTree = "<group>"; };
+		8B8C191E28109DAC00D94AF5 /* LocationsListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationsListView.swift; sourceTree = "<group>"; };
+		8BCF20A1281200F1008DD809 /* CaptureImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureImageView.swift; sourceTree = "<group>"; };
+		8BCF20A328120304008DD809 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		8BCF20A728122A19008DD809 /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
+		8BF68ADE2810D675006C1AED /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		8BF68AE02810E5D8006C1AED /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		8BF68AE22810F9E4006C1AED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8BF68AE32810FBD9006C1AED /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		8BF68AE528110A3B006C1AED /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
+		8BF68AE72811A6EA006C1AED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,9 +82,14 @@
 		8B8C18CD280FA8C500D94AF5 /* Treasureventure */ = {
 			isa = PBXGroup;
 			children = (
+				8BF68AE22810F9E4006C1AED /* Info.plist */,
 				8B8C18CE280FA8C500D94AF5 /* TreasureventureApp.swift */,
 				8B8C18D0280FA8C500D94AF5 /* ContentView.swift */,
-				8B8C18D2280FA8C700D94AF5 /* Assets.xcassets */,
+				8B8C1910281087DC00D94AF5 /* DataServices */,
+				8B8C190F281087D400D94AF5 /* Views */,
+				8B8C190E281087CB00D94AF5 /* ViewModels */,
+				8B8C190D281087BE00D94AF5 /* Models */,
+				8BF68AE72811A6EA006C1AED /* Assets.xcassets */,
 				8B8C18D4280FA8C700D94AF5 /* Preview Content */,
 			);
 			path = Treasureventure;
@@ -65,6 +101,49 @@
 				8B8C18D5280FA8C700D94AF5 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		8B8C190D281087BE00D94AF5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8B8C19112810882200D94AF5 /* Location.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8B8C190E281087CB00D94AF5 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8BCF20A1281200F1008DD809 /* CaptureImageView.swift */,
+				8B8C19172810957500D94AF5 /* LocationsViewModel.swift */,
+				8BCF20A328120304008DD809 /* Coordinator.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		8B8C190F281087D400D94AF5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8B8C191B28109DAC00D94AF5 /* LocationDetailView.swift */,
+				8B8C191C28109DAC00D94AF5 /* LocationMapAnnotationView.swift */,
+				8B8C191D28109DAC00D94AF5 /* LocationPreviewView.swift */,
+				8B8C191E28109DAC00D94AF5 /* LocationsListView.swift */,
+				8B8C191928109BF000D94AF5 /* LocationsView.swift */,
+				8BF68ADE2810D675006C1AED /* CardView.swift */,
+				8BF68AE02810E5D8006C1AED /* RatingView.swift */,
+				8BF68AE32810FBD9006C1AED /* StartView.swift */,
+				8BF68AE528110A3B006C1AED /* SliderView.swift */,
+				8BCF20A728122A19008DD809 /* SuccessView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		8B8C1910281087DC00D94AF5 /* DataServices */ = {
+			isa = PBXGroup;
+			children = (
+				8B8C191528108FF700D94AF5 /* LocationsDataService.swift */,
+			);
+			path = DataServices;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,8 +204,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BF68AE82811A6EA006C1AED /* Assets.xcassets in Resources */,
 				8B8C18D6280FA8C700D94AF5 /* Preview Assets.xcassets in Resources */,
-				8B8C18D3280FA8C700D94AF5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +216,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B8C191628108FF700D94AF5 /* LocationsDataService.swift in Sources */,
 				8B8C18D1280FA8C500D94AF5 /* ContentView.swift in Sources */,
+				8BCF20A828122A19008DD809 /* SuccessView.swift in Sources */,
+				8BCF20A2281200F1008DD809 /* CaptureImageView.swift in Sources */,
+				8B8C19122810882200D94AF5 /* Location.swift in Sources */,
+				8BF68AE12810E5D8006C1AED /* RatingView.swift in Sources */,
+				8B8C191F28109DAC00D94AF5 /* LocationDetailView.swift in Sources */,
+				8BF68AE42810FBD9006C1AED /* StartView.swift in Sources */,
+				8B8C192128109DAC00D94AF5 /* LocationPreviewView.swift in Sources */,
+				8B8C192228109DAC00D94AF5 /* LocationsListView.swift in Sources */,
+				8BCF20A428120304008DD809 /* Coordinator.swift in Sources */,
+				8B8C191A28109BF000D94AF5 /* LocationsView.swift in Sources */,
 				8B8C18CF280FA8C500D94AF5 /* TreasureventureApp.swift in Sources */,
+				8B8C19182810957500D94AF5 /* LocationsViewModel.swift in Sources */,
+				8BF68ADF2810D675006C1AED /* CardView.swift in Sources */,
+				8B8C192028109DAC00D94AF5 /* LocationMapAnnotationView.swift in Sources */,
+				8BF68AE628110A3B006C1AED /* SliderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,15 +358,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Treasureventure/Preview Content\"";
 				DEVELOPMENT_TEAM = Q3XNR6NH4H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Treasureventure/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Treasureventure;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow access to your camera to take a picture of the item you found";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow access to your photo library to verify the item you found";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -280,8 +379,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sjcorporation.Treasureventure;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jerishbovas.treasurehunt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -293,15 +393,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Treasureventure/Preview Content\"";
 				DEVELOPMENT_TEAM = Q3XNR6NH4H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Treasureventure/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Treasureventure;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow access to your camera to take a picture of the item you found";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Please allow access to your photo library to verify the item you found";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -309,8 +414,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sjcorporation.Treasureventure;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jerishbovas.treasurehunt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
