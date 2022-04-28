@@ -12,6 +12,7 @@ struct LocationsView: View {
     
     @EnvironmentObject private var vm: LocationsViewModel
     @Environment(\.presentationMode) var presentation
+    @State private var showShare: Bool = false
     let maxWidthForIpad: CGFloat = 700
     
     var body: some View {
@@ -25,6 +26,11 @@ struct LocationsView: View {
                 Spacer()
                 
                 locationsPreviewStack
+            }
+            if(showShare){
+                SheetView(sheetMode: .constant(.half)) {
+                    ShareSheet(activityItems: actionSheet())
+                }
             }
         }
         .sheet(item: $vm.sheetLocation, onDismiss: nil) { location in
@@ -45,7 +51,7 @@ struct LocationsView: View {
                ToolbarItem (placement: .automatic)  {
                    Menu{
                        Button {
-                           actionSheet()
+                           self.showShare = true
                        } label: {
                            Label("Share Location", systemImage: "square.and.arrow.up")
                        }
@@ -131,11 +137,10 @@ extension LocationsView {
             }
         }
     }
-    private func actionSheet() {
+    private func actionSheet()-> [String]{
         let loc = vm.mapLocation
-        guard let urlApple = URL(string: "http://maps.apple.com/?ll=\(loc.coordinates.latitude),\(loc.coordinates.longitude)") else {return}
+        let urlApple = "http://maps.apple.com/?ll=\(loc.coordinates.latitude),\(loc.coordinates.longitude)"
         let task = "Place name: \(loc.name)\nItem to find: \(loc.item)\nDifficulty: \(loc.difficulty.rawValue)"
-        let activityVC = UIActivityViewController(activityItems: [task,urlApple], applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+        return [urlApple, task]
     }
 }

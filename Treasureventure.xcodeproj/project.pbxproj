@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B3983D428184D3000F381FE /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983D328184D3000F381FE /* MainView.swift */; };
+		8B3983D82819AD2300F381FE /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983D72819AD2300F381FE /* ShareSheet.swift */; };
+		8B3983DA2819D1C200F381FE /* SheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983D92819D1C200F381FE /* SheetView.swift */; };
+		8B3983DC281AB52800F381FE /* FirstBootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983DB281AB52800F381FE /* FirstBootView.swift */; };
+		8B3983DE281AE71A00F381FE /* BasicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983DD281AE71A00F381FE /* BasicViewModel.swift */; };
 		8B8C18CF280FA8C500D94AF5 /* TreasureventureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C18CE280FA8C500D94AF5 /* TreasureventureApp.swift */; };
 		8B8C18D1280FA8C500D94AF5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C18D0280FA8C500D94AF5 /* ContentView.swift */; };
 		8B8C18D6280FA8C700D94AF5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B8C18D5280FA8C700D94AF5 /* Preview Assets.xcassets */; };
@@ -29,6 +34,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B3983D328184D3000F381FE /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		8B3983D72819AD2300F381FE /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		8B3983D92819D1C200F381FE /* SheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetView.swift; sourceTree = "<group>"; };
+		8B3983DB281AB52800F381FE /* FirstBootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstBootView.swift; sourceTree = "<group>"; };
+		8B3983DD281AE71A00F381FE /* BasicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicViewModel.swift; sourceTree = "<group>"; };
 		8B8C18CB280FA8C500D94AF5 /* Treasureventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Treasureventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B8C18CE280FA8C500D94AF5 /* TreasureventureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureventureApp.swift; sourceTree = "<group>"; };
 		8B8C18D0280FA8C500D94AF5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -63,6 +73,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B3983D228184BD900F381FE /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				8BF68AE528110A3B006C1AED /* SliderView.swift */,
+				8BF68ADE2810D675006C1AED /* CardView.swift */,
+				8BF68AE02810E5D8006C1AED /* RatingView.swift */,
+				8B8C191B28109DAC00D94AF5 /* LocationDetailView.swift */,
+				8B8C191C28109DAC00D94AF5 /* LocationMapAnnotationView.swift */,
+				8B8C191D28109DAC00D94AF5 /* LocationPreviewView.swift */,
+				8B8C191E28109DAC00D94AF5 /* LocationsListView.swift */,
+				8B3983D92819D1C200F381FE /* SheetView.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		8B8C18C2280FA8C500D94AF5 = {
 			isa = PBXGroup;
 			children = (
@@ -84,7 +109,6 @@
 			children = (
 				8BF68AE22810F9E4006C1AED /* Info.plist */,
 				8B8C18CE280FA8C500D94AF5 /* TreasureventureApp.swift */,
-				8B8C18D0280FA8C500D94AF5 /* ContentView.swift */,
 				8B8C1910281087DC00D94AF5 /* DataServices */,
 				8B8C190F281087D400D94AF5 /* Views */,
 				8B8C190E281087CB00D94AF5 /* ViewModels */,
@@ -117,6 +141,8 @@
 				8BCF20A1281200F1008DD809 /* CaptureImageView.swift */,
 				8B8C19172810957500D94AF5 /* LocationsViewModel.swift */,
 				8BCF20A328120304008DD809 /* Coordinator.swift */,
+				8B3983D72819AD2300F381FE /* ShareSheet.swift */,
+				8B3983DD281AE71A00F381FE /* BasicViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -124,16 +150,13 @@
 		8B8C190F281087D400D94AF5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8B8C191B28109DAC00D94AF5 /* LocationDetailView.swift */,
-				8B8C191C28109DAC00D94AF5 /* LocationMapAnnotationView.swift */,
-				8B8C191D28109DAC00D94AF5 /* LocationPreviewView.swift */,
-				8B8C191E28109DAC00D94AF5 /* LocationsListView.swift */,
+				8B3983D228184BD900F381FE /* SubViews */,
+				8B8C18D0280FA8C500D94AF5 /* ContentView.swift */,
 				8B8C191928109BF000D94AF5 /* LocationsView.swift */,
-				8BF68ADE2810D675006C1AED /* CardView.swift */,
-				8BF68AE02810E5D8006C1AED /* RatingView.swift */,
 				8BF68AE32810FBD9006C1AED /* StartView.swift */,
-				8BF68AE528110A3B006C1AED /* SliderView.swift */,
 				8BCF20A728122A19008DD809 /* SuccessView.swift */,
+				8B3983D328184D3000F381FE /* MainView.swift */,
+				8B3983DB281AB52800F381FE /* FirstBootView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -216,8 +239,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B3983DC281AB52800F381FE /* FirstBootView.swift in Sources */,
 				8B8C191628108FF700D94AF5 /* LocationsDataService.swift in Sources */,
+				8B3983D428184D3000F381FE /* MainView.swift in Sources */,
+				8B3983DA2819D1C200F381FE /* SheetView.swift in Sources */,
 				8B8C18D1280FA8C500D94AF5 /* ContentView.swift in Sources */,
+				8B3983DE281AE71A00F381FE /* BasicViewModel.swift in Sources */,
 				8BCF20A828122A19008DD809 /* SuccessView.swift in Sources */,
 				8BCF20A2281200F1008DD809 /* CaptureImageView.swift in Sources */,
 				8B8C19122810882200D94AF5 /* Location.swift in Sources */,
@@ -231,6 +258,7 @@
 				8B8C18CF280FA8C500D94AF5 /* TreasureventureApp.swift in Sources */,
 				8B8C19182810957500D94AF5 /* LocationsViewModel.swift in Sources */,
 				8BF68ADF2810D675006C1AED /* CardView.swift in Sources */,
+				8B3983D82819AD2300F381FE /* ShareSheet.swift in Sources */,
 				8B8C192028109DAC00D94AF5 /* LocationMapAnnotationView.swift in Sources */,
 				8BF68AE628110A3B006C1AED /* SliderView.swift in Sources */,
 			);

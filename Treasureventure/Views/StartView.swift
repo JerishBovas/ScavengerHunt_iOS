@@ -12,29 +12,31 @@ struct StartView: View {
     let location: Location
     @State var image: Image? = nil
     @State var showCaptureImageView: Bool = false
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State var showingAlert: Bool = true
     
     var body: some View {
         ZStack{
             VStack {
-                if(image == nil){
-                    LocationDetailView(location: location)
-                    Text("Click \'view on map\' button and then go to that location. Once you found the object, click \'open camera\'button, take a picture and submit")
-                    viewMapButton
-                    openCameraButton
-                }
+                LocationDetailView(location: location)
+                Text("Click \'view on map\' button and then go to that location. Once you found the object, click \'open camera\'button, take a picture and submit")
+                viewMapButton
+                openCameraButton
             }
-            VStack(alignment: .center, spacing: 40) {
+            VStack {
                 if(image != nil){
-                    image?.resizable()
-                      .frame(width: 250, height: 250)
-                      .clipShape(Circle())
-                      .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                      .shadow(radius: 10)
-                    Text("Is this the correct item?")
-                        .frame(alignment: .center)
-                        .font(.headline)
-                    confirmation
+                    VStack(alignment: .center, spacing: 40) {
+                        image?.resizable()
+                          .frame(width: 250, height: 250)
+                          .clipShape(Circle())
+                          .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                          .shadow(radius: 10)
+                        Text("Is this the correct item?")
+                            .frame(alignment: .center)
+                            .font(.headline)
+                        confirmation
+                    }
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                    .background(.ultraThinMaterial)
                 }
             }
         }
@@ -106,20 +108,6 @@ extension StartView {
             .buttonStyle(.borderless)
             .cornerRadius(10)
             .padding(20)
-//            Button {
-//                image = nil
-//            } label: {
-//                HStack{
-//                    Image(systemName: "checkmark")
-//                        .font(.title)
-//                        .foregroundColor(.white)
-//                }
-//                .frame(width: 135, height: 50)
-//                .background(.green)
-//            }
-//            .buttonStyle(.borderless)
-//            .cornerRadius(10)
-//            .padding(20)
         }
     }
 }

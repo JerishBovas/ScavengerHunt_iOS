@@ -8,10 +8,17 @@
 	</array>
 	<key>UILaunchScreen</key>
 	<dict>
-		<key>UIImageName</key>
-		<string>treasure</string>
-		<key>UILaunchScreen</key>
+		<key>UINavigationBar</key>
+		<dict>
+			<key>UIImageName</key>
+			<string></string>
+		</dict>
+		<key>UIToolbar</key>
 		<dict/>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
+		<key>UIImageName</key>
+		<string>chest</string>
 	</dict>
 </dict>
 </plist>

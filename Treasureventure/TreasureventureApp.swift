@@ -13,7 +13,7 @@ struct TreasureventureApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
                 .environmentObject(vm)
         }
     }
