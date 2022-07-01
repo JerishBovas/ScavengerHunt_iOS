@@ -32,7 +32,7 @@ class ApiService{
         var request = URLRequest(url: URL(string: endpoint.description)!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONEncoder().encode(body)
+        request.httpBody = try JSONEncoder().encode(body)
         
         return try await fetchApi(request: request)
     }
@@ -42,7 +42,7 @@ class ApiService{
         request.httpMethod = "POST"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONEncoder().encode(body)
+        request.httpBody = try JSONEncoder().encode(body)
         
         return try await fetchApi(request: request)
     }
@@ -52,7 +52,7 @@ class ApiService{
         request.httpMethod = "PUT"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONEncoder().encode(body)
+        request.httpBody = try JSONEncoder().encode(body)
         
         return try await fetchApi(request: request)
     }

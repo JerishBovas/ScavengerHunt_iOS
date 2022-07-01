@@ -249,7 +249,7 @@
 			dependencies = (
 			);
 			name = ScavengerHunt;
-			productName = Treasureventure;
+			productName = ScavengerHunt;
 			productReference = 8B8C18CB280FA8C500D94AF5 /* ScavengerHunt.app */;
 			productType = "com.apple.product-type.application";
 		};
