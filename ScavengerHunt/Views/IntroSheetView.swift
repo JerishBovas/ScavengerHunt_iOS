@@ -9,7 +9,7 @@ import SwiftUI
 
 struct IntroSheetView: View {
     
-    private var basicviewmodel = BasicViewModel()
+    private var lib = FunctionsLibrary()
     
     var body: some View {
         VStack(alignment: .center, spacing: 50) {
@@ -26,7 +26,7 @@ struct IntroSheetView: View {
             Spacer()
             VStack {
                 Button {
-                    basicviewmodel.setFirstTime(false)
+                    lib.setFirstTime(false)
                 } label: {
                     HStack{
                             Spacer()
@@ -94,10 +94,10 @@ extension IntroSheetView {
                     .foregroundColor(.accentColor)
                     .frame(width: 40, alignment: .center)
                 VStack(alignment: .leading) {
-                    Text("Location based quests")
+                    Text("Game based quests")
                         .font(.headline)
                         .foregroundColor(.primary)
-                    Text("Game uses your current location to provide you the quests nearby")
+                    Text("Game uses your current game to provide you the quests nearby")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)

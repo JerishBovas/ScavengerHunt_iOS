@@ -9,23 +9,23 @@ import SwiftUI
 import UIKit
 
 struct StartView: View {
-    let location: Location
-    @State var image: Image? = nil
+    let game: Game
+    @State var image: UIImage? = nil
     @State var showCaptureImageView: Bool = false
     @State var showingAlert: Bool = true
     
     var body: some View {
         ZStack{
             VStack {
-                ListView(location: location)
-                Text("Click \'view on map\' button and then go to that location. Once you found the object, click \'open camera\'button, take a picture and submit")
+                ListView(game: game)
+                Text("Click \'view on map\' button and then go to that game. Once you found the object, click \'open camera\'button, take a picture and submit")
                 viewMapButton
                 openCameraButton
             }
             VStack {
                 if(image != nil){
                     VStack(alignment: .center, spacing: 40) {
-                        image?.resizable()
+                        Image(uiImage: image!).resizable()
                           .frame(width: 250, height: 250)
                           .clipShape(Circle())
                           .overlay(Circle().stroke(Color.white, lineWidth: 4))
@@ -41,21 +41,21 @@ struct StartView: View {
             }
         }
         .sheet(isPresented: $showCaptureImageView) {
-            CaptureImageView(isShown: $showCaptureImageView, image: $image)
+            CaptureImageView(isShown: $showCaptureImageView, image: $image, sourceType: .constant(.camera))
         }
     }
 }
 
 struct StartView_Previews: PreviewProvider {
     static var previews: some View {
-        StartView(location: LocationsDataService.location)
+        StartView(game: GamesDataService.game)
     }
 }
 
 extension StartView {
     private var viewMapButton : some View {
         Button {
-            let url = URL(string: "maps://?saddr=&daddr=\(location.coordinate.latitude),\(location.coordinate.longitude)")
+            let url = URL(string: "maps://?saddr=&daddr=\(game.coordinate.latitude),\(game.coordinate.longitude)")
             if UIApplication.shared.canOpenURL(url!) {
                   UIApplication.shared.open(url!, options: [:], completionHandler: nil)
             }
@@ -96,7 +96,7 @@ extension StartView {
             .cornerRadius(10)
             .padding(20)
             
-            NavigationLink(destination: SuccessView(image: self.image!, location: location)) {
+            NavigationLink(destination: SuccessView(image: self.image!, game: game)) {
                 HStack{
                     Image(systemName: "checkmark")
                         .font(.title)

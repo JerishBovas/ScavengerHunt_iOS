@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct ScavengerHuntApp: App {
-    @StateObject private var locVM = LocationsViewModel()
+    @StateObject private var locVM = GameViewModel()
     @StateObject private var authVM = AuthViewModel()
     
     var body: some Scene {

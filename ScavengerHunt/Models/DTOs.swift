@@ -12,7 +12,7 @@ struct LoginRequest: Encodable{
     var password: String
 }
 
-struct TokenObject: Decodable, Encodable{
+struct TokenObject: Codable{
     var accessToken: String
     var refreshToken: String
 }
@@ -21,4 +21,17 @@ struct ErrorObject: Decodable, Error{
     var title: String
     var status: Int
     var errors: Set<String>
+}
+
+struct ImageRequest{
+    var imageFile: Data
+    var fileName: String
+}
+
+struct ImageResponse: Decodable{
+    var imagePath: String
+}
+
+struct ImageObject: Decodable{
+    var image: Data
 }

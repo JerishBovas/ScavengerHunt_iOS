@@ -9,15 +9,15 @@ import SwiftUI
 
 struct SuccessView: View {
     
-    let image: Image
-    let location: Location
+    let image: UIImage
+    let game: Game
     
     var body: some View {
         VStack(spacing: 20.0) {
             Spacer()
             Text("Congratulations, You won the game!")
                 .font(.title2)
-            image.resizable()
+            Image(uiImage: image).resizable()
               .frame(width: 250, height: 250)
               .shadow(radius: 10)
               .cornerRadius(20)
@@ -32,7 +32,7 @@ struct SuccessView: View {
             })
             .buttonStyle(.bordered)
             Spacer()
-            NavigationLink(destination: LocationsView()) {
+            NavigationLink(destination: GamesView()) {
                 HStack{
                     Text("Back to Home")
                     Image(systemName: "house.fill")
@@ -50,7 +50,7 @@ struct SuccessView: View {
 
 struct SuccessView_Previews: PreviewProvider {
     static var previews: some View {
-        SuccessView(image: Image("goldenkey"), location: LocationsDataService.location)
+        SuccessView(image: UIImage(named: "goldenkey")!, game: GamesDataService.game)
     }
 }
 
@@ -58,7 +58,7 @@ extension SuccessView {
     private func shareVictory() {
         let heading = "Congratulations from ScavengerHunt"
         let friend = "Your friend has successfully finished this level"
-        let task = "Place name: \(location.name)\nDifficulty: \(location.difficulty)"
+        let task = "Place name: \(game.name)\nDifficulty: \(game.difficulty)"
         let activityVC = UIActivityViewController(activityItems: [heading,friend,task], applicationActivities: nil)
         let scenes = UIApplication.shared.connectedScenes
         let windowScene = scenes.first as? UIWindowScene

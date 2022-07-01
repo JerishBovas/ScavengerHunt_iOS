@@ -6,23 +6,27 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ListView: View {
-    @State var location: Location
+    @State var game: Game
     
     var body: some View {
-        NavigationLink(destination: LocationsView()){
+        NavigationLink(destination: GamesView()){
             HStack(alignment: .top, spacing: 15){
-                Image(location.imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 60, height: 60)
-                    .clipShape(Circle())
+                AsyncImage(url: URL(string: game.imageName)) { image in
+                    image.resizable()
+                        .aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
                 VStack(alignment: .leading){
-                    Text(location.name)
+                    Text(game.name)
                         .foregroundColor(.primary)
                         .font(.headline)
-                    Text(location.address)
+                    Text(game.address)
                         .foregroundColor(.secondary)
                         .font(.subheadline)
                 }
@@ -33,6 +37,6 @@ struct ListView: View {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(location: LocationsDataService.location)
+        ListView(game: GamesDataService.game)
     }
 }

@@ -16,26 +16,25 @@ struct NavBarView: View {
         TabView(selection: $tabSelection) {
             HomeView(tabSelection: $tabSelection)
                 .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
+                    Label("Home", systemImage: "house.fill")
+                }
+                .sheet(isPresented: $isFirstTime) {
+                    IntroSheetView()
                 }
                 .tag(1)
-            LocationsView()
+            GamesView()
                 .tabItem {
-                    Image(systemName: "map")
-                    Text("Locations")
+                    Label("Games", systemImage: "gamecontroller.fill")
                 }
                 .tag(2)
             GroupsView()
                 .tabItem {
-                    Image(systemName: "person.2")
-                    Text("Groups")
+                    Label("Teams", systemImage: "person.2")
                 }
                 .tag(3)
             SettingsView()
                 .tabItem {
-                    Image(systemName: "gear")
-                    Text("Settings")
+                    Label("Settings", systemImage: "gear")
                 }
                 .tag(4)
         }
@@ -46,8 +45,8 @@ struct NavBarView: View {
                 }
             }
         }
-        .sheet(isPresented: $isFirstTime) {
-            IntroSheetView()
+        .sheet(isPresented: $authVM.showLogin) {
+            LoginSheetView()
         }
     }
 }

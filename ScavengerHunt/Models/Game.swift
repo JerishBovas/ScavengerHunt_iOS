@@ -1,5 +1,5 @@
 //
-//  Location.swift
+//  Game.swift
 //  ScavengerHunt
 //
 //  Created by Jerish Bovas on 2022-04-20.
@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-struct Location : Identifiable, Equatable, Codable {
+struct Game : Identifiable, Equatable, Codable {
     
     var id: String
     var isPrivate: Bool
@@ -19,13 +19,13 @@ struct Location : Identifiable, Equatable, Codable {
     var coordinate: Coordinate
     var imageName: String
     var difficulty: Int
-    var ratings: Set<Int>
+    var ratings: Int
     var tags: Set<String>
     var createdDate: String
     var lastUpdated: String
     
     //Equatable
-    static func == (lhs: Location, rhs: Location) -> Bool {
+    static func == (lhs: Game, rhs: Game) -> Bool {
         lhs.id == rhs.id
     }
 }

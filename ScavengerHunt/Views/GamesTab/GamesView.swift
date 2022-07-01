@@ -1,5 +1,5 @@
 //
-//  ListLocationsView.swift
+//  ListGamesView.swift
 //  ScavengerHunt
 //
 //  Created by Jerish Bovas on 2022-04-19.
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct LocationsView: View {
+struct GamesView: View {
     
-    @EnvironmentObject private var vm: LocationsViewModel
+    @EnvironmentObject private var vm: GameViewModel
     @EnvironmentObject private var authVM: AuthViewModel
     @State private var showingAbout = false
     @State private var searchText = ""
@@ -38,11 +38,11 @@ struct LocationsView: View {
                     .padding(EdgeInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 16)))
                     Divider()
                     VStack(alignment: .leading){
-                        if(!filteredLocations.isEmpty){
-                            ForEach(filteredLocations, id: \.self.id) { location in
-                                ListView(location: location)
+                        if(!filteredGames.isEmpty){
+                            ForEach(filteredGames, id: \.self.id) { game in
+                                ListView(game: game)
                                     .padding(.leading, 16)
-                                    .animation(.default, value: filteredLocations)
+                                    .animation(.default, value: filteredGames)
                                 Divider()
                                     .padding(.leading, 91)
                             }
@@ -61,14 +61,14 @@ struct LocationsView: View {
                     }
                     .onAppear{
                         Task{
-                            if(authVM.user != nil && vm.locations.isEmpty){
-                                await vm.getLocations()
+                            if(authVM.user != nil && vm.games.isEmpty){
+                                await vm.getGames()
                             }
                         }
                     }
                 }
             }
-            .navigationTitle("Locations")
+            .navigationTitle("Games")
             .searchable(text: $searchText, prompt: "Search")
             .toolbar(content: {
                 ToolbarItem (placement: .navigation)  {
@@ -86,21 +86,21 @@ struct LocationsView: View {
     }
 }
 
-struct LocationsView_Previews: PreviewProvider {
+struct GamesView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationsView()
-            .environmentObject(LocationsViewModel())
+        GamesView()
+            .environmentObject(GameViewModel())
             .environmentObject(AuthViewModel())
     }
 }
 
-extension LocationsView {
-    var filteredLocations: [Location] {
+extension GamesView {
+    var filteredGames: [Game] {
         if searchText.isEmpty {
-            return vm.locations
+            return vm.games
         }
         else {
-            return vm.locations.filter {
+            return vm.games.filter {
               $0.name
                 .localizedCaseInsensitiveContains(searchText)
             }

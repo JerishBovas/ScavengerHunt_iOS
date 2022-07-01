@@ -1,5 +1,5 @@
 //
-//  LocationsViewModel.swift
+//  GameViewModel.swift
 //  ScavengerHunt
 //
 //  Created by Jerish Bovas on 2022-04-20.
@@ -9,12 +9,13 @@ import Foundation
 import MapKit
 import SwiftUI
 
-class LocationsViewModel: ObservableObject {
+class GameViewModel: ObservableObject {
     
-    @Published var locations = [Location]()
+    @Published var games = [Game]()
     @State var authVM = AuthViewModel()
+    private var api: ApiService = ApiService()
     
-    func getLocations() async{
+    func getGames() async{
         do{
             let defaults = UserDefaults.standard
             if(await !authVM.refreshToken()){
@@ -25,11 +26,14 @@ class LocationsViewModel: ObservableObject {
                 return
             }
             
-            let locs = try await ApiService().getLocations(accessToken: accessToken)
-            print("Locations fetched")
+            let games: [Game] = try await api.get(accessToken: accessToken, endpoint: .game)
+            print("Games fetched")
             DispatchQueue.main.async {
-                self.locations = locs
+                self.games = games
             }
+        }
+        catch NetworkError.custom(let error){
+            print("Request failed with error: \(error)")
         }
         catch{
             print("Request failed with error: \(error.localizedDescription)")

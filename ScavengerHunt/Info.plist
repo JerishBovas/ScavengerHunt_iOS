@@ -9,16 +9,7 @@
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>
-		<string>chest</string>
-		<key>UIImageRespectsSafeAreaInsets</key>
-		<true/>
-		<key>UINavigationBar</key>
-		<dict>
-			<key>UIImageName</key>
-			<string></string>
-		</dict>
-		<key>UIToolbar</key>
-		<dict/>
+		<string>AppIcon</string>
 	</dict>
 	<key>UIStatusBarStyle</key>
 	<string></string>
