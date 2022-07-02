@@ -9,14 +9,16 @@ import SwiftUI
 
 @main
 struct ScavengerHuntApp: App {
-    @StateObject private var locVM = GameViewModel()
+    @StateObject private var gameVM = GameViewModel()
     @StateObject private var authVM = AuthViewModel()
+    @StateObject private var groupVM = GroupViewModel()
     
     var body: some Scene {
         WindowGroup {
             NavBarView()
-                .environmentObject(locVM)
+                .environmentObject(gameVM)
                 .environmentObject(authVM)
+                .environmentObject(groupVM)
         }
     }
 }
