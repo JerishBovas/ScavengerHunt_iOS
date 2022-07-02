@@ -28,31 +28,31 @@ class ApiService{
         return try await fetchApi(request: request)
     }
     
-    func post<T: Decodable>(body: Encodable, endpoint: APIEndpoint) async throws -> T{
+    func post<T: Decodable>(body: Data, endpoint: APIEndpoint) async throws -> T{
         var request = URLRequest(url: URL(string: endpoint.description)!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONEncoder().encode(body)
+        request.httpBody = body
         
         return try await fetchApi(request: request)
     }
     
-    func post<T: Decodable>(accessToken: String, body: Encodable, endpoint: APIEndpoint) async throws -> T{
+    func post<T: Decodable>(accessToken: String, body: Data, endpoint: APIEndpoint) async throws -> T{
         var request = URLRequest(url: URL(string: endpoint.description)!)
         request.httpMethod = "POST"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONEncoder().encode(body)
+        request.httpBody = body
         
         return try await fetchApi(request: request)
     }
     
-    func put(accessToken: String, body:Encodable, endpoint: APIEndpoint) async throws{
+    func put(accessToken: String, body: Data, endpoint: APIEndpoint) async throws{
         var request = URLRequest(url: URL(string: endpoint.description)!)
         request.httpMethod = "PUT"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONEncoder().encode(body)
+        request.httpBody = body
         
         return try await fetchApi(request: request)
     }

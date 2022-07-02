@@ -14,6 +14,7 @@ struct GamesView: View {
     @State private var showingAbout = false
     @State private var searchText = ""
     @State private var selectedSort: Sort = .relevance
+    @State private var isFetchingGames: Bool = false
     
     var body: some View {
         NavigationView {
@@ -38,32 +39,40 @@ struct GamesView: View {
                     .padding(EdgeInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 16)))
                     Divider()
                     VStack(alignment: .leading){
-                        if(!filteredGames.isEmpty){
-                            ForEach(filteredGames, id: \.self.id) { game in
-                                ListView(game: game)
-                                    .padding(.leading, 16)
-                                    .animation(.default, value: filteredGames)
-                                Divider()
-                                    .padding(.leading, 91)
+                        if(!isFetchingGames){
+                            if(!filteredGames.isEmpty){
+                                ForEach(filteredGames, id: \.self.id) { game in
+                                    ListView(game: game)
+                                        .padding(.leading, 16)
+                                        .animation(.spring(), value: filteredGames)
+                                    Divider()
+                                        .padding(.leading, 91)
+                                }
                             }
-                        }
-                        else{
-                            VStack{
-                                Text("No Match")
-                                    .padding(20)
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity)
-                                Text("Please refine your search")
-                                    .font(.subheadline)
-                                    .frame(maxWidth: .infinity)
+                            else{
+                                VStack{
+                                    Text("No Match")
+                                        .padding(20)
+                                        .font(.headline)
+                                        .frame(maxWidth: .infinity)
+                                    Text("Please refine your search")
+                                        .font(.subheadline)
+                                        .frame(maxWidth: .infinity)
+                                }
+                            }
+                        }else{
+                            HStack(alignment: .center){
+                                ProgressView()
                             }
                         }
                     }
                     .onAppear{
+                        isFetchingGames = true
                         Task{
                             if(authVM.user != nil && vm.games.isEmpty){
                                 await vm.getGames()
                             }
+                            isFetchingGames = false
                         }
                     }
                 }

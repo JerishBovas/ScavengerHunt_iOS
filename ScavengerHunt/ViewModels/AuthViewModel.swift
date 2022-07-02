@@ -20,7 +20,8 @@ class AuthViewModel: ObservableObject{
         
         do{
             let defaults = UserDefaults.standard
-            let body = LoginRequest(email: ema, password: pas)
+            let body = try JSONEncoder().encode(LoginRequest(email: ema, password: pas))
+            
             let tokenObj: TokenObject = try await api.post(body: body, endpoint: .login)
             defaults.set(tokenObj.refreshToken, forKey: "refreshToken")
             defaults.set(tokenObj.accessToken, forKey: "accessToken")
@@ -108,7 +109,8 @@ class AuthViewModel: ObservableObject{
         if(Date.now > expiryToken){
             
             do{
-                let body = TokenObject(accessToken: accessToken, refreshToken: refreshToken)
+                let body = try JSONEncoder().encode(TokenObject(accessToken: accessToken, refreshToken: refreshToken))
+                
                 let tokenObj: TokenObject = try await api.post(body: body, endpoint: .refreshToken)
                 
                 defaults.set(tokenObj.refreshToken, forKey: "refreshToken")
