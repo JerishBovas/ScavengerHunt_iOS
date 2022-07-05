@@ -8,13 +8,13 @@
 import SwiftUI
 import UIKit
 
-struct GroupListView: View {
-    @State var group: Group
+struct TeamListView: View {
+    @State var team: Team
     
     var body: some View {
-        NavigationLink(destination: GroupsView()){
+        NavigationLink(destination: TeamsView()){
             HStack(alignment: .top, spacing: 15){
-                AsyncImage(url: URL(string: group.groupIcon)) { image in
+                AsyncImage(url: URL(string: team.teamIcon)) { image in
                     image.resizable()
                         .aspectRatio(contentMode: .fit)
                 } placeholder: {
@@ -23,10 +23,10 @@ struct GroupListView: View {
                 .frame(width: 60, height: 60)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 VStack(alignment: .leading){
-                    Text(group.title)
+                    Text(team.title)
                         .foregroundColor(.primary)
                         .font(.headline)
-                    Text(group.description)
+                    Text(team.description)
                         .foregroundColor(.secondary)
                         .font(.subheadline)
                 }
@@ -35,8 +35,8 @@ struct GroupListView: View {
     }
 }
 
-struct GroupListView_Previews: PreviewProvider {
+struct TeamListView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupListView(group: GamesDataService.group)
+        TeamListView(team: GamesDataService.team)
     }
 }

@@ -9,13 +9,13 @@ import Foundation
 import MapKit
 import SwiftUI
 
-class GroupViewModel: ObservableObject {
+class TeamViewModel: ObservableObject {
     
-    @Published var groups = [Group]()
+    @Published var teams = [Team]()
     @State var authVM = AuthViewModel()
     private var api: ApiService = ApiService()
     
-    func getGroups() async{
+    func getTeams() async{
         do{
             let defaults = UserDefaults.standard
             if(await !authVM.refreshToken()){
@@ -26,10 +26,10 @@ class GroupViewModel: ObservableObject {
                 return
             }
             
-            let groups: [Group] = try await api.get(accessToken: accessToken, endpoint: .group)
+            let teams: [Team] = try await api.get(accessToken: accessToken, endpoint: .team)
             print("Games fetched")
             DispatchQueue.main.async {
-                self.groups = groups
+                self.teams = teams
             }
         }
         catch NetworkError.custom(let error){

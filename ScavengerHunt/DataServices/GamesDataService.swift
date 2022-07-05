@@ -24,8 +24,8 @@ class GamesDataService {
         lastUpdated: Date.now.description
     )
     
-    static let group: Group = Group(
-        id: "234jo2ro", isOpen: true, title: "Sample", description: "Sample Description", groupIcon: "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449087925704678.jpeg"
+    static let team: Team = Team(
+        id: "234jo2ro", isOpen: true, title: "Sample", description: "Sample Description", teamIcon: "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449087925704678.jpeg"
     )
     
 }

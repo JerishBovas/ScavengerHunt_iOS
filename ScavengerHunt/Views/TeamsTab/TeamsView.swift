@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct GroupsView: View {
+struct TeamsView: View {
     
-    @EnvironmentObject private var vm: GroupViewModel
+    @EnvironmentObject private var vm: TeamViewModel
     @EnvironmentObject private var authVM: AuthViewModel
     @State private var showingAbout = false
     @State private var searchText = ""
     @State private var selectedSort: Sort = .relevance
-    @State private var isFetchingGroups: Bool = false
+    @State private var isFetchingTeams: Bool = false
     
     var body: some View {
         NavigationView {
@@ -39,12 +39,12 @@ struct GroupsView: View {
                     .padding(EdgeInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 16)))
                     Divider()
                     VStack(alignment: .leading){
-                        if(!isFetchingGroups){
-                            if(!filteredGroups.isEmpty){
-                                ForEach(filteredGroups, id: \.self.id) { group in
-                                    GroupListView(group: group)
+                        if(!isFetchingTeams){
+                            if(!filteredTeams.isEmpty){
+                                ForEach(filteredTeams, id: \.self.id) { team in
+                                    TeamListView(team: team)
                                         .padding(.leading, 16)
-                                        .animation(.spring(), value: filteredGroups)
+                                        .animation(.spring(), value: filteredTeams)
                                     Divider()
                                         .padding(.leading, 91)
                                 }
@@ -67,17 +67,17 @@ struct GroupsView: View {
                         }
                     }
                     .onAppear{
-                        isFetchingGroups = true
+                        isFetchingTeams = true
                         Task{
-                            if(authVM.user != nil && vm.groups.isEmpty){
-                                await vm.getGroups()
+                            if(authVM.user != nil && vm.teams.isEmpty){
+                                await vm.getTeams()
                             }
-                            isFetchingGroups = false
+                            isFetchingTeams = false
                         }
                     }
                 }
             }
-            .navigationTitle("Games")
+            .navigationTitle("Teams")
             .searchable(text: $searchText, prompt: "Search")
             .toolbar(content: {
                 ToolbarItem (placement: .navigation)  {
@@ -95,21 +95,21 @@ struct GroupsView: View {
     }
 }
 
-struct GroupsView_Previews: PreviewProvider {
+struct TeamsView_Previews: PreviewProvider {
     static var previews: some View {
-        GroupsView()
-            .environmentObject(GroupViewModel())
+        TeamsView()
+            .environmentObject(TeamViewModel())
             .environmentObject(AuthViewModel())
     }
 }
 
-extension GroupsView {
-    var filteredGroups: [Group] {
+extension TeamsView {
+    var filteredTeams: [Team] {
         if searchText.isEmpty {
-            return vm.groups
+            return vm.teams
         }
         else {
-            return vm.groups.filter {
+            return vm.teams.filter {
                 $0.title
                     .localizedCaseInsensitiveContains(searchText)
             }

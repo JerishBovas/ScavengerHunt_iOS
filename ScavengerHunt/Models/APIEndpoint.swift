@@ -11,7 +11,7 @@ enum APIEndpoint : CustomStringConvertible{
     case register, login, refreshToken, revokeToken, resetPassword, changeName, uploadProfile
     case home, homeScores, uploadImage
     case game, gameId(id: String), gameItemId(id: String, itemId: String)
-    case group, groupId(id: String)
+    case team, teamId(id: String)
     
     var description: String{
         switch self{
@@ -32,8 +32,8 @@ enum APIEndpoint : CustomStringConvertible{
         case .gameId(let id) : return "https://scavengerhuntapis.azurewebsites.net/api/game/\(id)"
         case .gameItemId(let id, let itemId) : return "https://scavengerhuntapis.azurewebsites.net/api/game/\(id)/\(itemId)"
         
-        case .group : return "https://scavengerhuntapis.azurewebsites.net/api/group/"
-        case .groupId(let id) : return "https://scavengerhuntapis.azurewebsites.net/api/group/\(id)"
+        case .team : return "https://scavengerhuntapis.azurewebsites.net/api/team/"
+        case .teamId(let id) : return "https://scavengerhuntapis.azurewebsites.net/api/team/\(id)"
         }
     }
 }

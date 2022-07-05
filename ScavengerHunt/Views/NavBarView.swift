@@ -27,7 +27,7 @@ struct NavBarView: View {
                     Label("Games", systemImage: "gamecontroller.fill")
                 }
                 .tag(2)
-            GroupsView()
+            TeamsView()
                 .tabItem {
                     Label("Teams", systemImage: "person.2")
                 }
