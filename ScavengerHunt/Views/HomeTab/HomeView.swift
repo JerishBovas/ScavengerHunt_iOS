@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import WeatherKit
 
 struct HomeView: View {
     @EnvironmentObject private var locVM: GameViewModel
