@@ -6,21 +6,23 @@
 //
 
 import Foundation
-import MapKit
+import CoreLocation
 import SwiftUI
+import WeatherKit
 
 class GameViewModel: ObservableObject {
     
     @Published var games = [Game]()
-    @State var authVM = AuthViewModel()
+    @State var authVM = LoginViewModel()
     private var api: ApiService = ApiService()
+    @State var temperature: Double? = nil
+    @State var uvIndex: Int? = nil
+    @Published  var appError: AppError? = nil
     
     func getGames() async{
         do{
             let defaults = UserDefaults.standard
-            if(await !authVM.refreshToken()){
-                return
-            }
+            try await authVM.refreshToken()
             
             guard let accessToken = defaults.string(forKey: "accessToken") else {
                 return
@@ -32,10 +34,15 @@ class GameViewModel: ObservableObject {
                 self.games = games
             }
         }
-        catch NetworkError.custom(let error){
-            print("Request failed with error: \(error)")
+        catch ErrorType.error(let error){
+            DispatchQueue.main.async {
+                self.appError = error.appError
+            }
         }
         catch{
+            DispatchQueue.main.async {
+                self.appError = AppError(title: "Something went wrong", message: error.localizedDescription)
+            }
             print("Request failed with error: \(error.localizedDescription)")
         }
     }

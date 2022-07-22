@@ -12,15 +12,14 @@ import SwiftUI
 class TeamViewModel: ObservableObject {
     
     @Published var teams = [Team]()
-    @State var authVM = AuthViewModel()
+    @Published var appError: AppError? = nil
+    @State var authVM = LoginViewModel()
     private var api: ApiService = ApiService()
     
     func getTeams() async{
         do{
             let defaults = UserDefaults.standard
-            if(await !authVM.refreshToken()){
-                return
-            }
+            try await authVM.refreshToken()
             
             guard let accessToken = defaults.string(forKey: "accessToken") else {
                 return
@@ -32,11 +31,17 @@ class TeamViewModel: ObservableObject {
                 self.teams = teams
             }
         }
-        catch NetworkError.custom(let error){
-            print("Request failed with error: \(error)")
+        catch ErrorType.error(let error){
+            DispatchQueue.main.async {
+                self.appError = error.appError
+            }
         }
         catch{
+            DispatchQueue.main.async {
+                self.appError = AppError(title: "Something went wrong", message: error.localizedDescription)
+            }
             print("Request failed with error: \(error.localizedDescription)")
         }
+
     }
 }

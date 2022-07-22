@@ -2,15 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Please allow Scavenger Hunt to use Face ID to Securely Authenticate you</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>maps</string>
 	</array>
 	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIImageName</key>
-		<string>AppIcon</string>
-	</dict>
+	<dict/>
 	<key>UIStatusBarStyle</key>
 	<string></string>
 </dict>

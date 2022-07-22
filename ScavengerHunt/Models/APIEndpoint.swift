@@ -13,27 +13,31 @@ enum APIEndpoint : CustomStringConvertible{
     case game, gameId(id: String), gameItemId(id: String, itemId: String)
     case team, teamId(id: String)
     
+    private var DOMAIN_URL: String {
+        return "https://scavengerhuntapi.azurewebsites.net"
+    }
+    
     var description: String{
         switch self{
             
-        case .register: return "https://scavengerhuntapis.azurewebsites.net/api/auth/register"
-        case .login: return "https://scavengerhuntapis.azurewebsites.net/api/auth/login"
-        case .refreshToken: return "https://scavengerhuntapis.azurewebsites.net/api/auth/refreshtoken"
-        case .revokeToken : return "https://scavengerhuntapis.azurewebsites.net/api/auth/revoketoken"
-        case .resetPassword : return "https://scavengerhuntapis.azurewebsites.net/api/auth/resetpassword"
-        case .changeName : return "https://scavengerhuntapis.azurewebsites.net/api/auth/changename"
-        case .uploadProfile : return "https://scavengerhuntapis.azurewebsites.net/api/auth/addimage"
+        case .register: return "\(DOMAIN_URL)/api/auth/register"
+        case .login: return "\(DOMAIN_URL)/api/auth/login"
+        case .refreshToken: return "\(DOMAIN_URL)/api/auth/refreshtoken"
+        case .revokeToken : return "\(DOMAIN_URL)/api/auth/revoketoken"
+        case .resetPassword : return "\(DOMAIN_URL)/api/auth/resetpassword"
+        case .changeName : return "\(DOMAIN_URL)/api/auth/changename"
+        case .uploadProfile : return "\(DOMAIN_URL)/api/auth/addimage"
             
-        case .home : return "https://scavengerhuntapis.azurewebsites.net/api/home"
-        case .homeScores : return "https://scavengerhuntapis.azurewebsites.net/api/home/scores"
-        case .uploadImage : return "https://scavengerhuntapis.azurewebsites.net/api/home/uploadimage"
+        case .home : return "\(DOMAIN_URL)/api/home"
+        case .homeScores : return "\(DOMAIN_URL)/api/home/scores"
+        case .uploadImage : return "\(DOMAIN_URL)/api/home/uploadimage"
             
-        case .game : return "https://scavengerhuntapis.azurewebsites.net/api/game/"
-        case .gameId(let id) : return "https://scavengerhuntapis.azurewebsites.net/api/game/\(id)"
-        case .gameItemId(let id, let itemId) : return "https://scavengerhuntapis.azurewebsites.net/api/game/\(id)/\(itemId)"
+        case .game : return "\(DOMAIN_URL)/api/game/"
+        case .gameId(let id) : return "\(DOMAIN_URL)/api/game/\(id)"
+        case .gameItemId(let id, let itemId) : return "\(DOMAIN_URL)/api/game/\(id)/\(itemId)"
         
-        case .team : return "https://scavengerhuntapis.azurewebsites.net/api/team/"
-        case .teamId(let id) : return "https://scavengerhuntapis.azurewebsites.net/api/team/\(id)"
+        case .team : return "\(DOMAIN_URL)/api/team/"
+        case .teamId(let id) : return "\(DOMAIN_URL)/api/team/\(id)"
         }
     }
 }

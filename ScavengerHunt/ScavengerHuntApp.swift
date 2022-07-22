@@ -12,13 +12,15 @@ struct ScavengerHuntApp: App {
     @StateObject private var gameVM = GameViewModel()
     @StateObject private var authVM = AuthViewModel()
     @StateObject private var teamVM = TeamViewModel()
+    @StateObject private var loginVM = LoginViewModel()
     
     var body: some Scene {
         WindowGroup {
-            NavBarView()
+            ContentView()
                 .environmentObject(gameVM)
                 .environmentObject(authVM)
                 .environmentObject(teamVM)
+                .environmentObject(loginVM)
         }
     }
 }

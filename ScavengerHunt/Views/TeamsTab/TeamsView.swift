@@ -17,73 +17,72 @@ struct TeamsView: View {
     @State private var isFetchingTeams: Bool = false
     
     var body: some View {
-        NavigationView {
-            ScrollView(.vertical, showsIndicators: true){
-                VStack{
-                    HStack{
-                        Button {
-                            
-                        } label: {
-                            Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
-                        }
-                        Spacer()
-                        HStack(spacing: 0){
-                            Text("Sort By: ")
-                            Picker("Sort", selection: $selectedSort) {
-                                ForEach(Sort.allCases) { sort in
-                                    Text(sort.rawValue.capitalized)
-                                }
+        ScrollView(.vertical, showsIndicators: true){
+            VStack{
+                HStack{
+                    Button {
+                        
+                    } label: {
+                        Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                    }
+                    Spacer()
+                    HStack(spacing: 0){
+                        Text("Sort By: ")
+                        Picker("Sort", selection: $selectedSort) {
+                            ForEach(Sort.allCases) { sort in
+                                Text(sort.rawValue.capitalized)
                             }
                         }
                     }
-                    .padding(EdgeInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 16)))
-                    Divider()
-                    VStack(alignment: .leading){
-                        if(!isFetchingTeams){
-                            if(!filteredTeams.isEmpty){
-                                ForEach(filteredTeams, id: \.self.id) { team in
-                                    TeamListView(team: team)
-                                        .padding(.leading, 16)
-                                        .animation(.spring(), value: filteredTeams)
-                                    Divider()
-                                        .padding(.leading, 91)
-                                }
+                }
+                .padding(.horizontal)
+                Divider()
+                VStack(alignment: .leading){
+                    if(!isFetchingTeams){
+                        if(!filteredTeams.isEmpty){
+                            ForEach(filteredTeams, id: \.self.id) { team in
+                                TeamListView(team: team)
+                                    .padding(.leading)
+                                    .animation(.spring(), value: filteredTeams)
+                                Divider()
+                                    .padding(.leading, 91)
                             }
-                            else{
-                                VStack{
-                                    Text("No Match")
-                                        .padding(20)
-                                        .font(.headline)
-                                        .frame(maxWidth: .infinity)
-                                    Text("Please refine your search")
-                                        .font(.subheadline)
-                                        .frame(maxWidth: .infinity)
-                                }
+                        }
+                        else{
+                            VStack{
+                                Text("No Match")
+                                    .padding()
+                                    .font(.headline)
+                                Text("Please refine your search")
+                                    .font(.subheadline)
                             }
-                        }else{
-                            HStack(alignment: .center){
-                                ProgressView()
-                            }
+                        }
+                    }else{
+                        HStack(alignment: .center){
+                            ProgressView()
                         }
                     }
-                    .onAppear{
-                        isFetchingTeams = true
-                        Task{
-                            if(authVM.user != nil && vm.teams.isEmpty){
-                                await vm.getTeams()
-                            }
-                            isFetchingTeams = false
+                }
+                .onAppear{
+                    isFetchingTeams = true
+                    Task{
+                        if(authVM.user != nil && vm.teams.isEmpty){
+                            await vm.getTeams()
                         }
+                        isFetchingTeams = false
                     }
                 }
             }
+            .alert(item: $vm.appError, content: { appError in
+                Alert(title: Text(appError.title), message: Text(appError.message))
+            })
             .navigationTitle("Teams")
             .searchable(text: $searchText, prompt: "Search")
             .toolbar(content: {
-                ToolbarItem (placement: .navigation)  {
+                ToolbarItem (placement: .navigationBarLeading)  {
                     EditButton()
                 }
-                ToolbarItem (placement: .automatic)  {
+                ToolbarItem (placement: .navigationBarTrailing)  {
                     Button(action: {
                         
                     }, label: {

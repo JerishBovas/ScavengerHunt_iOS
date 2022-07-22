@@ -17,80 +17,84 @@ struct GamesView: View {
     @State private var isFetchingGames: Bool = false
     
     var body: some View {
-        NavigationView {
-            ScrollView(.vertical, showsIndicators: true){
-                VStack{
-                    HStack{
-                        Button {
-                            
-                        } label: {
-                            Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
-                        }
-                        Spacer()
-                        HStack(spacing: 0){
-                            Text("Sort By: ")
-                            Picker("Sort", selection: $selectedSort) {
-                                ForEach(Sort.allCases) { sort in
-                                    Text(sort.rawValue.capitalized)
-                                }
+        ScrollView(.vertical, showsIndicators: true){
+            VStack{
+                HStack{
+                    Button {
+                        
+                    } label: {
+                        Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                    }
+                    Spacer()
+                    HStack(spacing: 0){
+                        Text("Sort By: ")
+                        Picker("Sort", selection: $selectedSort) {
+                            ForEach(Sort.allCases) { sort in
+                                Text(sort.rawValue.capitalized)
                             }
                         }
                     }
-                    .padding(EdgeInsets(.init(top: 0, leading: 16, bottom: 0, trailing: 16)))
-                    Divider()
-                    VStack(alignment: .leading){
-                        if(!isFetchingGames){
-                            if(!filteredGames.isEmpty){
+                    if let temp = vm.temperature{
+                        Text(String(temp))
+                    }
+                }
+                .padding(.horizontal)
+                Divider()
+                VStack{
+                    if(!isFetchingGames){
+                        if(!filteredGames.isEmpty){
+                            LazyVStack(alignment: .leading){
                                 ForEach(filteredGames, id: \.self.id) { game in
                                     ListView(game: game)
-                                        .padding(.leading, 16)
+                                        .padding(.leading)
                                         .animation(.spring(), value: filteredGames)
                                     Divider()
                                         .padding(.leading, 91)
                                 }
                             }
-                            else{
-                                VStack{
-                                    Text("No Match")
-                                        .padding(20)
-                                        .font(.headline)
-                                        .frame(maxWidth: .infinity)
-                                    Text("Please refine your search")
-                                        .font(.subheadline)
-                                        .frame(maxWidth: .infinity)
-                                }
+                        }
+                        else{
+                            VStack{
+                                Text("No Match")
+                                    .padding()
+                                    .font(.headline)
+                                Text("Please refine your search")
+                                    .font(.subheadline)
                             }
-                        }else{
-                            HStack(alignment: .center){
-                                ProgressView()
-                            }
+                        }
+                    }else{
+                        HStack(alignment: .center){
+                            ProgressView()
                         }
                     }
-                    .onAppear{
-                        isFetchingGames = true
-                        Task{
-                            if(authVM.user != nil && vm.games.isEmpty){
-                                await vm.getGames()
-                            }
-                            isFetchingGames = false
+                }
+                .onAppear{
+                    isFetchingGames = true
+                    Task{
+                        if(authVM.user != nil && vm.games.isEmpty){
+                            await vm.getGames()
                         }
+                        isFetchingGames = false
                     }
                 }
             }
+            .alert(item: $vm.appError, content: { appError in
+                Alert(title: Text(appError.title), message: Text(appError.message))
+            })
             .navigationTitle("Games")
             .searchable(text: $searchText, prompt: "Search")
             .toolbar(content: {
-                ToolbarItem (placement: .navigation)  {
+                ToolbarItem (placement: .navigationBarLeading)  {
                     EditButton()
                 }
-                 ToolbarItem (placement: .automatic)  {
-                     Button(action: {
-                         
-                     }, label: {
-                         Image(systemName: "plus")
-                     })
-                 }
-             })
+                ToolbarItem (placement: .navigationBarTrailing)  {
+                        Button(action: {
+                            
+                        }, label: {
+                            Image(systemName: "plus")
+                        })
+                    }
+                })
         }
     }
 }

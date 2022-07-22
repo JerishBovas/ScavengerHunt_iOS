@@ -9,14 +9,15 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var authVM: AuthViewModel
+    @EnvironmentObject private var loginVM: LoginViewModel
     @State var searchString: String = ""
     @State private var showImagePicker: Bool = false
     @State var isUploadingImage: Bool = false
     @State var picker: UIImagePickerController.SourceType = .camera
     
     var body: some View {
-        NavigationView {
-            if(authVM.isAuthenticated){
+        ScrollView(showsIndicators: false){
+            if(loginVM.isAuthenticated){
                 VStack{
                     Text(authVM.user?.name ?? "Name")
                     if(authVM.profileImage != nil){
@@ -76,6 +77,13 @@ struct SettingsView: View {
                             }
                             .buttonStyle(.bordered)
                         }
+                        Button {
+                            loginVM.isAuthenticated = false
+                        } label: {
+                            Text("Log Out")
+                        }
+                        .buttonStyle(BorderedButtonStyle())
+                        .navigationTitle("Settings")
                     }
 
                 }
@@ -83,7 +91,6 @@ struct SettingsView: View {
                     CaptureImageView(isShown: $showImagePicker, image: $authVM.profileImage, sourceType: $picker)
                         .ignoresSafeArea()
                 }
-                .navigationTitle("Settings")
                 .searchable(text: $searchString)
                 .onAppear {
                     Task{
@@ -95,12 +102,11 @@ struct SettingsView: View {
             }
             else{
                 Button {
-                    authVM.showLogin = true
+                    loginVM.isAuthenticated = false
                 } label: {
                     Text("Login")
                 }
-                .buttonStyle(BorderedButtonStyle())
-                .navigationTitle("Settings")
+                .buttonStyle(.bordered)
             }
         }
     }

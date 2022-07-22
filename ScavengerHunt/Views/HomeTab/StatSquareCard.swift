@@ -8,27 +8,27 @@
 import SwiftUI
 
 struct StatSquareCard: View {
+    @Environment(\.colorScheme) var colorScheme
     @State var logo: String
     @State var logoColor: Color
     @State var value: Int
     @State var title: String
     
     var body: some View {
-        VStack{
-            Image(systemName: logo)
-                .foregroundColor(logoColor)
-                .frame(maxWidth: .infinity,alignment: .leading)
-            Text(String(value))
-                .foregroundColor(.accentColor)
-                .font(.system(size: 35, weight: .semibold, design: .rounded))
-            Text(title)
-                .font(.caption2)
-                .foregroundColor(.secondary)
+        ZStack {
+            Color.clear
+                .background(.ultraThinMaterial, in:RoundedRectangle(cornerRadius: 20))
+                .blur(radius: 0.5)
+            VStack(spacing: 8){
+                Label(title, systemImage: logo)
+                    .font(.caption)
+                    .foregroundColor(logoColor)
+                Text(String(value))
+                    .foregroundColor(.accentColor)
+                    .font(.system(size: 35, weight: .semibold, design: .rounded))
+            }
         }
-        .padding()
-        .background(.ultraThickMaterial, in:
-                        RoundedRectangle(cornerRadius: 10)
-        )
+        .frame(width: 100, height: 100)
     }
 }
 

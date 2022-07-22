@@ -6,9 +6,33 @@
 //
 
 import Foundation
-
-enum NetworkError: Error{
-    case custom(error:String)
+enum ErrorType: Error{
+    case error(_ error: ApiError)
+}
+enum ApiError{
+    case processingError
+    case unauthorizedError
+    case badRequestError
+    case serverError
+    case loginError
+    case custom(title: String, message: String)
+    
+    var appError: AppError {
+        switch self{
+        case .processingError:
+            return AppError(title: "Something went wrong", message: "Something went wrong.  Please try again or contact developer.")
+        case .unauthorizedError:
+            return AppError(title: "Permission Denied", message: "You are not permitted to do this action. Try Logging In again.")
+        case .badRequestError:
+            return AppError(title: "Try Again", message: "Something went wrong. Please try again.")
+        case .serverError:
+            return AppError(title: "Try again later", message: "Something went wrong in our side.  Please try back later.")
+        case .loginError:
+            return AppError(title: "Login Failed", message: "Please try logging in again")
+        case .custom(let title, let message):
+            return AppError(title: title, message: message)
+        }
+    }
 }
 
 class ApiService{
@@ -47,6 +71,25 @@ class ApiService{
         return try await fetchApi(request: request)
     }
     
+    func post(body: Data, endpoint: APIEndpoint) async throws{
+        var request = URLRequest(url: URL(string: endpoint.description)!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        
+        try await fetchApi(request: request)
+    }
+    
+    func post(accessToken: String, body: Data, endpoint: APIEndpoint) async throws{
+        var request = URLRequest(url: URL(string: endpoint.description)!)
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        
+        try await fetchApi(request: request)
+    }
+    
     func put(accessToken: String, body: Data, endpoint: APIEndpoint) async throws{
         var request = URLRequest(url: URL(string: endpoint.description)!)
         request.httpMethod = "PUT"
@@ -70,13 +113,9 @@ class ApiService{
         
         print(String(data: data, encoding: .utf8) ?? "")
         guard let response = response as? HTTPURLResponse, response.statusCode >= 200, response.statusCode < 300  else  {
+            print(response)
             let error = try JSONDecoder().decode(ErrorObject.self, from: data)
-            print(error)
-            throw NetworkError.custom(error: error.title)
-        }
-        
-        if response.statusCode == 204{
-            throw NetworkError.custom(error: "Not Content")
+            throw ErrorType.error( .custom(title: error.title, message: error.errors.joined(separator: "\n")))
         }
         
         let tokenObj = try JSONDecoder().decode(T.self, from: data)
@@ -91,7 +130,7 @@ class ApiService{
         guard let response = response as? HTTPURLResponse, response.statusCode >= 200, response.statusCode < 300  else  {
             let error = try JSONDecoder().decode(ErrorObject.self, from: data)
             print(error)
-            throw NetworkError.custom(error: error.title)
+            throw ErrorType.error( .custom(title: error.title, message: error.errors.joined(separator: "\n")))
         }
     }
     

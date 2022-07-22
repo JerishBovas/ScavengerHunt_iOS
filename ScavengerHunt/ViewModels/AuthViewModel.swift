@@ -9,43 +9,17 @@ import Foundation
 import UIKit
 
 class AuthViewModel: ObservableObject{
-    @Published var isAuthenticated = false
-    @Published var showLogin = false
+    private var loginVM: LoginViewModel = LoginViewModel()
     @Published var user: User? = nil
     @Published var profileImage: UIImage? = nil
+    @Published var appError: AppError? = nil
     private var api: ApiService = ApiService()
     private var lib: FunctionsLibrary = FunctionsLibrary()
-    
-    func login(email ema: String, password pas: String)async{
-        
-        do{
-            let defaults = UserDefaults.standard
-            let body = try JSONEncoder().encode(LoginRequest(email: ema, password: pas))
-            
-            let tokenObj: TokenObject = try await api.post(body: body, endpoint: .login)
-            defaults.set(tokenObj.refreshToken, forKey: "refreshToken")
-            defaults.set(tokenObj.accessToken, forKey: "accessToken")
-            defaults.set(Date().addingTimeInterval(24 * 60 * 60), forKey: "tokenExpiry")
-            DispatchQueue.main.async {
-                self.isAuthenticated = true
-                self.showLogin = false
-            }
-            print("Logged in")
-        }
-        catch NetworkError.custom(let error){
-            print("Request failed with error: \(error)")
-        }
-        catch{
-            print("Request failed with error: \(error.localizedDescription)")
-        }
-    }
     
     func getAccount() async{
         do{
             let defaults = UserDefaults.standard
-            if(await refreshToken() == false){
-                throw NetworkError.custom(error: "Token Refresh error")
-            }
+            try await loginVM.refreshToken()
             
             guard let accessToken = defaults.string(forKey: "accessToken") else {
                 return
@@ -57,7 +31,8 @@ class AuthViewModel: ObservableObject{
             }
             print("account fetched")
         }
-        catch NetworkError.custom(let errorDes){
+        catch ErrorType.error(let errorDes){
+            appError = errorDes.appError
             print("Request failed with error: \(errorDes)")
         }
         catch{
@@ -68,9 +43,7 @@ class AuthViewModel: ObservableObject{
     func setProfileImage() async{
         do{
             let defaults = UserDefaults.standard
-            if(await refreshToken() == false){
-                throw NetworkError.custom(error: "Token Refresh error")
-            }
+            try await loginVM.refreshToken()
             
             guard let accessToken = defaults.string(forKey: "accessToken"), let image = profileImage else {
                 return
@@ -84,60 +57,18 @@ class AuthViewModel: ObservableObject{
             let response = try await api.uploadImage(endpoint: .uploadProfile, request: data, accessToken: accessToken)
             print(response)
         }
-        catch NetworkError.custom(let errorDes){
+        catch ErrorType.error(let errorDes){
+            DispatchQueue.main.async {
+                self.appError = errorDes.appError
+            }
             print("Request failed with error: \(errorDes)")
         }
         catch{
+            DispatchQueue.main.async {
+                self.appError = AppError(title: "Something went wrong", message: error.localizedDescription)
+            }
             print("Request failed with error: \(error.localizedDescription)")
         }
-    }
-    
-    public func refreshToken() async -> Bool{
-        let defaults = UserDefaults.standard
-        
-        guard let expiry = defaults.object(forKey: "tokenExpiry"), let accessToken = defaults.string(forKey: "accessToken"), let refreshToken = defaults.string(forKey: "refreshToken") else {
-            print("Request failed with error: User not Logged In")
-            DispatchQueue.main.async {
-                self.isAuthenticated = false
-                self.showLogin = true
-            }
-            return false
-        }
-        
-        let expiryToken = expiry as! Date
-        
-        if(Date.now > expiryToken){
-            
-            do{
-                let body = try JSONEncoder().encode(TokenObject(accessToken: accessToken, refreshToken: refreshToken))
-                
-                let tokenObj: TokenObject = try await api.post(body: body, endpoint: .refreshToken)
-                
-                defaults.set(tokenObj.refreshToken, forKey: "refreshToken")
-                defaults.set(tokenObj.accessToken, forKey: "accessToken")
-                defaults.set(Date().addingTimeInterval(15 * 60), forKey: "tokenExpiry")
-                print("token refreshed")
-                return true
-            }
-            catch NetworkError.custom(let errorDes){
-                print("Request failed with error: \(errorDes)")
-                DispatchQueue.main.async {
-                    self.isAuthenticated = false
-                    self.showLogin = true
-                }
-                return false
-            }
-            catch{
-                print("Request failed with error: \(error)")
-                DispatchQueue.main.async {
-                    self.isAuthenticated = false
-                    self.showLogin = true
-                }
-                return false
-            }
-        }
-        print("token is already valid")
-        return true
     }
     
     func dateFormatter(dat: String) -> String{
