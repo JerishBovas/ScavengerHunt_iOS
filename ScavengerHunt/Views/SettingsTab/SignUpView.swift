@@ -54,8 +54,6 @@ extension SignUpView{
         VStack(alignment: .leading){
             TextField("Full Name", text: $viewModel.name)
                 .textContentType(.name)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
                 .focused($focus, equals: .name)
                 .submitLabel(.next)
                 .onSubmit {
@@ -70,8 +68,6 @@ extension SignUpView{
             }
             TextField("Email ID", text: $viewModel.email)
                 .textContentType(.username)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
                 .keyboardType(.emailAddress)
                 .focused($focus, equals: .email)
                 .submitLabel(.next)
@@ -87,8 +83,6 @@ extension SignUpView{
             }
             SecureField("New Password", text: $viewModel.password)
                 .textContentType(.newPassword)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
                 .focused($focus, equals: .password)
                 .submitLabel(.go)
                 .onSubmit {
