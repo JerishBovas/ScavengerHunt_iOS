@@ -8,7 +8,6 @@
 import Foundation
 import CoreLocation
 import SwiftUI
-import WeatherKit
 
 class GameViewModel: ObservableObject {
     
