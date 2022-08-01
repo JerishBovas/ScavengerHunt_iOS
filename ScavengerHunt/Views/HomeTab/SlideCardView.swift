@@ -11,10 +11,11 @@ struct SlideCardView: View {
     @State var game: Game
     
     var body: some View {
-        VStack{
+        ZStack{
             AsyncImage(url: URL(string: game.imageName)) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
+                    .frame(width: 300, height: 250)
             } placeholder: {
                 ProgressView()
             }
@@ -30,13 +31,14 @@ struct SlideCardView: View {
                     .font(.subheadline)
                     .foregroundColor(.primary)
             }
-            .padding(.bottom)
+            .padding()
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .shadow(radius: 5)
+            .frame(maxWidth: 268, maxHeight: .infinity, alignment: .bottom)
+            .padding()
         }
-        .frame(width: 340)
-        .background(.ultraThickMaterial, in:
-            Rectangle()
-        )
-        .cornerRadius(10)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
 

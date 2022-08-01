@@ -10,7 +10,6 @@ import MapKit
 import SwiftUI
 
 class TeamViewModel: ObservableObject {
-    
     @Published var teams = [Team]()
     @Published var appError: AppError? = nil
     @State var authVM = LoginViewModel()

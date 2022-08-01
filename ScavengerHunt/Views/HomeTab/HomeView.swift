@@ -9,37 +9,75 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var locVM: GameViewModel
-    @EnvironmentObject private var authVM: AuthViewModel
+    @EnvironmentObject private var VM: HomeViewModel
     @Environment(\.colorScheme) var colorScheme
+    @Binding var tabSelection: TabSelected
     @State private var showAddGame: Bool = false
     @State private var isScoreLoading: Bool = false
-    @Binding var tabSelection: TabSelected
-    var colors: [Color] = [.blue, .teal]
+    @State private var topSafeAreaHeight = 0.0
+    @State private var welcomeViewHeight = 0.0
+    @State private var scrollViewHeight = 0.0
+    @State private var barChartValues: [Double] = [20.0, 44, 24, 70, 54, 33]
     
     var body: some View {
-        ScrollView(showsIndicators: false){
-            VStack(alignment: .leading){
-                WelcomeTitle
-                ScoreCard
-                LastUpdated
-                Stats
-                LeaderBoard
-                LocOfTheDay
-                PopularGames
-                GamesSlide
+        VStack(spacing: 0) {
+            WelcomeTitle
+                .background(GeometryReader{ geometry -> Color in
+                    DispatchQueue.main.async {
+                        self.topSafeAreaHeight = geometry.safeAreaInsets.top
+                        self.welcomeViewHeight = geometry.size.height
+                    }
+                    return Color.clear
+                })
+            ScrollView(showsIndicators: false){
+                ZStack {
+                    VStack(alignment: .leading, spacing: 16){
+                        ScoreCard
+                        Stats
+                        if(!barChartValues.isEmpty){
+                            BarChartCard
+                        }
+                        LeaderBoard
+                        LocOfTheDay
+                        PopularGames
+                        GamesSlide
+                    }
+                    .padding(.vertical, 20)
+                    .padding(.bottom, 40)
+                    GeometryReader { proxy in
+                        let offset = proxy.frame(in: .named("scroll")).minY
+                        Color.clear.preference(key: ScrollViewOffsetPreferenceKey.self, value: offset)
+                    }
+                }
+            }
+            .coordinateSpace(name: "scroll")
+            .onPreferenceChange(ScrollViewOffsetPreferenceKey.self) { value in
+                if(value < 0){
+                    scrollViewHeight = 0
+                }else{
+                    scrollViewHeight = 120
+                }
             }
         }
-        .alert(item: $authVM.appError, content: { appError in
+        .background(LinearGradient(colors: colorScheme == .light ? [.cyan, .blue] : [.purple, .blue], startPoint: .topLeading, endPoint: .bottomTrailing)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .frame(height: topSafeAreaHeight + welcomeViewHeight + scrollViewHeight)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .edgesIgnoringSafeArea(.top)
+            .animation(.spring(), value: scrollViewHeight)
+        )
+        .background(colorScheme == .light ? .gray.opacity(0.4) : Color(.systemBackground))
+        .alert(item: $VM.appError, content: { appError in
             Alert(title: Text(appError.title), message: Text(appError.message))
         })
         .onAppear{
             isScoreLoading = true
             Task{
-                if(authVM.user != nil){
+                if(VM.user != nil){
                     isScoreLoading = false
                     return
                 }
-                await authVM.getAccount()
+                await VM.getUser()
                 isScoreLoading = false
             }
         }
@@ -51,7 +89,7 @@ struct HomeView_Previews: PreviewProvider {
         Group {
             HomeView(tabSelection: .constant(TabSelected(id: 2)))
                 .environmentObject(GameViewModel())
-                .environmentObject(AuthViewModel())
+                .environmentObject(HomeViewModel())
         }
     }
 }
@@ -63,48 +101,48 @@ extension HomeView{
                 Text(getGreeting())
                     .font(.headline)
                     .foregroundColor(.secondary)
-                Text(authVM.user?.name ?? "Hunter")
+                Text(VM.user?.name ?? "User")
                     .font(.system(.title, design: .rounded))
                     .fontWeight(.semibold)
             }
             Spacer()
             VStack{
-                Spacer()
-                AsyncImage(url: URL(string: authVM.user?.profileImage ?? "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449040109061189.jpeg")) { image in
+                AsyncImage(url: URL(string: VM.user?.profileImage ?? "")) { image in
                     image.resizable()
                         .scaledToFill()
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
                 } placeholder: {
-                    Color.random
+                    Image(systemName: "person")
+                        .font(.title2)
+                        .foregroundColor(.blue)
                         .frame(width: 40, height: 40)
-                        .clipShape(Circle())
+                        .background(Color(.systemBackground), in: Circle())
                         
                 }
             }
-            
         }
-        .padding(24)
+        .padding()
     }
+    
     private var ScoreCard: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading){
                     Text("Your score")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.secondary)
                     HStack{
                         Image(systemName: "bitcoinsign.circle")
                             .font(.title)
                             .foregroundColor(.yellow)
-                        Text(String(authVM.user?.userLog.userScore ?? 1000))
+                        Text(String(VM.user?.userLog.userScore ?? 1000))
                             .font(.system(.largeTitle, design: .rounded))
                             .fontWeight(.semibold)
-                            .foregroundColor(.white)
-                            .id(authVM.user?.userLog.userScore)
+                            .id(VM.user?.userLog.userScore)
                             .transition(AnyTransition.asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top)).combined(with: .opacity))
                     }
-                    .animation(.default, value: authVM.user?.userLog.userScore)
+                    .animation(.default, value: VM.user?.userLog.userScore)
                 }
                 Spacer()
                 Text("0")
@@ -118,8 +156,8 @@ extension HomeView{
             Spacer()
             VStack(alignment: .trailing, spacing: 10){
                 Text("Elite Player")
-                    .font(.body)
-                    .foregroundColor(.white)
+                    .font(.headline)
+                    .foregroundColor(.secondary)
                 HStack{
                     ForEach((1...5), id: \.self) {_ in
                         Image(systemName: "star.circle.fill")
@@ -130,13 +168,12 @@ extension HomeView{
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .padding()
-        .padding(.vertical)
-        .background(LinearGradient(colors: [.pink, .purple, .blue], startPoint: .topLeading, endPoint: .bottomTrailing), in:RoundedRectangle(cornerRadius: 20, style: .continuous)
-        )
-        .shadow(radius: 5)
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
         .frame(maxWidth: .infinity, maxHeight: 170)
         .padding(.horizontal)
     }
+    
     private var LastUpdated: some View{
         VStack {
             HStack{
@@ -144,17 +181,37 @@ extension HomeView{
                     .font(.body)
                     .foregroundColor(.white)
                 Spacer()
-                Text(authVM.dateFormatter(dat: authVM.user?.userLog.lastUpdated ?? Date.now.description))
+                Text(VM.dateFormatter(dat: VM.user?.userLog.lastUpdated ?? Date.now.description))
                     .font(.headline)
                     .foregroundColor(.white)
             }
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 15, style: .continuous).fill(LinearGradient(colors: [.pink, .purple, .blue], startPoint: .bottomLeading, endPoint: .topTrailing)))
-        .shadow(radius: 5, y: 5)
+        .shadow(radius: 5)
         .padding(.horizontal)
-        .padding(.vertical, 8)
     }
+    
+    private var Stats: some View{
+        VStack(alignment: .leading){
+            HStack{
+                StatSquareCard(logo: "gamecontroller.fill", logoColor: .pink, value: 8, title: "Games")
+                Spacer()
+                StatSquareCard(logo: "person.2.fill", logoColor: .purple, value: 3, title: "Teams")
+                Spacer()
+                StatSquareCard(logo: "star.circle.fill", logoColor: .yellow, value: 5, title: "Played")
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    private var BarChartCard: some View{
+        BarChartView(data: barChartValues, colors: [.cyan, .blue])
+            .padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
+            .padding(.horizontal)
+    }
+    
     private var LeaderBoard: some View{
         VStack(alignment: .leading, spacing: 20){
             VStack(alignment: .leading, spacing: 5){
@@ -169,27 +226,27 @@ extension HomeView{
             }
             if !isScoreLoading {
                 VStack{
-                    if !locVM.games.isEmpty {
-                        ForEach(locVM.games, id: \.self.id) { game in
+                    if !VM.leaderBoard.isEmpty {
+                        ForEach(VM.leaderBoard, id: \.self.id) { user in
                             HStack{
-                                AsyncImage(url: URL(string: game.imageName)) { image in
+                                AsyncImage(url: URL(string: user.profileImage)) { image in
                                     image.resizable()
-                                        .aspectRatio(contentMode: .fit)
+                                        .scaledToFill()
                                 } placeholder: {
                                     Color.random
                                 }
                                 .frame(width: 40, height: 40)
-                                .clipShape(RoundedRectangle(cornerRadius: 5))
+                                .clipShape(Circle())
                                 VStack(alignment: .leading, spacing: 5){
-                                    Text(game.name)
+                                    Text(user.name)
                                         .font(.title3)
                                         .foregroundColor(.primary)
-                                    Text(game.description)
+                                    Text(VM.dateFormatter(dat: user.userLog.lastUpdated))
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
                                 Spacer()
-                                Text("1392")
+                                Text(String(user.userLog.userScore))
                                     .font(.headline)
                                     .foregroundColor(.primary)
                             }
@@ -221,24 +278,13 @@ extension HomeView{
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial, in:
-                        RoundedRectangle(cornerRadius: 10)
-        )
+        .background(.regularMaterial, in:RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal)
-    }
-    
-    private var Stats: some View{
-        VStack(alignment: .leading){
-            HStack{
-                StatSquareCard(logo: "gamecontroller.fill", logoColor: .pink, value: 8, title: "Games")
-                Spacer()
-                StatSquareCard(logo: "person.2.fill", logoColor: .purple, value: 3, title: "Teams")
-                Spacer()
-                StatSquareCard(logo: "star.circle.fill", logoColor: .yellow, value: 5, title: "Played")
+        .onAppear{
+            Task{
+                await VM.getLeaderboard()
             }
         }
-        .padding(.horizontal)
-        .padding(.bottom, 8)
     }
     
     private var GamesSlide: some View{
@@ -255,7 +301,7 @@ extension HomeView{
                                 SlideCardView(game: game)
                             }
                         }
-                        .padding(.leading)
+                        .padding(.horizontal)
                     }
                 }
             }
@@ -269,10 +315,11 @@ extension HomeView{
     
     private var LocOfTheDay: some View{
         VStack{
-            AsyncImage(url: URL(string: authVM.user?.profileImage == "" ? "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449040109061189.jpeg" : authVM.user?.profileImage ?? "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449040109061189.jpeg" )) { image in
+            AsyncImage(url: URL(string: VM.user?.profileImage == "" ? "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449040109061189.jpeg" : VM.user?.profileImage ?? "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449040109061189.jpeg" )) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(height: 200)
+                    .frame(maxWidth: .infinity,maxHeight: 200, alignment: .center)
+                    .clipped()
             } placeholder: {
                 ProgressView()
             }
@@ -289,13 +336,11 @@ extension HomeView{
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
+            .frame(minHeight: 100)
             .padding()
         }
-        .frame(maxWidth: .infinity)
-        .background(.ultraThinMaterial, in:
-            Rectangle()
-        )
-        .cornerRadius(10)
+        .background(.regularMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal)
     }
     
@@ -312,11 +357,11 @@ extension HomeView{
                     .foregroundColor(.primary)
             }
             VStack{
-                ForEach(locVM.games, id: \.self.id) { game in
+                ForEach(VM.popularGames, id: \.self.id) { game in
                     HStack{
                         AsyncImage(url: URL(string: game.imageName)) { image in
                             image.resizable()
-                                .aspectRatio(contentMode: .fit)
+                                .scaledToFill()
                         } placeholder: {
                             ProgressView()
                         }
@@ -347,11 +392,15 @@ extension HomeView{
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial, in:
-            RoundedRectangle(cornerRadius: 10)
-        )
+        .background(.regularMaterial, in:RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal)
+        .onAppear{
+            Task{
+                await VM.getPopularGames()
+            }
+        }
     }
+    
     private func getGreeting() -> String{
         let date = Date.now.formatted(date: .omitted, time: .shortened)
         let hrminSplit = date.split(separator: " ")
@@ -365,16 +414,31 @@ extension HomeView{
         switch hour{
         case 1...12:
             return "Good Morning,"
-        case 13...15:
+        case 13...16:
             return "Good Afternoon,"
-        case 16...19:
+        case 17...20:
             return "Good Evening,"
-        case 20...23:
+        case 21...23:
             return "Good Night,"
         case 24:
-            return "Good Noon,"
+            return "Good Afternoon,"
         default:
             return "Good Day,"
+        }
+    }
+    
+    struct ScrollViewOffsetPreferenceKey: PreferenceKey {
+        typealias Value = CGFloat
+        static var defaultValue = CGFloat.zero
+        static func reduce(value: inout Value, nextValue: () -> Value) {
+            value += nextValue()
+        }
+    }
+    struct WelcomeViewHeightPreferenceKey: PreferenceKey{
+        typealias Value = CGFloat
+        static var defaultValue = CGFloat.zero
+        static func reduce(value: inout Value, nextValue: () -> Value) {
+            value += nextValue()
         }
     }
 }

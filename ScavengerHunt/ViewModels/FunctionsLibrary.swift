@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 class FunctionsLibrary{
+    private var loginVM: LoginViewModel = LoginViewModel()
     
     public func setFirstTime(_ val: Bool){
         UserDefaults.standard.set(val, forKey: "firstTime")
@@ -30,6 +31,16 @@ class FunctionsLibrary{
         }
         
         return correctImage
+    }
+    
+    public func getAccessToken()async throws -> String?{
+        let defaults = UserDefaults.standard
+        try await loginVM.refreshToken()
+        
+        guard let accessToken = defaults.string(forKey: "accessToken") else {
+            return nil
+        }
+        return accessToken
     }
 }
 

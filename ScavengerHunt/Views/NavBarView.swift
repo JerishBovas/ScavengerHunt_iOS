@@ -27,92 +27,99 @@ struct NavBarView: View {
             case 1:
                 HomeView(tabSelection: $tabSelection)
                     .transition(getTabTransition())
-                    .onAppear{
-                        prevTabSelection = tabSelection
-                    }
             case 2:
                 GamesView()
                     .transition(getTabTransition())
-                    .onAppear{
-                        prevTabSelection = tabSelection
-                    }
             case 3:
                 TeamsView()
                     .transition(getTabTransition())
-                    .onAppear{
-                        prevTabSelection = tabSelection
-                    }
             case 4:
                 SettingsView()
                     .transition(getTabTransition())
-                    .onAppear{
-                        prevTabSelection = tabSelection
-                    }
             default:
                 HomeView(tabSelection: $tabSelection)
                     .transition(getTabTransition())
-                    .onAppear{
-                        prevTabSelection = tabSelection
-                    }
             }
         }
-        .animation(.spring(dampingFraction: 0.6), value: tabSelection)
-        .background(colorScheme == .dark ? LinearGradient(colors: [Color(.systemBackground)], startPoint: .top, endPoint: .bottomTrailing) :
-        LinearGradient(colors: [.yellow.opacity(0.5), .purple.opacity(0.5), .blue], startPoint: .top, endPoint: .bottom))
+        .animation(.spring(), value: tabSelection)
         .overlay {
-            VStack {
-                HStack{
-                    Spacer()
-                    Button(action: {tabSelection = TabSelected(id: 1)}) {
-                        Image("house")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
-                    .padding(12)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-                    Spacer()
-                    Button(action: {tabSelection = TabSelected(id: 2)}) {
-                        Image("house")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
-                    .padding(12)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-                    Spacer()
-                    Button(action: {tabSelection = TabSelected(id: 3)}) {
-                        Image("house")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
-                    .padding(12)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-                    Spacer()
-                    Button(action: {tabSelection = TabSelected(id: 4)}) {
-                        Image("house")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                    }
-                    .padding(12)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-                    Spacer()
-                }
-                .padding(.vertical)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 40))
-                .padding(8)
-            }
-            .shadow(color: .gray.opacity(0.4),radius: 10)
-            .frame(maxHeight: .infinity, alignment: .bottom)
-            
+            NavBar
         }
     }
 }
 
 extension NavBarView{
+    private var NavBar: some View {
+        VStack {
+            HStack{
+                Spacer()
+                getMenuItem(id: 1, name: "Home", icon: "house.fill")
+                Spacer()
+                getMenuItem(id: 2, name: "Games", icon: "gamecontroller.fill")
+                Spacer()
+                getMenuItem(id: 3, name: "Teams", icon: "person.2.fill")
+                Spacer()
+                getMenuItem(id: 4, name: "Settings", icon: "gear")
+                Spacer()
+            }
+            .padding(.bottom)
+            .padding(.bottom)
+            .background(Color(.secondarySystemBackground))
+        }
+        .overlay(Divider().background(.tertiary), alignment: .top)
+        .frame(maxHeight: .infinity, alignment: .bottom)
+        .edgesIgnoringSafeArea(.bottom)
+    }
+    
     private func getTabTransition() -> AnyTransition{
         if(tabSelection.id > prevTabSelection.id){
             return AnyTransition.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading))
         }else{
             return AnyTransition.asymmetric(insertion: .move(edge: .leading), removal: .move(edge: .trailing))
+        }
+    }
+    
+    private func getMenuItem(id: Int, name: String, icon: String) -> some View{
+        if(tabSelection.id == id){
+            return VStack {
+                Color.clear
+                    .background(RoundedRectangle(cornerRadius: 10).fill(.blue))
+                    .frame(width: 65, height: 2)
+                VStack(spacing: 0) {
+                    Button(action: {
+                        prevTabSelection = tabSelection
+                        tabSelection = TabSelected(id: id)
+                    },label: {
+                        Image(systemName: icon)
+                            .foregroundColor(.accentColor)
+                            .font(.title2)
+                    })
+                    .frame(width: 30, height: 30)
+                    Text(name)
+                        .foregroundColor(.accentColor)
+                        .font(.caption)
+                }
+            }
+        }else{
+            return VStack {
+                Color.clear
+                    .background(RoundedRectangle(cornerRadius: 10).fill(.clear))
+                    .frame(width: 65, height: 1)
+                VStack(spacing: 0) {
+                    Button(action: {
+                        prevTabSelection = tabSelection
+                        tabSelection = TabSelected(id: id)
+                    },label: {
+                        Image(systemName: icon)
+                            .foregroundColor(.secondary)
+                            .font(.title2)
+                    })
+                    .frame(width: 30, height: 30)
+                    Text(name)
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
+            }
         }
     }
 }
@@ -121,7 +128,7 @@ struct NavBarView_Previews: PreviewProvider {
     static var previews: some View {
         NavBarView()
             .environmentObject(GameViewModel())
-            .environmentObject(AuthViewModel())
+            .environmentObject(HomeViewModel())
             .environmentObject(TeamViewModel())
             .environmentObject(LoginViewModel())
     }

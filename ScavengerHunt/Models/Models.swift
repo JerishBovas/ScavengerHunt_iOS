@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-struct User: Decodable, Hashable{
+struct User: Codable, Hashable, Identifiable, Equatable{
     var id: String
     var name: String
     var email: String
@@ -24,7 +24,7 @@ struct User: Decodable, Hashable{
     }
 }
 
-struct UserLog: Decodable{
+struct UserLog: Codable{
     var userScore: Int
     var lastUpdated: String
 }
@@ -40,8 +40,8 @@ struct Game : Identifiable, Equatable, Codable, Hashable {
     var coordinate: Coordinate
     var imageName: String
     var difficulty: Int
-    var ratings: Int
-    var tags: Set<String>
+    var ratings: Double
+    var tags: [String]
     var createdDate: String
     var lastUpdated: String
     

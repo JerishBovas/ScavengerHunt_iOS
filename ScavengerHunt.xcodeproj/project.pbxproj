@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B246E8C28909C7E00D88D8F /* BarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B246E8B28909C7E00D88D8F /* BarChartView.swift */; };
 		8B3983D428184D3000F381FE /* NavBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983D328184D3000F381FE /* NavBarView.swift */; };
 		8B3983DE281AE71A00F381FE /* FunctionsLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983DD281AE71A00F381FE /* FunctionsLibrary.swift */; };
 		8B3983E2281B01F400F381FE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3983E1281B01F400F381FE /* HomeView.swift */; };
@@ -15,7 +16,6 @@
 		8B703D36286BC6BD00754F35 /* StatSquareCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B703D35286BC6BD00754F35 /* StatSquareCard.swift */; };
 		8B71060B285B6E4D007F4049 /* TeamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B71060A285B6E4D007F4049 /* TeamsView.swift */; };
 		8B710610285FD1EC007F4049 /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B71060F285FD1EC007F4049 /* ApiService.swift */; };
-		8B710612285FD7D3007F4049 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B710611285FD7D3007F4049 /* AuthViewModel.swift */; };
 		8B79A579285A8C5B0084B85D /* SlideCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B79A578285A8C5B0084B85D /* SlideCardView.swift */; };
 		8B8134B1286F31DC002848DD /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8134B0286F31DC002848DD /* APIEndpoint.swift */; };
 		8B8C18CF280FA8C500D94AF5 /* ScavengerHuntApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8C18CE280FA8C500D94AF5 /* ScavengerHuntApp.swift */; };
@@ -41,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B246E8B28909C7E00D88D8F /* BarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarChartView.swift; sourceTree = "<group>"; };
 		8B3983D328184D3000F381FE /* NavBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarView.swift; sourceTree = "<group>"; };
 		8B3983DD281AE71A00F381FE /* FunctionsLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionsLibrary.swift; sourceTree = "<group>"; };
 		8B3983E1281B01F400F381FE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -49,7 +50,6 @@
 		8B703D35286BC6BD00754F35 /* StatSquareCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatSquareCard.swift; sourceTree = "<group>"; };
 		8B71060A285B6E4D007F4049 /* TeamsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamsView.swift; sourceTree = "<group>"; };
 		8B71060F285FD1EC007F4049 /* ApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
-		8B710611285FD7D3007F4049 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		8B79A578285A8C5B0084B85D /* SlideCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideCardView.swift; sourceTree = "<group>"; };
 		8B8134B0286F31DC002848DD /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		8B8C18CB280FA8C500D94AF5 /* ScavengerHunt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScavengerHunt.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +103,7 @@
 				8B79A578285A8C5B0084B85D /* SlideCardView.swift */,
 				8B3983E1281B01F400F381FE /* HomeView.swift */,
 				8B703D35286BC6BD00754F35 /* StatSquareCard.swift */,
+				8B246E8B28909C7E00D88D8F /* BarChartView.swift */,
 			);
 			path = HomeTab;
 			sourceTree = "<group>";
@@ -181,7 +182,6 @@
 			children = (
 				8B8C19172810957500D94AF5 /* GameViewModel.swift */,
 				8B3983DD281AE71A00F381FE /* FunctionsLibrary.swift */,
-				8B710611285FD7D3007F4049 /* AuthViewModel.swift */,
 				8B9B43532870E73D0023F655 /* TeamViewModel.swift */,
 				8B47E49928848B2100FAFCB8 /* HomeViewModel.swift */,
 				8BC1360B2885B45600F1C70D /* SignUpViewModel.swift */,
@@ -314,11 +314,11 @@
 				8BAFCEC42825417D00A4E804 /* SliderView.swift in Sources */,
 				8BF68AE42810FBD9006C1AED /* StartView.swift in Sources */,
 				8BAFCEC12825417D00A4E804 /* ListView.swift in Sources */,
-				8B710612285FD7D3007F4049 /* AuthViewModel.swift in Sources */,
 				8B8C18CF280FA8C500D94AF5 /* ScavengerHuntApp.swift in Sources */,
 				8B3983E4281B01FF00F381FE /* SettingsView.swift in Sources */,
 				8B9B43562870E8BE0023F655 /* TeamListView.swift in Sources */,
 				8B8134B1286F31DC002848DD /* APIEndpoint.swift in Sources */,
+				8B246E8C28909C7E00D88D8F /* BarChartView.swift in Sources */,
 				8B703D36286BC6BD00754F35 /* StatSquareCard.swift in Sources */,
 				8BCDB64F2865F2E70060573B /* Models.swift in Sources */,
 				8B9B43542870E73D0023F655 /* TeamViewModel.swift in Sources */,

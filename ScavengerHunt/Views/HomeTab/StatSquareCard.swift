@@ -17,8 +17,7 @@ struct StatSquareCard: View {
     var body: some View {
         ZStack {
             Color.clear
-                .background(.ultraThinMaterial, in:RoundedRectangle(cornerRadius: 20))
-                .blur(radius: 0.5)
+                .background(.regularMaterial, in:RoundedRectangle(cornerRadius: 14))
             VStack(spacing: 8){
                 Label(title, systemImage: logo)
                     .font(.caption)

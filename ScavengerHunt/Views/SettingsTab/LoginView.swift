@@ -133,12 +133,10 @@ struct LoginField: View {
             if isSecure{
                 SecureField("Required", text: $text)
                     .frame(maxWidth: 250, alignment: .trailing)
-                    .textInputAutocapitalization(.none)
             }
             else{
                 TextField("Required", text: $text)
                     .frame(maxWidth: 250, alignment: .trailing)
-                    .textInputAutocapitalization(.none)
             }
         }
         .padding(.vertical, 8)

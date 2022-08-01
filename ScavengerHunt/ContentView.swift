@@ -22,8 +22,6 @@ struct ContentView: View {
                     VStack{
                         
                     }
-                    .background(Color(.systemBackground))
-                    .ignoresSafeArea(.all)
                     .onAppear{
                         Task{
                             await loginVM.initLogin()
