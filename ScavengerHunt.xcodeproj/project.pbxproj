@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8B03E16329D471170038CE4E /* DashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03E16229D471170038CE4E /* DashView.swift */; };
+		8B1337BE2A260CD700493604 /* secrets.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B1337BD2A260CD700493604 /* secrets.plist */; };
 		8B18A11029EFAE8F00D841A3 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A10F29EFAE8F00D841A3 /* Nuke */; };
 		8B18A11229EFAE8F00D841A3 /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A11129EFAE8F00D841A3 /* NukeExtensions */; };
 		8B18A11429EFAE8F00D841A3 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A11329EFAE8F00D841A3 /* NukeUI */; };
@@ -62,6 +63,7 @@
 /* Begin PBXFileReference section */
 		8B03E16229D471170038CE4E /* DashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashView.swift; sourceTree = "<group>"; };
 		8B07F55F29D45A0500D54F94 /* ScavengerHunt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScavengerHunt.entitlements; sourceTree = "<group>"; };
+		8B1337BD2A260CD700493604 /* secrets.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = secrets.plist; sourceTree = "<group>"; };
 		8B1E568F29E5658700C1DE36 /* MapIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapIcon.swift; sourceTree = "<group>"; };
 		8B3310CE29F1261A00D37CAD /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		8B458AD929F2A52A00857CEA /* GamesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesListView.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				8BBDE0A429D458C600A694B2 /* RootView.swift */,
 				8BBDE0A629D458C800A694B2 /* Assets.xcassets */,
 				8BBDE0A829D458C800A694B2 /* Preview Content */,
+				8B1337BD2A260CD700493604 /* secrets.plist */,
 			);
 			path = ScavengerHunt;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BBDE0AA29D458C800A694B2 /* Preview Assets.xcassets in Resources */,
+				8B1337BE2A260CD700493604 /* secrets.plist in Resources */,
 				8BBDE0A729D458C800A694B2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

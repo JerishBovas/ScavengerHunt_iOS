@@ -84,14 +84,13 @@ extension DashView{
                         .foregroundColor(.primary)
                 }
                 Spacer()
-                Button {
-                    showProfile = true
-                } label: {
-                    Image("profileImage")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                }
+                Image("profileImage")
+                    .resizable()
+                    .frame(width: 40, height: 40)
+                    .clipShape(Circle())
+                    .onTapGesture {
+                        showProfile = true
+                    }
 
             }
             ProgressView(value: 400, total: Double(lvlXP))
@@ -124,12 +123,9 @@ extension DashView{
     private var spotLightSection: some View {
         VStack(alignment: .leading) {
             Text("TODAY")
-                .font(.system(size: 18, weight: .medium, design: .rounded))
+                .font(.system(size: 22, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
-            Text("Pick for the day")
-                .font(.system(size: 24, weight: .bold, design: .rounded))
-                .foregroundColor(.primary)
-                .padding(.bottom, -2)
+                .padding(.bottom, -1)
             
             ImageView(url: vm.gotd?.imageName ?? "")
                 .frame(maxHeight: 230)
@@ -140,17 +136,15 @@ extension DashView{
                     Text(vm.gotd?.name ?? "Jerish Bovas")
                         .font(.title2)
                         .fontWeight(.medium)
-                        .fontDesign(.rounded)
                     Text(shortAddress(address: vm.gotd?.address ?? "Something something somethign"))
                         .font(.headline)
-                        .fontDesign(.rounded)
                         .foregroundColor(.secondary)
                 }
                 Spacer()
                 NavigationLink("View", value: vm.gotd)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
-                .padding(.horizontal, 24)
-                .padding(.vertical, 8)
+                .font(.system(size: 18, weight: .bold, design: .default))
+                .padding(.horizontal, 20)
+                .padding(.vertical, 6)
                 .background(Color.accentColor)
                 .foregroundColor(.white)
                 .cornerRadius(12)
@@ -162,14 +156,10 @@ extension DashView{
 
     
     private var topGamesSection: some View {
-        VStack(alignment: .leading) {
+        return VStack(alignment: .leading) {
             Text("TOP GAMES")
-                .font(.system(size: 18, weight: .medium, design: .rounded))
+                .font(.system(size: 22, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
-
-            Text("Top Games This Week")
-                .font(.system(size: 24, weight: .bold, design: .rounded))
-                .foregroundColor(.primary)
 
             LazyVStack {
                 ForEach(vm.popularGames ?? [DataService.getGame(), DataService.getGame(), DataService.getGame(), DataService.getGame()]) { game in
@@ -193,9 +183,9 @@ extension DashView{
                         Spacer()
 
                         NavigationLink("View", value: game)
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 8)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 6)
                         .background(Color.accentColor)
                         .foregroundColor(.white)
                         .cornerRadius(12)

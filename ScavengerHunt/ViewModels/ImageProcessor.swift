@@ -17,12 +17,27 @@ struct DetectedObject: Codable{
 }
 
 class ImageProcessor{
-    private let VISION_KEY = "c62d276f9135452aadef7af41007a9c9"
-    private let VISION_ENDPOINT = "https://scavengerhuntvision.cognitiveservices.azure.com/"
+    private var VISION_KEY: String
+    private var VISION_ENDPOINT: String
     private let apiService = ApiService()
     
+    init(){
+        guard let path = Bundle.main.path(forResource: "secrets", ofType: "plist"),
+              let xml = FileManager.default.contents(atPath: path),
+              let secrets = try? PropertyListSerialization.propertyList(from: xml, options: [], format: nil) as? [String: Any],
+              let visionKey = secrets["VISION_KEY"] as? String,
+              let visionEndpoint = secrets["VISION_ENDPOINT"] as? String
+        else {
+            self.VISION_KEY = ""
+            self.VISION_ENDPOINT = ""
+            return
+        }
+        self.VISION_KEY = visionKey
+        self.VISION_ENDPOINT = visionEndpoint
+    }
+    
     public func removeBackground(image: UIImage) async throws-> UIImage{
-        let endpoint = "https://scavengerhuntvision.cognitiveservices.azure.com/computervision/imageanalysis:segment?api-version=2023-02-01-preview&mode=backgroundRemoval"
+        let endpoint = "\(VISION_ENDPOINT)computervision/imageanalysis:segment?api-version=2023-02-01-preview&mode=backgroundRemoval"
         
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
@@ -36,7 +51,7 @@ class ImageProcessor{
     }
     
     public func detectObjects(imageData: UIImage) async throws -> DetectedObjects{
-        let requestURL = URL(string: "\(VISION_ENDPOINT)/vision/v3.2/analyze?visualFeatures=Tags")!
+        let requestURL = URL(string: "\(VISION_ENDPOINT)vision/v3.2/analyze?visualFeatures=Tags")!
         
         var request = URLRequest(url: requestURL)
         request.httpMethod = "POST"
