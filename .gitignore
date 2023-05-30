@@ -1,0 +1,30 @@
+# Xcode
+#
+# Ignore the build directory
+build/
+
+# Ignore personal Xcode settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+
+# CocoaPods dependency directory (if used)
+# Pods/
+
+# Ignore sensitive files
+secrets.plist
+secrets.json
+
+# Ignore generated files
+DerivedData/
+xcuserdata/
+
+# Ignore macOS specific files
+.DS_Store
+
