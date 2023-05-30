@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1400"
+   LastUpgradeVersion = "1430"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8B8C18CA280FA8C500D94AF5"
+               BlueprintIdentifier = "8BBDE09E29D458C600A694B2"
                BuildableName = "ScavengerHunt.app"
                BlueprintName = "ScavengerHunt"
                ReferencedContainer = "container:ScavengerHunt.xcodeproj">
@@ -26,9 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-      </Testables>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -44,16 +43,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8B8C18CA280FA8C500D94AF5"
+            BlueprintIdentifier = "8BBDE09E29D458C600A694B2"
             BuildableName = "ScavengerHunt.app"
             BlueprintName = "ScavengerHunt"
             ReferencedContainer = "container:ScavengerHunt.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <LocationScenarioReference
-         identifier = "com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier"
-         referenceType = "1">
-      </LocationScenarioReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -65,7 +60,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8B8C18CA280FA8C500D94AF5"
+            BlueprintIdentifier = "8BBDE09E29D458C600A694B2"
             BuildableName = "ScavengerHunt.app"
             BlueprintName = "ScavengerHunt"
             ReferencedContainer = "container:ScavengerHunt.xcodeproj">

@@ -9,19 +9,14 @@ import Foundation
 import SwiftUI
 
 class FunctionsLibrary{
-    private var loginVM: LoginViewModel = LoginViewModel()
     
-    public func setFirstTime(_ val: Bool){
-        UserDefaults.standard.set(val, forKey: "firstTime")
-    }
-    
-    public func getCompressedImage(image: UIImage) -> Data?{
+    public func getCompressedImage(image: UIImage, quality: Int) -> Data?{
         guard var correctImage = image.jpegData(compressionQuality: 1.0) else {
             return nil
         }
         let count = correctImage.count / 1024
-        if(count > 256){
-            let longQuality = Double(256) / Double(count)
+        if(count > quality){
+            let longQuality = Double(quality) / Double(count)
             let quality = Double(floor(100 * longQuality)/100)
             print(quality)
             
@@ -31,16 +26,6 @@ class FunctionsLibrary{
         }
         
         return correctImage
-    }
-    
-    public func getAccessToken()async throws -> String?{
-        let defaults = UserDefaults.standard
-        try await loginVM.refreshToken()
-        
-        guard let accessToken = defaults.string(forKey: "accessToken") else {
-            return nil
-        }
-        return accessToken
     }
 }
 

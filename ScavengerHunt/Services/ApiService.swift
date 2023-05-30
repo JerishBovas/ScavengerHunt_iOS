@@ -6,73 +6,32 @@
 //
 
 import Foundation
-enum ErrorType: Error{
-    case error(_ error: ApiError)
-}
-enum ApiError{
-    case processingError
-    case unauthorizedError
-    case badRequestError
-    case serverError
-    case loginError
-    case custom(title: String, message: String)
-    
-    var appError: AppError {
-        switch self{
-        case .processingError:
-            return AppError(title: "Something went wrong", message: "Something went wrong.  Please try again or contact developer.")
-        case .unauthorizedError:
-            return AppError(title: "Permission Denied", message: "You are not permitted to do this action. Try Logging In again.")
-        case .badRequestError:
-            return AppError(title: "Try Again", message: "Something went wrong. Please try again.")
-        case .serverError:
-            return AppError(title: "Try again later", message: "Something went wrong in our side.  Please try back later.")
-        case .loginError:
-            return AppError(title: "Login Failed", message: "Please try logging in again")
-        case .custom(let title, let message):
-            return AppError(title: title, message: message)
-        }
-    }
+
+struct ErrorObject: Decodable, Error{
+    var title: String
+    var status: Int
+    var errors: Set<String>
 }
 
 class ApiService{
     
-    func get<T: Decodable>(endpoint: APIEndpoint) async throws -> T{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
+    func get<T: Decodable>(endpoint: String) async throws -> T{
+        var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "GET"
         
         return try await fetchApi(request: request)
     }
     
-    func get<T: Decodable>(accessToken: String, endpoint: APIEndpoint) async throws -> T{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
+    func get<T: Decodable>(accessToken: String, endpoint: String) async throws -> T{
+        var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         return try await fetchApi(request: request)
     }
     
-    func post<T: Decodable>(body: Data, endpoint: APIEndpoint) async throws -> T{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
-        
-        return try await fetchApi(request: request)
-    }
-    
-    func post<T: Decodable>(accessToken: String, body: Data, endpoint: APIEndpoint) async throws -> T{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
-        request.httpMethod = "POST"
-        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
-        
-        return try await fetchApi(request: request)
-    }
-    
-    func post(body: Data, endpoint: APIEndpoint) async throws{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
+    func post(body: Data, endpoint: String) async throws{
+        var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
@@ -80,8 +39,8 @@ class ApiService{
         try await fetchApi(request: request)
     }
     
-    func post(accessToken: String, body: Data, endpoint: APIEndpoint) async throws{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
+    func post(accessToken: String, body: Data, endpoint: String) async throws{
+        var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -90,8 +49,55 @@ class ApiService{
         try await fetchApi(request: request)
     }
     
-    func put(accessToken: String, body: Data, endpoint: APIEndpoint) async throws{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
+    func post<T: Decodable>(body: Data, endpoint: String) async throws -> T{
+        var request = URLRequest(url: URL(string: endpoint)!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        
+        return try await fetchApi(request: request)
+    }
+    
+    func post<T: Decodable>(accessToken: String, body: Data, endpoint: String) async throws -> T{
+        var request = URLRequest(url: URL(string: endpoint)!)
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        
+        return try await fetchApi(request: request)
+    }
+    
+    func post<T:Decodable>(imageData: Data, data: Data, endpoint: String, accessToken: String) async throws -> T{
+        let boundary = UUID().uuidString
+        var request = URLRequest(url: URL(string: endpoint)!)
+        request.httpMethod = "POST"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"json\"\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n".data(using: .utf8)!)
+
+        // add image data to the request body
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpeg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+
+        // end the request body
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        request.httpBody = body
+
+        return try await fetchApi(request: request)
+    }
+    
+    func put(accessToken: String, body: Data, endpoint: String) async throws{
+        var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "PUT"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -99,9 +105,47 @@ class ApiService{
         
         return try await fetchApi(request: request)
     }
+    func put<T:Decodable>(accessToken: String, body: Data, endpoint: String) async throws -> T{
+        var request = URLRequest(url: URL(string: endpoint)!)
+        request.httpMethod = "PUT"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        
+        return try await fetchApi(request: request)
+    }
+    func put<T:Decodable>(imageData: Data?, data: Data, endpoint: String, accessToken: String) async throws -> T{
+        let boundary = UUID().uuidString
+        var request = URLRequest(url: URL(string: endpoint)!)
+        request.httpMethod = "PUT"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"json\"\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n".data(using: .utf8)!)
+
+        if let imageData = imageData{
+            // add image data to the request body
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpeg\"\r\n".data(using: .utf8)!)
+            body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+            body.append(imageData)
+            body.append("\r\n".data(using: .utf8)!)
+        }
+
+        // end the request body
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+
+        request.httpBody = body
+
+        return try await fetchApi(request: request)
+    }
     
-    func delete(accessToken: String, endpoint: APIEndpoint) async throws{
-        var request = URLRequest(url: URL(string: endpoint.description)!)
+    func delete(accessToken: String, endpoint: String) async throws{
+        var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "DELETE"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
@@ -115,7 +159,7 @@ class ApiService{
         guard let response = response as? HTTPURLResponse, response.statusCode >= 200, response.statusCode < 300  else  {
             print(response)
             let error = try JSONDecoder().decode(ErrorObject.self, from: data)
-            throw ErrorType.error( .custom(title: error.title, message: error.errors.joined(separator: "\n")))
+            throw AppError(title: error.title, message: error.errors.joined(separator: "\n"))
         }
         
         let tokenObj = try JSONDecoder().decode(T.self, from: data)
@@ -130,15 +174,15 @@ class ApiService{
         guard let response = response as? HTTPURLResponse, response.statusCode >= 200, response.statusCode < 300  else  {
             let error = try JSONDecoder().decode(ErrorObject.self, from: data)
             print(error)
-            throw ErrorType.error( .custom(title: error.title, message: error.errors.joined(separator: "\n")))
+            throw AppError(title: error.title, message: error.errors.joined(separator: "\n"))
         }
     }
     
-    func uploadImage(endpoint: APIEndpoint, request: ImageRequest, accessToken: String) async throws -> ImageResponse{
-        var urlRequest = URLRequest(url: URL(string: endpoint.description)!)
+    func uploadImage(endpoint: String, request: ImageRequest, accessToken: String) async throws -> ImageResponse{
+        var urlRequest = URLRequest(url: URL(string: endpoint)!)
         let boundary = "Boundary-\(UUID().uuidString)"
         
-        urlRequest.httpMethod = "PUT"
+        urlRequest.httpMethod = "POST"
         urlRequest.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         urlRequest.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "content-type")
         

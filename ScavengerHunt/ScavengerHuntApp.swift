@@ -2,25 +2,21 @@
 //  ScavengerHuntApp.swift
 //  ScavengerHunt
 //
-//  Created by Jerish Bovas on 2022-04-19.
+//  Created by Jerish Bovas on 2023-03-29.
 //
 
 import SwiftUI
 
 @main
 struct ScavengerHuntApp: App {
-    @StateObject private var gameVM = GameViewModel()
-    @StateObject private var authVM = HomeViewModel()
-    @StateObject private var teamVM = TeamViewModel()
-    @StateObject private var loginVM = LoginViewModel()
+    @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var router = Router()
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(gameVM)
-                .environmentObject(authVM)
-                .environmentObject(teamVM)
-                .environmentObject(loginVM)
+            RootView()
+                .environmentObject(authViewModel)
+                .environmentObject(router)
         }
     }
 }

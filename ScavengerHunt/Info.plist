@@ -2,15 +2,40 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Please allow Scavenger Hunt to use Face ID to Securely Authenticate you</string>
-	<key>LSApplicationQueriesSchemes</key>
+	<key>CFBundleDocumentTypes</key>
 	<array>
-		<string>maps</string>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>MKDirectionsRequest</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.apple.maps.directionsrequest</string>
+			</array>
+		</dict>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict/>
-	<key>UIStatusBarStyle</key>
-	<string></string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>quest.scavengerhunt.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>navStack</string>
+			</array>
+		</dict>
+	</array>
+	<key>MKDirectionsApplicationSupportedModes</key>
+	<array>
+		<string>MKDirectionsModeBike</string>
+		<string>MKDirectionsModeBus</string>
+		<string>MKDirectionsModeCar</string>
+		<string>MKDirectionsModePedestrian</string>
+		<string>MKDirectionsModeStreetCar</string>
+		<string>MKDirectionsModeSubway</string>
+		<string>MKDirectionsModeTaxi</string>
+		<string>MKDirectionsModeTrain</string>
+	</array>
 </dict>
 </plist>
