@@ -17,8 +17,25 @@ struct PlayGameView: View {
     @State private var locationStatus: LocationStatus = .notChecking
     @State private var isWithinRange: Bool = false
     @State private var showingAlert: Bool = false
+    @State private var showingSection: Int = 0
     
     var body: some View {
+        if showingSection == 0{
+            preparationSection
+        }else if showingSection == 1{
+            gamePlaySection
+        }
+    }
+}
+
+extension PlayGameView{
+    private var gamePlaySection: some View{
+        ZStack{
+            
+        }
+    }
+    
+    private var preparationSection: some View{
         ZStack{
             ImageView(url: game.imageName)
             Rectangle().fill(.ultraThinMaterial)
@@ -147,9 +164,7 @@ struct PlayGameView: View {
             )
         }
     }
-}
-
-extension PlayGameView{
+    
     private func createGridColumns() -> [GridItem] {
         Array(repeating: .init(.flexible(), spacing: 16), count: 3)
     }

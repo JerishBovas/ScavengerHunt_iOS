@@ -93,6 +93,8 @@
 		8BB9711829DB3DA100D69BCF /* PlayGameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayGameViewModel.swift; sourceTree = "<group>"; };
 		8BB9712629DC297900D69BCF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
+		8BBD5FA52A27CA9B00350785 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
+		8BBD5FA62A27CAA400350785 /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		8BBDE09F29D458C600A694B2 /* ScavengerHunt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScavengerHunt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BBDE0A229D458C600A694B2 /* ScavengerHuntApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScavengerHuntApp.swift; sourceTree = "<group>"; };
 		8BBDE0A429D458C600A694B2 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -221,6 +223,15 @@
 			path = SettingsTab;
 			sourceTree = "<group>";
 		};
+		8BBD5FA42A27CA8800350785 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				8BBD5FA52A27CA9B00350785 /* debug.xcconfig */,
+				8BBD5FA62A27CAA400350785 /* release.xcconfig */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
 		8BBDE09629D458C600A694B2 = {
 			isa = PBXGroup;
 			children = (
@@ -241,6 +252,7 @@
 		8BBDE0A129D458C600A694B2 /* ScavengerHunt */ = {
 			isa = PBXGroup;
 			children = (
+				8BBD5FA42A27CA8800350785 /* Configs */,
 				8BCFB9B429E188CB0014422F /* Info.plist */,
 				8BB970FD29DA9F9600D69BCF /* Services */,
 				8B03E16129D471070038CE4E /* ViewModels */,
@@ -278,6 +290,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8BBDE0AD29D458C800A694B2 /* Build configuration list for PBXNativeTarget "ScavengerHunt" */;
 			buildPhases = (
+				8BBD5FA32A27C83F00350785 /* ShellScript */,
 				8BBDE09B29D458C600A694B2 /* Sources */,
 				8BBDE09C29D458C600A694B2 /* Frameworks */,
 				8BBDE09D29D458C600A694B2 /* Resources */,
@@ -347,6 +360,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		8BBD5FA32A27C83F00350785 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\n\n# Set the path to the release.xcconfig file\nXC_CONFIG_FILE=\"../ScavengerHunt/Configs/release.xcconfig\"\n\n# Function to write a key-value pair to the xcconfig file\nfunction writeKeyValue() {\n    echo \"$1 = $2\" >> \"$XC_CONFIG_FILE\"\n}\n\n# Clear the existing content of the xcconfig file\n> \"$XC_CONFIG_FILE\"\n\n# Write your environment variables to the xcconfig file\n# Replace \"YOUR_ENV_VAR_NAME\" with the actual names of your environment variables\n\n# Example:\n# writeKeyValue(\"API_KEY\", \"$API_KEY\")\n\n# Write your environment variables here\n\nwriteKeyValue(\"API_ENDPOINT\", \"$API_ENDPOINT\")\nwriteKeyValue(\"VISION_ENDPOINT\", \"$VISION_ENDPOINT\")\nwriteKeyValue(\"VISION_KEY\", \"$VISION_KEY\")\n\n# Add any other key-value pairs as needed\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8BBDE09B29D458C600A694B2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -400,6 +433,7 @@
 /* Begin XCBuildConfiguration section */
 		8BBDE0AB29D458C800A694B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BBD5FA52A27CA9B00350785 /* debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -460,6 +494,7 @@
 		};
 		8BBDE0AC29D458C800A694B2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BBD5FA62A27CAA400350785 /* release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

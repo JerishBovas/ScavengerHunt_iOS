@@ -16,8 +16,8 @@ enum APIEndpoint : CustomStringConvertible{
     case item(gameId: String)
     
     private var DOMAIN_URL: String {
-        let url = ProcessInfo.processInfo.environment["API_ENDPOINT"] ?? ""
-        return "https://\(String(describing: url))"
+        let url = Bundle.main.infoDictionary?["API_ENDPOINT"] as? String ?? ""
+        return "https://\(url)"
     }
     
     var description: String{

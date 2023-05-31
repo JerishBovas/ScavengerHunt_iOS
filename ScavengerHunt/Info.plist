@@ -2,13 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>API_ENDPOINT</key>
+	<string>$(API_ENDPOINT)</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>MKDirectionsRequest</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>com.apple.maps.directionsrequest</string>
@@ -39,5 +39,9 @@
 		<string>MKDirectionsModeTaxi</string>
 		<string>MKDirectionsModeTrain</string>
 	</array>
+	<key>VISION_ENDPOINT</key>
+	<string>$(VISION_ENDPOINT)</string>
+	<key>VISION_KEY</key>
+	<string>$(VISION_KEY)</string>
 </dict>
 </plist>
