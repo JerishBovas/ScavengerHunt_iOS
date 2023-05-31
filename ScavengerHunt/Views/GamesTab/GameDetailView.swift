@@ -8,16 +8,6 @@
 import SwiftUI
 import MapKit
 
-struct CustomAnnotation: Identifiable{
-    var id: UUID
-    var coordinate: CLLocationCoordinate2D
-
-    init(coordinate: Coordinate) {
-        self.id = UUID()
-        self.coordinate = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
-    }
-}
-
 struct GameDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var gameVM: GameViewModel
@@ -28,6 +18,7 @@ struct GameDetailView: View {
     @State private var difficulty = ["None","Easy", "Medium", "Hard"]
     @State private var isPresented = false
     @State private var showItemsSheet = false
+    @State private var showGamePlaySheet = false
     
     private func fetchGame() async{
         if let game = await gameVM.getGame(game: game){
@@ -58,7 +49,7 @@ struct GameDetailView: View {
                         Spacer()
                         HStack{
                             Button(action: {
-                                
+                                showGamePlaySheet = true
                             }, label: {
                                 Text("Play")
                                     .font(.headline)
@@ -176,7 +167,7 @@ struct GameDetailView: View {
                     .padding(.horizontal)
                 }
                 VStack(alignment: .leading){
-                    Map(coordinateRegion: .constant(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude), latitudinalMeters: 500, longitudinalMeters: 500)), annotationItems: [CustomAnnotation(coordinate: gameDetail.coordinate)]) { game in
+                    Map(coordinateRegion: .constant(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude), latitudinalMeters: 500, longitudinalMeters: 500)), annotationItems: [CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude))]) { game in
                         MapMarker(coordinate: game.coordinate)
                     }
                     .disabled(true)
@@ -317,21 +308,24 @@ struct GameDetailView: View {
                 }
             }
         }
-        .sheet(isPresented: $showItemsSheet, content: {
-            AddItemsView(game: gameDetail)
-                .onDisappear{
-                    Task{
-                        await fetchGame()
-                    }
-                }
+        .fullScreenCover(isPresented: $showGamePlaySheet, onDismiss: {
+            dismiss()
+        }, content: {
+            PlayGameView(game: gameDetail)
         })
-        .sheet(isPresented: $isPresented, content: {
+        .sheet(isPresented: $showItemsSheet, onDismiss: {
+            Task{
+                await fetchGame()
+            }
+        }, content: {
+            AddItemsView(game: gameDetail)
+        })
+        .sheet(isPresented: $isPresented, onDismiss: {
+            Task{
+                await fetchGame()
+            }
+        },content: {
             EditGameView(game: gameDetail)
-                .onDisappear{
-                    Task{
-                        await fetchGame()
-                    }
-                }
         })
     }
 }

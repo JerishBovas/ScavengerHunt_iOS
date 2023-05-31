@@ -12,7 +12,7 @@ import SwiftUI
 
 class LocationService: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
-    @objc dynamic var currentLocation: CLLocation?
+    @Published dynamic var currentLocation: CLLocation?
     @Published var authorizationStatus: CLAuthorizationStatus?
     
     override init() {

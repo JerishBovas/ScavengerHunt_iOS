@@ -11,7 +11,6 @@ import UIKit
 class DashViewModel: ObservableObject{
     private var accessToken: String?
     private var api: ApiService
-    private var lib: FunctionsLibrary
     
     @Published var user: User?
     @Published var gotd: Game?
@@ -21,7 +20,6 @@ class DashViewModel: ObservableObject{
     init(){
         self.accessToken = UserDefaults.standard.string(forKey: "accessToken")
         api = ApiService()
-        lib = FunctionsLibrary()
         if let data = UserDefaults.standard.data(forKey: "user"),
            let use = try? JSONDecoder().decode(User.self, from: data){
             self.user = use
