@@ -93,7 +93,6 @@
 		8BB9711829DB3DA100D69BCF /* PlayGameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayGameViewModel.swift; sourceTree = "<group>"; };
 		8BB9712629DC297900D69BCF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
-		8BBD5FA12A2765AC00350785 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		8BBDE09F29D458C600A694B2 /* ScavengerHunt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScavengerHunt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BBDE0A229D458C600A694B2 /* ScavengerHuntApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScavengerHuntApp.swift; sourceTree = "<group>"; };
 		8BBDE0A429D458C600A694B2 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -222,14 +221,6 @@
 			path = SettingsTab;
 			sourceTree = "<group>";
 		};
-		8BBD5FA22A27696500350785 /* Configs */ = {
-			isa = PBXGroup;
-			children = (
-				8BBD5FA12A2765AC00350785 /* debug.xcconfig */,
-			);
-			path = Configs;
-			sourceTree = "<group>";
-		};
 		8BBDE09629D458C600A694B2 = {
 			isa = PBXGroup;
 			children = (
@@ -250,7 +241,6 @@
 		8BBDE0A129D458C600A694B2 /* ScavengerHunt */ = {
 			isa = PBXGroup;
 			children = (
-				8BBD5FA22A27696500350785 /* Configs */,
 				8BCFB9B429E188CB0014422F /* Info.plist */,
 				8BB970FD29DA9F9600D69BCF /* Services */,
 				8B03E16129D471070038CE4E /* ViewModels */,
@@ -410,7 +400,6 @@
 /* Begin XCBuildConfiguration section */
 		8BBDE0AB29D458C800A694B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8BBD5FA12A2765AC00350785 /* debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -542,6 +531,7 @@
 				INFOPLIST_FILE = ScavengerHunt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Scavenger Hunt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scavenger Hunt needs your Camera to capture images";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Scavenger Hunt needs your location to show places near you.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Scavenger Hunt needs your location to show places near you.";
@@ -585,6 +575,7 @@
 				INFOPLIST_FILE = ScavengerHunt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Scavenger Hunt";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.puzzle-games";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Scavenger Hunt needs your Camera to capture images";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Scavenger Hunt needs your location to show places near you.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Scavenger Hunt needs your location to show places near you.";
