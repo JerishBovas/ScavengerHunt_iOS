@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 class DashViewModel: ObservableObject{
     private var accessToken: String?
@@ -22,7 +23,9 @@ class DashViewModel: ObservableObject{
         api = ApiService()
         if let data = UserDefaults.standard.data(forKey: "user"),
            let use = try? JSONDecoder().decode(User.self, from: data){
-            self.user = use
+            withAnimation {
+                self.user = use
+            }
         }
     }
     
@@ -35,12 +38,16 @@ class DashViewModel: ObservableObject{
 
         DispatchQueue.main.async {
             if let leaderBoard = leaderBoard {
-                self.leaderBoard = leaderBoard
+                withAnimation(.default) {
+                    self.leaderBoard = leaderBoard
+                }
             }
             
             if let popularGames = popularGames {
-                self.popularGames = popularGames
-                self.gotd = popularGames[1]
+                withAnimation(.default) {
+                    self.popularGames = popularGames
+                    self.gotd = popularGames[1]
+                }
             }
             print("Page Fetched")
         }
@@ -49,7 +56,9 @@ class DashViewModel: ObservableObject{
             let user = await fetchedUser
             DispatchQueue.main.async {
                 if let user = user {
-                    self.user = user
+                    withAnimation(.default) {
+                        self.user = user
+                    }
                     if let encoded = try? JSONEncoder().encode(user) {
                         UserDefaults.standard.set(encoded, forKey: "user")
                     }

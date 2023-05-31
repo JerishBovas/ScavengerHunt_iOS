@@ -378,7 +378,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\n\n# Set the path to the release.xcconfig file\nXC_CONFIG_FILE=\"$CI_WORKSPACE/ScavengerHunt/Configs/release.xcconfig\"\n\n# Write your environment variables to the xcconfig file\n# Replace \"YOUR_ENV_VAR_NAME\" with the actual names of your environment variables\n\n# Example:\n# writeKeyValue(\"API_KEY\", \"$API_KEY\")\n\n# Write your environment variables here\necho \"API_ENDPOINT = $API_ENDPOINT\" >> \"$CONFIG_FILE\"\necho \"VISION_ENDPOINT = $VISION_ENDPOINT\" >> \"$CONFIG_FILE\"\necho \"VISION_KEY = $VISION_KEY\" >> \"$CONFIG_FILE\"\n\nexit 0\n# Add any other key-value pairs as needed\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#!/bin/bash\n\n# Set the path to the release.xcconfig file\nls $CI_WORKSPACE\nXC_CONFIG_FILE_PATH=\"$CI_WORKSPACE/ScavengerHunt/Configs/release.xcconfig\"\n\n# Create new xcconfig file\ntouch $XC_CONFIG_FILE_PATH\n# Write your environment variables to the xcconfig file\n# Replace \"YOUR_ENV_VAR_NAME\" with the actual names of your environment variables\n\n# Example:\n# writeKeyValue(\"API_KEY\", \"$API_KEY\")\n\n# Write your environment variables here\necho \"API_ENDPOINT = $API_ENDPOINT\" >> \"$XC_CONFIG_FILE_PATH\"\necho \"VISION_ENDPOINT = $VISION_ENDPOINT\" >> \"$XC_CONFIG_FILE_PATH\"\necho \"VISION_KEY = $VISION_KEY\" >> \"$XC_CONFIG_FILE_PATH\"\n\nexit 0\n# Add any other key-value pairs as needed\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -48,12 +48,16 @@ class PlayGameViewModel : ObservableObject, HubConnectionDelegate{
         hubConnection!.invoke(method: "GameStatus", gameId, userId, resultType: Bool.self) { (status: Bool?, error: Error?) in
             if let status = status {
                 DispatchQueue.main.async {
-                    self.gamePlayStatus = status ? .ready : .notReady
+                    withAnimation {
+                        self.gamePlayStatus = status ? .ready : .notReady
+                    }
                 }
             } else if let _ = error {
                 DispatchQueue.main.async {
-                    self.gamePlayStatus = .notFetched
-                    self.enqueue(message: "Error fetching data", backgroundColor: .red)
+                    withAnimation {
+                        self.gamePlayStatus = .notFetched
+                        self.enqueue(message: "Error fetching data", backgroundColor: .red)
+                    }
                 }
             }
         }
@@ -117,20 +121,20 @@ enum RunStatus{
     var getIcon: some View{
         switch self{
         case .failed:
-            return Image(systemName: "xmark.octagon.fill")
-                .font(.title)
+            return Image(systemName: "xmark")
+                .font(.title2)
                 .symbolRenderingMode(.multicolor)
         case .notRunning:
-            return Image(systemName: "questionmark.circle.fill")
-                .font(.title)
+            return Image(systemName: "questionmark")
+                .font(.title2)
                 .symbolRenderingMode(.multicolor)
         case .success:
-            return Image(systemName: "checkmark.circle.fill")
-                .font(.title)
+            return Image(systemName: "checkmark")
+                .font(.title2)
                 .symbolRenderingMode(.multicolor)
         case .running:
-            return Image(systemName: "figure.run.circle.fill")
-                .font(.title)
+            return Image(systemName: "figure.run")
+                .font(.title2)
                 .symbolRenderingMode(.multicolor)
         }
     }

@@ -38,7 +38,9 @@ class GameViewModel: ObservableObject {
             let games: [Game] = try await api.get(accessToken: accessToken, endpoint: APIEndpoint.game.description + "?category=user&count=25")
             print("Games fetched")
             DispatchQueue.main.async {
-                self.myGames = games
+                withAnimation {
+                    self.myGames = games
+                }
             }
         }catch let error as AppError{
             DispatchQueue.main.async {
@@ -61,7 +63,9 @@ class GameViewModel: ObservableObject {
             let games: [Game] = try await api.get(accessToken: accessToken, endpoint: APIEndpoint.game.description + "?category=other&count=25")
             print("Games fetched")
             DispatchQueue.main.async {
-                self.games = games
+                withAnimation {
+                    self.games = games
+                }
             }
         }catch let error as AppError{
             DispatchQueue.main.async {
@@ -108,7 +112,9 @@ class GameViewModel: ObservableObject {
         
         let gameResp: Game = try await api.post(imageData: imageData, data: gameData, endpoint: APIEndpoint.gameCreate.description, accessToken: accessToken)
         DispatchQueue.main.async {
-            self.myGames?.insert(gameResp, at: 0)
+            withAnimation {
+                self.myGames?.insert(gameResp, at: 0)
+            }
         }
     }
     

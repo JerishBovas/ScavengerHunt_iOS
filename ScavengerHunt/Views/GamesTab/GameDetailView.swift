@@ -22,7 +22,9 @@ struct GameDetailView: View {
     
     private func fetchGame() async{
         if let game = await gameVM.getGame(game: game){
-            self.gameDetail = game
+            withAnimation {
+                self.gameDetail = game
+            }
         }
         else{
             dismiss()

@@ -36,112 +36,90 @@ extension PlayGameView{
     }
     
     private var preparationSection: some View{
-        ZStack{
-            ImageView(url: game.imageName)
-            Rectangle().fill(.ultraThinMaterial)
-            ScrollView(showsIndicators: false){
-                VStack(spacing: 16) {
-                    Text(game.name)
-                        .font(.title)
-                        .fontWeight(.medium)
-                        .fontDesign(.rounded)
-                    VStack(spacing: 16) {
-                        GridRowView(name: "Connection Status", status: vm.connectionStatus.icon)
-                            .onChange(of: vm.connectionStatus) { newValue in
-                                if newValue == .connected{
-                                    vm.getGameStatus(gameId: game.id, userId: game.userId)
-                                }
-                            }
-                        GridRowView(name: "Game Status", status: vm.gamePlayStatus.icon)
-                            .onChange(of: vm.gamePlayStatus) { newValue in
-                                if newValue == .ready{
-                                    switch locationService.authorizationStatus {
-                                    case .authorizedWhenInUse:
-                                        if let location = locationService.currentLocation{
-                                            locationStatus = .checking
-                                            userLocation = location
-                                            guard let loca = userLocation else {return}
-                                            let from = CLLocationCoordinate2D(latitude: loca.coordinate.latitude, longitude: loca.coordinate.longitude)
-                                            let to = CLLocationCoordinate2D(latitude: game.coordinate.latitude, longitude: game.coordinate.longitude)
-                                            let distance = calculateDistance(from: from, to: to)
-                                            isWithinRange = distance < 100 ? true : false
-                                            locationStatus = isWithinRange ? .done : .checking
-                                        }
-                                    case .restricted, .denied:
-                                        locationStatus = .failed
-                                        showingAlert = true
-                                    default:
-                                        return
-                                    }
-                                }
-                            }
-                        GridRowView(name: "Location Status", status: locationStatus.icon)
-                    }
-                    .frame(width: UIScreen.main.bounds.width - 40)
-                    if isWithinRange {
-                        Text("You are in the game location.")
-                            .foregroundColor(.green)
-                            .font(.headline)
-                    } else {
-                        Text("Please move closer to the game location.")
-                            .foregroundColor(.yellow)
-                            .font(.headline)
-                    }
-                    CircleMap(gameLocation: CLLocationCoordinate2D(latitude: game.coordinate.latitude, longitude: game.coordinate.longitude))
-                        .frame(width: UIScreen.main.bounds.width - 40)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
-                    Button(action: {
-                        // Start game action
-                    }) {
-                        Text("Start Game")
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    .padding()
-                    .disabled(!isWithinRange)
-                }
-                .overlay{
-                    VStack{
-                        HStack{
-                            Spacer()
-                            Button {
-                                dismiss()
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .symbolRenderingMode(.monochrome)
-                                    .font(.largeTitle)
-                                    .tint(.primary)
-                                    .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
-                            }
-
+        VStack(spacing: 16) {
+            Text(game.name)
+                .font(.title)
+                .fontWeight(.medium)
+                .fontDesign(.rounded)
+            VStack(spacing: 16) {
+                GridRowView(name: "Connection Status", status: vm.connectionStatus.icon)
+                    .onChange(of: vm.connectionStatus) { newValue in
+                        if newValue == .connected{
+                            vm.getGameStatus(gameId: game.id, userId: game.userId)
                         }
-                        Spacer()
                     }
-                }
-                .overlay{
-                    VStack{
-                        ForEach(vm.toasts) { toast in
-                            ToastView(toast: toast, isPresented: .constant(true)) {
-                                vm.toasts.removeAll(where: { $0.id == toast.id })
+                GridRowView(name: "Game Status", status: vm.gamePlayStatus.icon)
+                    .onChange(of: vm.gamePlayStatus) { newValue in
+                        if newValue == .ready{
+                            switch locationService.authorizationStatus {
+                            case .authorizedWhenInUse:
+                                if let location = locationService.currentLocation{
+                                    locationStatus = .checking
+                                    userLocation = location
+                                    guard let loca = userLocation else {return}
+                                    let from = CLLocationCoordinate2D(latitude: loca.coordinate.latitude, longitude: loca.coordinate.longitude)
+                                    let to = CLLocationCoordinate2D(latitude: game.coordinate.latitude, longitude: game.coordinate.longitude)
+                                    let distance = calculateDistance(from: from, to: to)
+                                    isWithinRange = distance < 100 ? true : false
+                                    locationStatus = isWithinRange ? .done : .checking
+                                }
+                            case .restricted, .denied:
+                                locationStatus = .failed
+                                showingAlert = true
+                            default:
+                                return
                             }
-                            .transition(.slide)
                         }
-                        Spacer()
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                GridRowView(name: "Location Status", status: locationStatus.icon)
+            }
+            if isWithinRange {
+                Text("You are in the game location.")
+                    .foregroundColor(.green)
+                    .font(.headline)
+            } else {
+                Text("Please move closer to the game location.")
+                    .foregroundColor(.yellow)
+                    .font(.headline)
+            }
+            CircleMap(gameLocation: CLLocationCoordinate2D(latitude: game.coordinate.latitude, longitude: game.coordinate.longitude))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            Spacer()
+            HStack{
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Cancel")
+                        .font(.title2)
+                        .foregroundColor(.red)
                 }
+                Spacer()
+                Button(action: {
+                    // Start game action
+                }) {
+                    Text("Start Game")
+                        .font(.title2)
+                }
+                .buttonStyle(.borderless)
             }
-            .padding(.top, 60)
-            .onAppear{
-                vm.openConnection()
-            }
+            .padding()
         }
-        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        .ignoresSafeArea()
+        .overlay{
+            VStack{
+                ForEach(vm.toasts) { toast in
+                    ToastView(toast: toast, isPresented: .constant(true)) {
+                        vm.toasts.removeAll(where: { $0.id == toast.id })
+                    }
+                    .transition(.slide)
+                }
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
+        .padding(.horizontal, 20)
+        .onAppear{
+            vm.openConnection()
+        }
         .onReceive(locationService.$currentLocation) { location in
             locationStatus = .checking
             userLocation = location
@@ -184,23 +162,22 @@ struct GridRowView: View {
     var body: some View {
         HStack {
             Text(name)
-                .font(.title3)
-                .fontWeight(.bold)
+                .font(.headline)
             Spacer()
             if status == .running{
                 ProgressView()
-                    .scaleEffect(1.3)
                     .tint(.primary)
-                    .padding(.trailing, 8)
+                    .padding(.trailing, 4)
             }
             else{
                 status.getIcon
             }
         }
-        .padding()
+        .padding(8)
+        .padding(.horizontal, 8)
+        .frame(height: 50)
         .background(.ultraThinMaterial)
         .cornerRadius(8)
-        .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
     }
 }
 

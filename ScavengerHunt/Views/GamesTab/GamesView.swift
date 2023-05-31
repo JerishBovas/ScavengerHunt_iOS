@@ -52,7 +52,7 @@ struct GamesView: View {
                             .transition(.move(edge: .trailing))
                     }
                 }
-                .animation(.spring(), value: tabSelection)
+                .animation(.default, value: tabSelection)
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .navigationDestination(for: Game.self){ game in
                     GameDetailView(game: game)
@@ -70,6 +70,14 @@ struct GamesView: View {
                             Image(systemName: "plus")
                         }
                     }
+                }
+            }
+            .task {
+                if vm.myGames == nil{
+                    await vm.getMyGames()
+                }
+                if vm.games == nil{
+                    await vm.getGames()
                 }
             }
             .sheet(isPresented: $showSheet, content: {
@@ -118,11 +126,6 @@ extension GamesView{
             }
             .onDelete(perform: deleteItems)
         }
-        .task {
-            if vm.myGames == nil{
-                await vm.getMyGames()
-            }
-        }
         .refreshable {
             await vm.getMyGames()
         }
@@ -149,11 +152,6 @@ extension GamesView{
                     }
                     .redacted(reason: vm.games == nil ? .placeholder : [])
                 }
-            }
-        }
-        .task {
-            if vm.games == nil{
-                await vm.getGames()
             }
         }
         .refreshable {
