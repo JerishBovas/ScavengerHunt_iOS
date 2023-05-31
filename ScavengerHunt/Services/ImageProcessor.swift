@@ -22,22 +22,12 @@ class ImageProcessor{
     private let apiService = ApiService()
     
     init(){
-        guard let path = Bundle.main.path(forResource: "secrets", ofType: "plist"),
-              let xml = FileManager.default.contents(atPath: path),
-              let secrets = try? PropertyListSerialization.propertyList(from: xml, options: [], format: nil) as? [String: Any],
-              let visionKey = secrets["VISION_KEY"] as? String,
-              let visionEndpoint = secrets["VISION_ENDPOINT"] as? String
-        else {
-            self.VISION_KEY = ""
-            self.VISION_ENDPOINT = ""
-            return
-        }
-        self.VISION_KEY = visionKey
-        self.VISION_ENDPOINT = visionEndpoint
+        self.VISION_KEY = Bundle.main.infoDictionary?["VISION_KEY"] as? String ?? ""
+        self.VISION_ENDPOINT = Bundle.main.infoDictionary?["VISION_ENDPOINT"] as? String ?? ""
     }
     
     public func removeBackground(image: UIImage) async throws-> UIImage{
-        let endpoint = "\(VISION_ENDPOINT)computervision/imageanalysis:segment?api-version=2023-02-01-preview&mode=backgroundRemoval"
+        let endpoint = "https://\(VISION_ENDPOINT)/computervision/imageanalysis:segment?api-version=2023-02-01-preview&mode=backgroundRemoval"
         
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
@@ -51,7 +41,7 @@ class ImageProcessor{
     }
     
     public func detectObjects(imageData: UIImage) async throws -> DetectedObjects{
-        let requestURL = URL(string: "\(VISION_ENDPOINT)vision/v3.2/analyze?visualFeatures=Tags")!
+        let requestURL = URL(string: "https://\(VISION_ENDPOINT)/vision/v3.2/analyze?visualFeatures=Tags")!
         
         var request = URLRequest(url: requestURL)
         request.httpMethod = "POST"

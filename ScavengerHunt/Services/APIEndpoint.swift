@@ -16,7 +16,8 @@ enum APIEndpoint : CustomStringConvertible{
     case item(gameId: String)
     
     private var DOMAIN_URL: String {
-        return "https://api.scavengerhunt.quest"
+        let url = Bundle.main.infoDictionary?["API_ENDPOINT"] as! String
+        return "https://\(url)"
     }
     
     var description: String{
