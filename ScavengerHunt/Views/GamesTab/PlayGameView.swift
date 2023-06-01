@@ -20,18 +20,76 @@ struct PlayGameView: View {
     @State private var showingSection: Int = 0
     
     var body: some View {
-        if showingSection == 0{
+        if let gamePlay = vm.gamePlay{
+            gamePlaySection(play: gamePlay)
+        }
+        else{
             preparationSection
-        }else if showingSection == 1{
-            gamePlaySection
         }
     }
 }
 
 extension PlayGameView{
-    private var gamePlaySection: some View{
-        ZStack{
+    private func gamePlaySection(play: GamePlay) -> some View{
+        VStack{
+            HStack{
+                VStack(alignment: .leading){
+                    Text("Score")
+                        .font(.headline)
+                    Text(play.score.description)
+                        .font(.largeTitle)
+                        .fontWeight(.medium)
+                }
+                Spacer()
+                VStack(alignment: .trailing){
+                    Text("Time Remaining")
+                        .font(.headline)
+                    Text(play.deadline)
+                        .font(.largeTitle)
+                        .fontWeight(.medium)
+                }
+            }
+            HStack{
+                if let item = vm.item{
+                    Spacer()
+                    Text(item.name)
+                    Spacer()
+                    ImageView(url: item.imageUrl)
+                        .frame(width: 150, height: 150)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+                else{
+                    Spacer()
+                    Text("Item...")
+                    Spacer()
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.ultraThinMaterial)
+                        .frame(width: 150, height: 150)
+                }
+            }
+            if let image = vm.image{
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+            }
+            else{
+                CameraPreviewView(session: vm.session)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+            }
+            Spacer()
             
+        }
+        .padding(20)
+        .ignoresSafeArea(.keyboard)
+        .overlay{
+            VStack{
+                Spacer()
+                footerSection
+            }
+        }
+        .onAppear{
+            vm.setupCamera()
         }
     }
     
@@ -95,12 +153,13 @@ extension PlayGameView{
                 }
                 Spacer()
                 Button(action: {
-                    // Start game action
+                    vm.startGame(gameId: game.id, gameUserId: game.userId)
                 }) {
                     Text("Start Game")
                         .font(.title2)
                 }
                 .buttonStyle(.borderless)
+                .disabled(!isWithinRange)
             }
             .padding()
         }
@@ -141,6 +200,47 @@ extension PlayGameView{
                 }
             )
         }
+    }
+    
+    private var footerSection: some View{
+        HStack{
+            if let _ = vm.image{
+                HStack{
+                    Button(action: {
+                        vm.image = nil
+                    }, label: {
+                        Image(systemName: "xmark")
+                            .symbolRenderingMode(.multicolor)
+                            .font(.largeTitle)
+                    })
+                    Spacer()
+                    Button(action: {
+                        vm.verifyItem()
+                    }, label: {
+                        Image(systemName: "checkmark")
+                            .symbolRenderingMode(.multicolor)
+                            .font(.largeTitle)
+                    })
+                }
+                .padding(.horizontal, 100)
+            }else{
+                Spacer()
+                Button(action: {
+                    vm.captureImage()
+                }, label: {
+                    ZStack{
+                        Circle()
+                            .frame(width: 70)
+                        Circle()
+                            .stroke(.background, lineWidth: 3.0)
+                            .frame(width: 60)
+                    }
+                })
+                Spacer()
+            }
+        }
+        .frame(height: 100)
+        .background(.ultraThickMaterial)
     }
     
     private func createGridColumns() -> [GridItem] {

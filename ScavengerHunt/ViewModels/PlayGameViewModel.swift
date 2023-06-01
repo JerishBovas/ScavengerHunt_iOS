@@ -9,20 +9,26 @@ import Foundation
 import UIKit
 import SignalRClient
 import SwiftUI
+import AVFoundation
 
-class PlayGameViewModel : ObservableObject, HubConnectionDelegate{
+class PlayGameViewModel : NSObject, ObservableObject{
     @Published var connectionStatus: ConnectionStatus = .stopped
     @Published var gamePlayStatus: GameStatus = .notFetched
     @Published var toasts: [Toast] = []
+    @Published var item: Item?
+    @Published var gamePlay: GamePlay?
     private var accessToken: String?
-    private var image: UIImage? = nil
+    @Published var image: UIImage?
     private var hubConnection: HubConnection?
-    private var imageProcessor: ImageProcessor
+    private var imageProcessor = ImageProcessor()
     private var timesRetry: Int = 0
+    let session = AVCaptureSession()
+    private var photoOutput: AVCapturePhotoOutput?
     
-    init() {
+    
+    override init() {
+        super.init()
         accessToken = UserDefaults.standard.string(forKey: "accessToken")
-        imageProcessor = ImageProcessor()
         hubConnection = HubConnectionBuilder(url: URL(string: "https://api.scavengerhunt.quest/Play")!)
             .withHubConnectionDelegate(delegate: self)
             .withHttpConnectionOptions(configureHttpOptions: { httpConnectionOptions in
@@ -38,8 +44,56 @@ class PlayGameViewModel : ObservableObject, HubConnectionDelegate{
     
     
     func addListeners(){
-        hubConnection!.on(method: "VerifyItem") { message in
+        hubConnection!.on(method: "Error") { message in
             print(">>> \(try! message.getArgument(type: String.self))")
+        }
+    }
+    
+    func verifyItem(){
+        guard let img = self.image,
+                let image = imageProcessor.getCompressedImage(image: img, quality: 128),
+                let item = self.item,
+                let gamePlay = self.gamePlay else {return}
+        
+        let data = ImageData(imageBytes: image, itemId: item.id, gamePlayId: gamePlay.id)
+        self.item = randomPickWithNoRepeats(from: gamePlay.items)
+        hubConnection!.invoke(method: "VerifyImage", data, resultType: VerifiedItem.self) { (result: VerifiedItem?, error: Error?) in
+            if let result = result, let _ = self.gamePlay {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.gamePlay?.gameEnded = result.gameEnded
+                        self.gamePlay?.score = result.score
+                        if let itemId = result.itemToRemove{
+                            self.gamePlay?.items.removeAll(where: {$0.id == itemId})
+                        }
+                    }
+                }
+            } else if let _ = error {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.enqueue(message: error?.localizedDescription ?? "Error starting game.", backgroundColor: .red)
+                    }
+                }
+            }
+        }
+    }
+    
+    func startGame(gameId: String, gameUserId: String){
+        hubConnection!.invoke(method: "StartGame", gameId, gameUserId, resultType: GamePlay.self) { (result: GamePlay?, error: Error?) in
+            if let result = result {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.gamePlay = result
+                        self.item = self.randomPickWithNoRepeats(from: result.items)
+                    }
+                }
+            } else if let _ = error {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.enqueue(message: error?.localizedDescription ?? "Error starting game.", backgroundColor: .red)
+                    }
+                }
+            }
         }
     }
     
@@ -71,7 +125,84 @@ class PlayGameViewModel : ObservableObject, HubConnectionDelegate{
     func closeConnection(){
         hubConnection!.stop()
     }
+}
+
+extension PlayGameViewModel: AVCapturePhotoCaptureDelegate{
+    func setupCamera() {
+        DispatchQueue.global(qos: .userInitiated).async {
+                guard let device = AVCaptureDevice.default(for: .video) else {
+                    return
+                }
+                
+                do {
+                    let input = try AVCaptureDeviceInput(device: device)
+                    self.session.addInput(input)
+                    
+                    self.photoOutput = AVCapturePhotoOutput()
+                    if let photoOutput = self.photoOutput {
+                        self.session.addOutput(photoOutput)
+                    }
+                } catch {
+                    print("Error setting up camera: \(error.localizedDescription)")
+                }
+                
+                self.session.startRunning()
+            }
+    }
     
+    func captureImage() {
+        guard let photoOutput = photoOutput else {
+            return
+        }
+        
+        let photoSettings = AVCapturePhotoSettings()
+        photoOutput.capturePhoto(with: photoSettings, delegate: self)
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let imageData = photo.fileDataRepresentation() {
+            // Process the captured image data
+            processImage(imageData)
+        }
+    }
+    
+    private func processImage(_ imageData: Data) {
+        guard let img = UIImage(data: imageData), let sqrImg = imageProcessor.cropImageToSquare(image: img), let compressImg = imageProcessor.getCompressedImage(image: sqrImg, quality: 256) else {return}
+        image = UIImage(data: compressImg)
+    }
+}
+
+extension PlayGameViewModel{
+    private func randomPickWithNoRepeats<T>(from array: [T]) -> T? {
+        guard !array.isEmpty else {
+            return nil
+        }
+        
+        var previousIndex: Int?
+        var randomIndex: Int
+        
+        repeat {
+            randomIndex = Int.random(in: 0..<array.count)
+        } while randomIndex == previousIndex
+        
+        previousIndex = randomIndex
+        return array[randomIndex]
+    }
+
+    func enqueue(message: String, backgroundColor: Color) {
+        let toast = Toast(message: message, backgroundColor: backgroundColor)
+        toasts.append(toast)
+        dequeueToast(after: toast.duration)
+    }
+    
+    private func dequeueToast(after duration: TimeInterval) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            self.toasts.removeFirst()
+        }
+    }
+}
+
+extension PlayGameViewModel: HubConnectionDelegate{
     internal func connectionDidOpen(hubConnection: HubConnection) {
         timesRetry = 0
         connectionStatus = .connected
@@ -91,18 +222,6 @@ class PlayGameViewModel : ObservableObject, HubConnectionDelegate{
 
     internal func connectionDidClose(error: Error?) {
         connectionStatus = .stopped
-    }
-    
-    func enqueue(message: String, backgroundColor: Color) {
-        let toast = Toast(message: message, backgroundColor: backgroundColor)
-        toasts.append(toast)
-        dequeueToast(after: toast.duration)
-    }
-    
-    private func dequeueToast(after duration: TimeInterval) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            self.toasts.removeFirst()
-        }
     }
 }
 

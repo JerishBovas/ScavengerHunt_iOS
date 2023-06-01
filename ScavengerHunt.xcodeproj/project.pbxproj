@@ -133,7 +133,6 @@
 				8B03E16729D53CC20038CE4E /* DashTab */,
 				8B03E16629D5371A0038CE4E /* Modifiers */,
 				8BCFB9AC29DE8FD70014422F /* TabBarView.swift */,
-				8B9823D02A14D715001AFB58 /* AddItemsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -202,6 +201,7 @@
 		8BB9710E29DAC30700D69BCF /* GamesTab */ = {
 			isa = PBXGroup;
 			children = (
+				8B9823D02A14D715001AFB58 /* AddItemsView.swift */,
 				8BB970F729DA0B7F00D69BCF /* GameDetailView.swift */,
 				8BB9710F29DAC31700D69BCF /* GamesView.swift */,
 				8BCFB9AE29DED76C0014422F /* AddGameView.swift */,

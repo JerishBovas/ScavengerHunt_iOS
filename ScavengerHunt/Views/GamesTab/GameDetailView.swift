@@ -19,6 +19,7 @@ struct GameDetailView: View {
     @State private var isPresented = false
     @State private var showItemsSheet = false
     @State private var showGamePlaySheet = false
+    @State private var isShareSheetPresented = false
     
     private func fetchGame() async{
         if let game = await gameVM.getGame(game: game){
@@ -61,14 +62,13 @@ struct GameDetailView: View {
                             .buttonBorderShape(.capsule)
                             .buttonStyle(.borderedProminent)
                             Spacer()
-                            Button {
-                                
-                            } label: {
-                                Image(systemName: "square.and.arrow.up")
-                                    .font(.title3)
-                                    .fontWeight(.medium)
-                            }
-                            
+                            ShareLink(
+                                item: game.name, subject: Text(gameDetail.country), message: Text(game.address),
+                                     preview: SharePreview(game.name, image: Image("profileImage"))) {
+                                         Image(systemName: "square.and.arrow.up")
+                                             .font(.title3)
+                                             .fontWeight(.medium)
+                                     }
                         }
                     }
                 }
@@ -172,7 +172,9 @@ struct GameDetailView: View {
                     Map(coordinateRegion: .constant(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude), latitudinalMeters: 500, longitudinalMeters: 500)), annotationItems: [CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude))]) { game in
                         MapMarker(coordinate: game.coordinate)
                     }
-                    .disabled(true)
+                    .onTapGesture {
+                        openMapsApp(game: gameDetail)
+                    }
                     .frame(height: 240)
                     .cornerRadius(8, corners: .allCorners)
                     Text(gameDetail.address + ", " + gameDetail.country)
@@ -310,9 +312,7 @@ struct GameDetailView: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $showGamePlaySheet, onDismiss: {
-            dismiss()
-        }, content: {
+        .fullScreenCover(isPresented: $showGamePlaySheet, content: {
             PlayGameView(game: gameDetail)
         })
         .sheet(isPresented: $showItemsSheet, onDismiss: {
@@ -332,6 +332,13 @@ struct GameDetailView: View {
     }
 }
 
+extension GameDetailView{
+    private func openMapsApp(game: GameDetail) {
+        var placemark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude))
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.openInMaps(launchOptions: nil)
+    }
+}
 
 struct GameDetailView_Previews: PreviewProvider {
     static var previews: some View {

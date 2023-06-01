@@ -69,3 +69,28 @@ struct NewGame: Codable, Hashable{
 struct GameCreateResp: Codable{
     var id: String
 }
+
+struct GamePlay: Decodable, Identifiable{
+    var id: String
+    var gameEnded: Bool
+    var gameId: String
+    var name: String
+    var userId: String
+    var items: [Item]
+    var gameDuration: Int
+    var score: Int
+    var startTime: String
+    var deadline: String
+}
+
+struct VerifiedItem: Decodable{
+    var gameEnded: Bool
+    var itemToRemove: String?
+    var score: Int
+}
+
+struct ImageData: Encodable{
+    var imageBytes: Data
+    var itemId: String
+    var gamePlayId: String
+}
