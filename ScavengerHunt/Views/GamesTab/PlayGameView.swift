@@ -98,7 +98,7 @@ struct PlayGameView: View {
         .onDisappear{
             if let play = vm.gamePlay{
                 vm.stopTimer()
-                vm.endGame(playId: play.id)
+                vm.endGame(gamePlayId: play.id)
             }
             vm.closeConnection()
         }
