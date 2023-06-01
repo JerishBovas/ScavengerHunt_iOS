@@ -18,75 +18,250 @@ struct PlayGameView: View {
     @State private var isWithinRange: Bool = false
     @State private var showingAlert: Bool = false
     @State private var showingSection: Int = 0
+    @State private var showConfirmation: Bool = false
     
     var body: some View {
-        if let gamePlay = vm.gamePlay{
-            gamePlaySection(play: gamePlay)
+        VStack{
+            if showingSection == 0{
+                preparationSection
+            }
+            else if showingSection == 1{
+                if let result = vm.result{
+                    VStack{
+                        Text(result.name)
+                        Text(result.score.description)
+                    }
+                    .background(Color.accentColor)
+                }else{
+                    gamePlaySection(play: vm.gamePlay)
+                }
+            }
         }
-        else{
-            preparationSection
+        .transition(.opacity)
+        .animation(.easeInOut(duration: 0.3), value: showingSection)
+        .edgesIgnoringSafeArea(.bottom)
+        .overlay{
+            VStack(){
+                HStack{
+                    Button("Close") {
+                        if showingSection == 1{
+                            showConfirmation = true
+                        }else{
+                            dismiss()
+                        }
+                    }
+                    .foregroundColor(.red)
+                    .buttonStyle(.borderless)
+                    Spacer()
+                    if vm.connectionStatus == .connected{
+                        Image(systemName: "antenna.radiowaves.left.and.right")
+                            .font(.title2)
+                            .symbolRenderingMode(.multicolor)
+                    }else{
+                        Image(systemName: "antenna.radiowaves.left.and.right.slash")
+                            .font(.title2)
+                            .foregroundColor(.red)
+                            .symbolRenderingMode(.multicolor)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .alert("End Game?", isPresented: $showConfirmation) {
+                    Button("Cancel"){
+                        showConfirmation = false
+                    }
+                    Button("Yes"){
+                        dismiss()
+                    }
+                    .foregroundColor(.red)
+                } message: {
+                    Text("Are you sure you want to end the Game?")
+                }
+
+                Spacer()
+            }
+        }
+        .overlay{
+            VStack{
+                ForEach(vm.toasts) { toast in
+                    ToastView(toast: toast, isPresented: .constant(true)) {
+                        vm.toasts.removeAll(where: { $0.id == toast.id })
+                    }
+                    .transition(.slide)
+                }
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
+        .onAppear{
+            vm.openConnection()
+        }
+        .onDisappear{
+            if let play = vm.gamePlay{
+                vm.stopTimer()
+                vm.endGame(playId: play.id)
+            }
+            vm.closeConnection()
         }
     }
 }
 
 extension PlayGameView{
-    private func gamePlaySection(play: GamePlay) -> some View{
-        VStack{
+    private func gamePlaySection(play: GamePlay?) -> some View{
+        VStack(spacing: 0){
+            Text(game.name)
+                .font(.title)
+                .fontWeight(.medium)
+                .fontDesign(.rounded)
+                .padding(.bottom, 8)
+            Divider()
             HStack{
-                VStack(alignment: .leading){
-                    Text("Score")
-                        .font(.headline)
-                    Text(play.score.description)
-                        .font(.largeTitle)
-                        .fontWeight(.medium)
+                HStack{
+                    VStack(spacing: 6){
+                        Text("SCORE")
+                            .font(.custom("Footer", size: 12))
+                            .fontWeight(.bold)
+                            .foregroundColor(.blue) // Use your desired color
+                        Text(play?.score.description ?? "0")
+                            .font(.custom("", size: 24))
+                            .fontWeight(.bold)
+                            .fontDesign(.rounded)
+                            .foregroundColor(.blue) // Use your desired color
+                        Text("XP")
+                            .font(.footnote)
+                            .foregroundColor(.blue) // Use your desired color
+                    }
+                    Divider()
+                        .padding(.vertical)
+                        .padding(.horizontal, 8)
+                    VStack(spacing: 6){
+                        Text("TOTAL")
+                            .font(.custom("Footer", size: 12))
+                            .fontWeight(.bold)
+                            .foregroundColor(.green) // Use your desired color
+                        Text(play?.items.count.description ?? "0")
+                            .font(.custom("", size: 24))
+                            .fontWeight(.bold)
+                            .fontDesign(.rounded)
+                            .foregroundColor(.green) // Use your desired color
+                        Text("Items")
+                            .font(.footnote)
+                            .foregroundColor(.green) // Use your desired color
+                    }
+                    Divider()
+                        .padding(.vertical)
+                        .padding(.horizontal, 8)
+                    VStack(spacing: 6){
+                        Text("FOUND")
+                            .font(.custom("Footer", size: 12))
+                            .fontWeight(.bold)
+                            .foregroundColor(.orange) // Use your desired color
+                        Text("\((play?.items.count ?? 0) - (vm.itemsRemaining?.count ?? 0))")
+                            .font(.custom("", size: 24))
+                            .fontWeight(.bold)
+                            .fontDesign(.rounded)
+                            .foregroundColor(.orange) // Use your desired color
+                        Text("Items")
+                            .font(.footnote)
+                            .foregroundColor(.orange) // Use your desired color
+                    }
                 }
-                Spacer()
-                VStack(alignment: .trailing){
-                    Text("Time Remaining")
-                        .font(.headline)
-                    Text(play.deadline)
-                        .font(.largeTitle)
-                        .fontWeight(.medium)
+                HStack{
+                    Divider()
+                        .padding(.vertical)
+                        .padding(.horizontal, 8)
+                    VStack(spacing: 6){
+                        Text("TO FIND")
+                            .font(.custom("Footer", size: 12))
+                            .fontWeight(.bold)
+                            .foregroundColor(.purple) // Use your desired color
+                        Text(vm.itemsRemaining?.count.description ?? "0")
+                            .font(.custom("", size: 24))
+                            .fontWeight(.bold)
+                            .fontDesign(.rounded)
+                            .foregroundColor(.purple) // Use your desired color
+                        Text("Items")
+                            .font(.footnote)
+                            .foregroundColor(.purple) // Use your desired color
+                    }
+                    Divider()
+                        .padding(.vertical)
+                        .padding(.horizontal, 8)
+                    VStack(spacing: 6){
+                        Text("TIME LEFT")
+                            .font(.custom("Footer", size: 12))
+                            .fontWeight(.bold)
+                            .foregroundColor(.red) // Use your desired color
+                        Text(timeString(from: vm.timeRemaining))
+                            .font(.custom("", size: 24))
+                            .fontWeight(.bold)
+                            .fontDesign(.rounded)
+                            .foregroundColor(.red) // Use your desired color
+                        Text("Minutes")
+                            .font(.footnote)
+                            .foregroundColor(.red) // Use your desired color
+                    }
                 }
             }
+
+            .frame(maxHeight: 80)
+            .padding(.vertical, 8)
+            Divider()
             HStack{
                 if let item = vm.item{
-                    Spacer()
-                    Text(item.name)
-                    Spacer()
-                    ImageView(url: item.imageUrl)
-                        .frame(width: 150, height: 150)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    HStack{
+                        ImageView(url: item.imageUrl)
+                            .scaledToFit()
+                            .frame(maxHeight: 160)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        Spacer()
+                        VStack(spacing: 20){
+                            Text(item.name)
+                                .font(.title)
+                                .fontWeight(.medium)
+                                .fontDesign(.rounded)
+                        }
+                        Spacer()
+                    }
                 }
                 else{
-                    Spacer()
-                    Text("Item...")
-                    Spacer()
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.ultraThinMaterial)
-                        .frame(width: 150, height: 150)
+                    HStack{
+                        Image("placeholder")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 160)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        Spacer()
+                        VStack(spacing: 20){
+                            Text("Item Name")
+                                .font(.title)
+                                .fontWeight(.medium)
+                                .fontDesign(.rounded)
+                        }
+                        .padding()
+                        Spacer()
+                    }
                 }
             }
-            if let image = vm.image{
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-            }
-            else{
-                CameraPreviewView(session: vm.session)
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-            }
-            Spacer()
-            
-        }
-        .padding(20)
-        .ignoresSafeArea(.keyboard)
-        .overlay{
+            .padding(8)
             VStack{
-                Spacer()
-                footerSection
+                if let image = vm.image{
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                }
+                else{
+                    Image("placeholder")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+//                    CameraPreviewView(session: vm.session)
+//                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+                }
             }
+            .animation(.default, value: vm.image)
+            footerSection
+            
         }
         .onAppear{
             vm.setupCamera()
@@ -143,42 +318,19 @@ extension PlayGameView{
             CircleMap(gameLocation: CLLocationCoordinate2D(latitude: game.coordinate.latitude, longitude: game.coordinate.longitude))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             Spacer()
-            HStack{
-                Button {
-                    dismiss()
-                } label: {
-                    Text("Cancel")
-                        .font(.title2)
-                        .foregroundColor(.red)
-                }
-                Spacer()
-                Button(action: {
-                    vm.startGame(gameId: game.id, gameUserId: game.userId)
-                }) {
-                    Text("Start Game")
-                        .font(.title2)
-                }
-                .buttonStyle(.borderless)
-                .disabled(!isWithinRange)
+            Button(action: {
+                showingSection = 1
+                vm.startGame(gameId: game.id, gameUserId: game.userId)
+            }) {
+                Text("Start Game")
+                    .font(.title)
+                    .padding(8)
             }
-            .padding()
-        }
-        .overlay{
-            VStack{
-                ForEach(vm.toasts) { toast in
-                    ToastView(toast: toast, isPresented: .constant(true)) {
-                        vm.toasts.removeAll(where: { $0.id == toast.id })
-                    }
-                    .transition(.slide)
-                }
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .buttonStyle(.bordered)
+            .disabled(!isWithinRange)
+            Spacer()
         }
         .padding(.horizontal, 20)
-        .onAppear{
-            vm.openConnection()
-        }
         .onReceive(locationService.$currentLocation) { location in
             locationStatus = .checking
             userLocation = location
@@ -241,6 +393,12 @@ extension PlayGameView{
         }
         .frame(height: 100)
         .background(.ultraThickMaterial)
+    }
+
+    private func timeString(from seconds: Int) -> String {
+        let minutes = seconds / 60
+        let remainingSeconds = seconds % 60
+        return String(format: "%02d:%02d", minutes, remainingSeconds)
     }
     
     private func createGridColumns() -> [GridItem] {

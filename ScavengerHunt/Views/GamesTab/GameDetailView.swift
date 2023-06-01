@@ -169,7 +169,7 @@ struct GameDetailView: View {
                     .padding(.horizontal)
                 }
                 VStack(alignment: .leading){
-                    Map(coordinateRegion: .constant(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude), latitudinalMeters: 500, longitudinalMeters: 500)), annotationItems: [CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude))]) { game in
+                    Map(coordinateRegion: .constant(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude), latitudinalMeters: 500, longitudinalMeters: 500)), interactionModes: [], annotationItems: [CustomAnnotation(coordinate: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude))]) { game in
                         MapMarker(coordinate: game.coordinate)
                     }
                     .onTapGesture {
@@ -334,7 +334,7 @@ struct GameDetailView: View {
 
 extension GameDetailView{
     private func openMapsApp(game: GameDetail) {
-        var placemark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude))
+        let placemark = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: gameDetail.coordinate.latitude, longitude: gameDetail.coordinate.longitude))
         let mapItem = MKMapItem(placemark: placemark)
         mapItem.openInMaps(launchOptions: nil)
     }

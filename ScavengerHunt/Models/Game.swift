@@ -52,6 +52,11 @@ struct Item: Equatable, Codable, Hashable{
         self.name = name
         self.imageUrl = ""
     }
+    init(id:String, name: String, url: String) {
+        self.id = id
+        self.name = name
+        self.imageUrl = url
+    }
 }
 
 struct NewGame: Codable, Hashable{

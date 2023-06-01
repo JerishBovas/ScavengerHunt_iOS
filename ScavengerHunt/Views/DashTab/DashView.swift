@@ -30,7 +30,7 @@ struct DashView: View {
             VStack(spacing: 0){
                 headerSection
                 ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 16){
+                    VStack(spacing: 12){
                         spotLightSection
                             .padding(.trailing, 20)
                         Divider()
@@ -39,7 +39,7 @@ struct DashView: View {
                         Divider()
                     }
                     .padding(.leading, 20)
-                    .padding(.vertical, 20)
+                    .padding(.vertical, 8)
                     gamesNearYouSection
                 }
             }
@@ -131,24 +131,25 @@ extension DashView{
                 .frame(maxHeight: 230)
                 .cornerRadius(8)
             
-            HStack(spacing: 10) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(vm.gotd?.name ?? "Jerish Bovas")
+            NavigationLink(value: vm.gotd) {
+                HStack{
+                    ImageView(url: vm.gotd?.imageName ?? "")
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(8, corners: .allCorners)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(vm.gotd?.name ?? "Jerish Bovas")
+                            .font(.title2)
+                            .fontWeight(.medium)
+                        Text(shortAddress(address: vm.gotd?.address ?? "Something something somethign"))
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
                         .font(.title2)
                         .fontWeight(.medium)
-                    Text(shortAddress(address: vm.gotd?.address ?? "Something something somethign"))
-                        .font(.headline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.gray)
                 }
-                Spacer()
-                NavigationLink("View", value: vm.gotd)
-                .font(.system(size: 18, weight: .bold, design: .default))
-                .padding(.horizontal, 20)
-                .padding(.vertical, 6)
-                .background(Color.accentColor)
-                .foregroundColor(.white)
-                .cornerRadius(12)
-                .unredacted()
             }
         }
         .redacted(reason: vm.gotd == nil ? .placeholder : [])
@@ -156,15 +157,13 @@ extension DashView{
 
     
     private var topGamesSection: some View {
-        return VStack(alignment: .leading) {
+        return VStack(alignment: .leading, spacing: 8) {
             Text("TOP GAMES")
                 .font(.system(size: 22, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
 
             LazyVStack {
                 ForEach(vm.popularGames ?? [DataService.getGame(), DataService.getGame(), DataService.getGame(), DataService.getGame()]) { game in
-                    Divider()
-                        .padding(.leading, 60)
                     HStack(alignment: .center, spacing: 10) {
                         ImageView(url: game.imageName)
                             .frame(width: 50, height: 50)
@@ -183,14 +182,16 @@ extension DashView{
                         Spacer()
 
                         NavigationLink("View", value: game)
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 6)
+                        .font(.system(size: 14, weight: .regular, design: .rounded))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
                         .background(Color.accentColor)
                         .foregroundColor(.white)
                         .cornerRadius(12)
                         .unredacted()
                     }
+                    Divider()
+                        .padding(.leading, 60)
                 }
             }
         }
