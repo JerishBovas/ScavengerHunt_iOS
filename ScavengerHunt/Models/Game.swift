@@ -95,7 +95,7 @@ struct VerifiedItem: Decodable{
 }
 
 struct ImageData: Encodable{
-    var imageBytes: Data
+    var imageString: String
     var itemId: String
     var gamePlayId: String
 }

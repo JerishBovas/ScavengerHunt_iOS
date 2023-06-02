@@ -17,7 +17,8 @@ enum APIEndpoint : CustomStringConvertible{
     
     private var DOMAIN_URL: String {
         let url = Bundle.main.infoDictionary?["API_ENDPOINT"] as? String ?? ""
-        return "https://\(url)"
+        print(url)
+        return "\(url)"
     }
     
     var description: String{

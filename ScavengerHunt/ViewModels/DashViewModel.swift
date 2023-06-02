@@ -46,7 +46,9 @@ class DashViewModel: ObservableObject{
             if let popularGames = popularGames {
                 withAnimation(.default) {
                     self.popularGames = popularGames
-                    self.gotd = popularGames[1]
+                    if !popularGames.isEmpty{
+                        self.gotd = popularGames[0]
+                    }
                 }
             }
             print("Page Fetched")

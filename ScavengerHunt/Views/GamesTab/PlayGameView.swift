@@ -251,12 +251,8 @@ extension PlayGameView{
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                 }
                 else{
-                    Image("placeholder")
-                        .resizable()
-                        .scaledToFit()
+                    CameraPreviewView(session: vm.session)
                         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-//                    CameraPreviewView(session: vm.session)
-//                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                 }
             }
             .animation(.default, value: vm.image)

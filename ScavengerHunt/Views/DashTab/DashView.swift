@@ -30,15 +30,11 @@ struct DashView: View {
             VStack(spacing: 0){
                 headerSection
                 ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 12){
+                    VStack(spacing: 20){
                         spotLightSection
-                            .padding(.trailing, 20)
-                        Divider()
                         topGamesSection
-                            .padding(.trailing, 20)
-                        Divider()
                     }
-                    .padding(.leading, 20)
+                    .padding(.horizontal, 20)
                     .padding(.vertical, 8)
                     gamesNearYouSection
                 }
@@ -123,7 +119,7 @@ extension DashView{
     private var spotLightSection: some View {
         VStack(alignment: .leading) {
             Text("TODAY")
-                .font(.system(size: 22, weight: .medium, design: .rounded))
+                .font(.system(size: 20, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
                 .padding(.bottom, -1)
             
@@ -140,15 +136,15 @@ extension DashView{
                         Text(vm.gotd?.name ?? "Jerish Bovas")
                             .font(.title2)
                             .fontWeight(.medium)
+                            .foregroundColor(.primary)
                         Text(shortAddress(address: vm.gotd?.address ?? "Something something somethign"))
                             .font(.headline)
                             .foregroundColor(.secondary)
                     }
                     Spacer()
                     Image(systemName: "chevron.right")
-                        .font(.title2)
                         .fontWeight(.medium)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.secondary)
                 }
             }
         }
@@ -159,7 +155,7 @@ extension DashView{
     private var topGamesSection: some View {
         return VStack(alignment: .leading, spacing: 8) {
             Text("TOP GAMES")
-                .font(.system(size: 22, weight: .medium, design: .rounded))
+                .font(.system(size: 20, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
 
             LazyVStack {
@@ -182,13 +178,9 @@ extension DashView{
                         Spacer()
 
                         NavigationLink("View", value: game)
-                        .font(.system(size: 14, weight: .regular, design: .rounded))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .unredacted()
+                        .font(.system(size: 14, weight: .bold, design: .rounded))
+                        .buttonStyle(.borderedProminent)
+                        .buttonBorderShape(.capsule)
                     }
                     Divider()
                         .padding(.leading, 60)
@@ -202,24 +194,18 @@ extension DashView{
     private var topPlayersSection: some View {
         VStack(alignment: .leading) {
             Text("TOP PLAYERS")
-                .font(.system(size: 18, weight: .medium, design: .rounded))
+                .font(.system(size: 24, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
 
-            Text("Top Players Today")
-                .font(.system(size: 24, weight: .bold, design: .rounded))
-                .foregroundColor(.primary)
-
-            LazyVStack {
+            LazyVStack(spacing: 8) {
                 ForEach(vm.leaderBoard ?? [DataService.getUser(), DataService.getUser(), DataService.getUser(), DataService.getUser()]) { user in
-                    Divider()
-                        .padding(.leading, 60)
                     HStack(spacing: 10) {
                         ImageView(url: user.profileImage)
                             .frame(width: 50, height: 50)
                             .clipShape(Circle())
 
                         Text(user.name)
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .font(.system(size: 30, weight: .medium, design: .rounded))
                             .foregroundColor(.primary)
 
                         Spacer()
@@ -228,10 +214,11 @@ extension DashView{
                             .font(.system(size: 18, weight: .medium, design: .rounded))
                             .foregroundColor(.accentColor)
                     }
+                    Divider()
+                        .padding(.leading, 60)
                 }
                 .redacted(reason: vm.leaderBoard == nil ? .placeholder : [])
             }
-            .padding(.vertical)
         }
     }
 
@@ -239,9 +226,9 @@ extension DashView{
     private var gamesNearYouSection: some View {
         VStack(alignment: .leading) {
             Text("GAMES NEAR YOU")
-                .font(.system(size: 24, weight: .bold, design: .rounded))
-                .foregroundColor(.primary)
-                .padding(.horizontal)
+                .font(.system(size: 24, weight: .medium, design: .rounded))
+                .foregroundColor(.secondary)
+                .padding(.leading, 20)
             ScrollView(.horizontal, showsIndicators: false) {
                 let dimension = UIScreen.main.bounds.width - 60
                 LazyHStack {

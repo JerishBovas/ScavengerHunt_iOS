@@ -18,27 +18,29 @@ struct CardView: View {
             .overlay {
                 VStack(alignment: .leading){
                     Spacer()
-                    HStack{
-                        VStack(alignment: .leading, spacing: 3){
-                            Text(game.name)
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .foregroundColor(.primary)
-                            Text(game.address)
-                                .font(.subheadline)
+                    NavigationLink(value: game, label: {
+                        HStack{
+                            ImageView(url: game.imageName)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(8)
+                            VStack(alignment: .leading, spacing: 5){
+                                Text(game.name)
+                                    .font(.title3)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.primary)
+                                Text(game.address)
+                                    .font(.footnote)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
                         }
-                        Spacer()
-                        NavigationLink("View", value: game)
-                        .font(.headline)
-                        .buttonBorderShape(.capsule)
-                        .buttonStyle(.borderedProminent)
-                        .unredacted()
-                        
-                    }
+                    })
                     .padding()
-                    .background(.ultraThinMaterial)
+                    .background(.regularMaterial)
                     .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
                 }
             }

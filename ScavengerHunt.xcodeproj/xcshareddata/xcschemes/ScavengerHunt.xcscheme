@@ -49,23 +49,6 @@
             ReferencedContainer = "container:ScavengerHunt.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "VISION_KEY"
-            value = "c3b77a9b391a4d6c88c3167e5c57720f"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "API_ENDPOINT"
-            value = "api.scavengerhunt.quest"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "VISION_ENDPOINT"
-            value = "scavengerhuntvision.cognitiveservices.azure.com"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

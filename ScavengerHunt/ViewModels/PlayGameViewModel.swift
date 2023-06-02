@@ -33,7 +33,8 @@ class PlayGameViewModel : NSObject, ObservableObject{
     override init() {
         super.init()
         accessToken = UserDefaults.standard.string(forKey: "accessToken")
-        hubConnection = HubConnectionBuilder(url: URL(string: "https://api.scavengerhunt.quest/Play")!)
+        let url = Bundle.main.infoDictionary?["API_ENDPOINT"] as? String ?? ""
+        hubConnection = HubConnectionBuilder(url: URL(string: "\(url)/Play")!)
             .withHubConnectionDelegate(delegate: self)
             .withHttpConnectionOptions(configureHttpOptions: { httpConnectionOptions in
                 httpConnectionOptions.accessTokenProvider = {() -> String? in
@@ -49,24 +50,15 @@ class PlayGameViewModel : NSObject, ObservableObject{
     
     func addListeners(){
         hubConnection!.on(method: "Error") { message in
-            print(">>> \(try! message.getArgument(type: String.self))")
-        }
-    }
-    
-    func verifyItem(){
-        guard let img = self.image,
-                let image = imageProcessor.getCompressedImage(image: img, quality: 128),
-                let item = self.item,
-                let gamePlay = self.gamePlay,
-                let itemRemaining = self.itemsRemaining else {return}
-        
-        let data = ImageData(imageBytes: image, itemId: item.id, gamePlayId: gamePlay.id)
-        DispatchQueue.main.async {
-            withAnimation {
-                self.item = self.randomPickWithNoRepeats(from: itemRemaining)
+            let message = try! message.getArgument(type: String.self)
+            DispatchQueue.main.async {
+                self.enqueue(message: message, backgroundColor: .red)
             }
         }
-        hubConnection!.invoke(method: "VerifyImage", data, resultType: VerifiedItem.self) { (result: VerifiedItem?, error: Error?) in
+        
+        hubConnection!.on(method: "VerifyImage") { message in
+            let result = try? message.getArgument(type: VerifiedItem.self)
+            
             if let result = result, let _ = self.gamePlay {
                 DispatchQueue.main.async {
                     withAnimation {
@@ -77,18 +69,12 @@ class PlayGameViewModel : NSObject, ObservableObject{
                         }
                     }
                 }
-            } else if let _ = error {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.enqueue(message: error?.localizedDescription ?? "Error starting game.", backgroundColor: .red)
-                    }
-                }
             }
         }
-    }
-    
-    func startGame(gameId: String, gameUserId: String){
-        hubConnection!.invoke(method: "StartGame", gameId, gameUserId, resultType: GamePlay.self) { (result: GamePlay?, error: Error?) in
+        
+        hubConnection!.on(method: "StartGame") { message in
+            let result = try? message.getArgument(type: GamePlay.self)
+            
             if let result = result {
                 DispatchQueue.main.async {
                     withAnimation {
@@ -98,32 +84,68 @@ class PlayGameViewModel : NSObject, ObservableObject{
                         self.startTimer()
                     }
                 }
-            } else if let _ = error {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.enqueue(message: error?.localizedDescription ?? "Error starting game.", backgroundColor: .red)
-                    }
-                }
             }
         }
-    }
-    
-    func endGame(gamePlayId: String){
-        hubConnection!.invoke(method: "EndGame", gamePlayId, resultType: GamePlay.self) { (result: GamePlay?, error: Error?) in
+        
+        hubConnection!.on(method: "EndGame") { message in
+            let result = try? message.getArgument(type: GamePlay.self)
+            
             if let result = result {
                 DispatchQueue.main.async {
                     withAnimation {
                         self.result = result
                     }
                 }
-            } else if let _ = error {
+            }
+        }
+        
+        hubConnection!.on(method: "GameStatus") { message in
+            let result = try? message.getArgument(type: Bool.self)
+            
+            if let status = result {
                 DispatchQueue.main.async {
                     withAnimation {
-                        self.enqueue(message: error?.localizedDescription ?? "Error ending game.", backgroundColor: .red)
+                        self.gamePlayStatus = status ? .ready : .notReady
                     }
                 }
             }
         }
+    }
+    
+    func verifyItem(){
+        guard let img = self.image,
+                let image = imageProcessor.getCompressedImage(image: img, quality: 128),
+                let item = self.item,
+                let gamePlay = self.gamePlay,
+                let itemRemaining = self.itemsRemaining else {return}
+        
+        let data = ImageData(imageString: image.base64EncodedString(), itemId: item.id, gamePlayId: gamePlay.id)
+        let serializedData = try? JSONEncoder().encode(data)
+        let jsonString = String(data: serializedData!, encoding: .utf8)
+        guard connectionStatus == .connected else {return}
+        hubConnection!.send(method: "VerifyImage", jsonString){ error in
+            if let error = error {
+                print("Sending data failed: \(error)")
+                // Handle the error, such as retrying or showing an error message
+            } else {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.item = self.randomPickWithNoRepeats(from: itemRemaining)
+                        self.image = nil
+                    }
+                }
+            }
+        }
+    }
+    
+    func startGame(gameId: String, gameUserId: String){
+        guard connectionStatus == .connected else {return}
+        hubConnection!.send(method: "StartGame", gameId, gameUserId)
+    }
+    
+    func endGame(gamePlayId: String){
+        guard connectionStatus == .connected else {return}
+        hubConnection!.send(method: "EndGame", gamePlayId)
     }
     
     func getGameStatus(gameId: String, userId: String){
@@ -132,22 +154,8 @@ class PlayGameViewModel : NSObject, ObservableObject{
                 self.gamePlayStatus = .fetching
             }
         }
-        hubConnection!.invoke(method: "GameStatus", gameId, userId, resultType: Bool.self) { (status: Bool?, error: Error?) in
-            if let status = status {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.gamePlayStatus = status ? .ready : .notReady
-                    }
-                }
-            } else if let _ = error {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.gamePlayStatus = .notFetched
-                        self.enqueue(message: "Error fetching data", backgroundColor: .red)
-                    }
-                }
-            }
-        }
+        guard connectionStatus == .connected else {return}
+        hubConnection!.send(method: "GameStatus", gameId, userId)
     }
     
     func openConnection(){
@@ -254,8 +262,12 @@ extension PlayGameViewModel{
 
     func enqueue(message: String, backgroundColor: Color) {
         let toast = Toast(message: message, backgroundColor: backgroundColor)
-        toasts.append(toast)
-        dequeueToast(after: toast.duration)
+        DispatchQueue.main.async {
+            withAnimation {
+                self.toasts.append(toast)
+                self.dequeueToast(after: toast.duration)
+            }
+        }
     }
     
     private func dequeueToast(after duration: TimeInterval) {
@@ -267,24 +279,42 @@ extension PlayGameViewModel{
 
 extension PlayGameViewModel: HubConnectionDelegate{
     internal func connectionDidOpen(hubConnection: HubConnection) {
-        timesRetry = 0
-        connectionStatus = .connected
+        DispatchQueue.main.async {
+            withAnimation {
+                self.timesRetry = 0
+                self.connectionStatus = .connected
+                self.enqueue(message: "Connected", backgroundColor: .green)
+            }
+        }
     }
 
     internal func connectionDidFailToOpen(error: Error) {
         if timesRetry < 5{
-            connectionStatus = .tryingAgain
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.connectionStatus = .tryingAgain
+                    self.enqueue(message: "Retrying Connection to Game Server", backgroundColor: .yellow)
+                }
+            }
             timesRetry += 1
-            enqueue(message: "Retrying Connection to Game Server", backgroundColor: .yellow)
             hubConnection!.start()
         }else{
-            connectionStatus = .connectionFailed
-            enqueue(message: "Error connecting to Game Server", backgroundColor: .red)
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.connectionStatus = .connectionFailed
+                    self.enqueue(message: "Error connecting to Game Server", backgroundColor: .red)
+                }
+            }
         }
     }
 
     internal func connectionDidClose(error: Error?) {
-        connectionStatus = .stopped
+        DispatchQueue.main.async {
+            withAnimation {
+                self.connectionStatus = .stopped
+                self.enqueue(message: "Connection stopped", backgroundColor: .red)
+            }
+        }
     }
 }
 
