@@ -17,10 +17,11 @@ class PlayGameViewModel : NSObject, ObservableObject{
     @Published var toasts: [Toast] = []
     @Published var item: Item?
     @Published var gamePlay: GamePlay?
-    @Published var itemsRemaining: [Item]?
+    @Published var itemsRemaining: [Item] = []
     @Published var result: GamePlay?
     @Published var image: UIImage?
     @Published var timeRemaining = 0
+    @Published var isVerifying = false
     private var accessToken: String?
     private var hubConnection: HubConnection?
     private var imageProcessor = ImageProcessor()
@@ -56,22 +57,6 @@ class PlayGameViewModel : NSObject, ObservableObject{
             }
         }
         
-        hubConnection!.on(method: "VerifyImage") { message in
-            let result = try? message.getArgument(type: VerifiedItem.self)
-            
-            if let result = result, let _ = self.gamePlay {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.gamePlay?.gameEnded = result.gameEnded
-                        self.gamePlay?.score = result.score
-                        if let itemId = result.itemToRemove{
-                            self.itemsRemaining?.removeAll(where: {$0.id == itemId})
-                        }
-                    }
-                }
-            }
-        }
-        
         hubConnection!.on(method: "StartGame") { message in
             let result = try? message.getArgument(type: GamePlay.self)
             
@@ -94,6 +79,30 @@ class PlayGameViewModel : NSObject, ObservableObject{
                 DispatchQueue.main.async {
                     withAnimation {
                         self.result = result
+                        self.stopTimer()
+                    }
+                }
+            }
+        }
+        
+        hubConnection!.on(method: "VerifyImage") { message in
+            let result = try? message.getArgument(type: VerifiedItem.self)
+            
+            if let result = result, let _ = self.gamePlay {
+                DispatchQueue.main.async {
+                    withAnimation {
+                        print("result reached")
+                        self.gamePlay?.gameEnded = result.gameEnded
+                        self.gamePlay?.score = result.score
+                        if let itemId = result.itemToRemove{
+                            self.itemsRemaining.removeAll(where: {$0.id == itemId})
+                            self.item = self.randomPickWithNoRepeats(from: self.itemsRemaining)
+                        }
+                        else{
+                            self.enqueue(message: "Wrong Object. Please try again!", backgroundColor: .yellow)
+                        }
+                        self.image = nil
+                        self.isVerifying = false
                     }
                 }
             }
@@ -113,29 +122,19 @@ class PlayGameViewModel : NSObject, ObservableObject{
     }
     
     func verifyItem(){
+        DispatchQueue.main.async {
+            withAnimation {
+                self.isVerifying = true
+            }
+        }
         guard let img = self.image,
                 let image = imageProcessor.getCompressedImage(image: img, quality: 128),
                 let item = self.item,
                 let gamePlay = self.gamePlay,
-                let itemRemaining = self.itemsRemaining else {return}
+                connectionStatus == .connected else {return}
         
         let data = ImageData(imageString: image.base64EncodedString(), itemId: item.id, gamePlayId: gamePlay.id)
-        let serializedData = try? JSONEncoder().encode(data)
-        let jsonString = String(data: serializedData!, encoding: .utf8)
-        guard connectionStatus == .connected else {return}
-        hubConnection!.send(method: "VerifyImage", jsonString){ error in
-            if let error = error {
-                print("Sending data failed: \(error)")
-                // Handle the error, such as retrying or showing an error message
-            } else {
-                DispatchQueue.main.async {
-                    withAnimation {
-                        self.item = self.randomPickWithNoRepeats(from: itemRemaining)
-                        self.image = nil
-                    }
-                }
-            }
-        }
+        hubConnection!.send(method: "VerifyImage", data)
     }
     
     func startGame(gameId: String, gameUserId: String){
@@ -146,6 +145,11 @@ class PlayGameViewModel : NSObject, ObservableObject{
     func endGame(gamePlayId: String){
         guard connectionStatus == .connected else {return}
         hubConnection!.send(method: "EndGame", gamePlayId)
+    }
+    
+    func submitRating(rating: Int){
+        guard connectionStatus == .connected, let result = result else{return}
+        hubConnection!.send(method: "AddRating", rating, result.id)
     }
     
     func getGameStatus(gameId: String, userId: String){
@@ -223,16 +227,28 @@ extension PlayGameViewModel: AVCapturePhotoCaptureDelegate{
 
 extension PlayGameViewModel{
     private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            
             let dateFormatterCS = DateFormatter()
             dateFormatterCS.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-            guard let gamePlay = self.gamePlay, let deadline = dateFormatterCS.date(from: gamePlay.deadline) else {return}
+            
+            guard let gamePlay = self.gamePlay,
+                  let deadline = dateFormatterCS.date(from: gamePlay.deadline) else {
+                return
+            }
+            
             let currentTime = Date()
             let timeDifference = Calendar.current.dateComponents([.second], from: currentTime, to: deadline)
-            if let secondsRemaining = timeDifference.second, secondsRemaining > 0 {
+            
+            if let secondsRemaining = timeDifference.second, secondsRemaining >= 0 {
                 self.timeRemaining = secondsRemaining
             } else {
                 self.stopTimer()
+                if let play = self.gamePlay, !play.gameEnded{
+                    self.gamePlay?.gameEnded = true
+                    self.endGame(gamePlayId: play.id)
+                }
             }
         }
     }
@@ -240,10 +256,8 @@ extension PlayGameViewModel{
     func stopTimer() {
         timer?.invalidate()
         timer = nil
-        if let play = gamePlay{
-            endGame(gamePlayId: play.id)
-        }
     }
+
     private func randomPickWithNoRepeats<T>(from array: [T]) -> T? {
         guard !array.isEmpty else {
             return nil

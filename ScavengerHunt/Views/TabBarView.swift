@@ -10,6 +10,7 @@ import SwiftUI
 struct TabBarView: View {
     @StateObject private var dashViewModel = DashViewModel()
     @StateObject private var gameViewModel = GameViewModel()
+    @StateObject private var profileViewModel = ProfileViewModel()
     @State private var selection = 0
     
     var body: some View {
@@ -25,6 +26,15 @@ struct TabBarView: View {
                 }
                 .tag(1)
         }
+        .task {
+            await profileViewModel.fetchUser()
+        }
+        .alert(profileViewModel.appError?.title ?? "", isPresented: $profileViewModel.showAlert) {
+            Text("OK")
+        } message: {
+            Text(profileViewModel.appError?.message ?? "")
+        }
+        .environmentObject(profileViewModel)
         .environmentObject(dashViewModel)
         .environmentObject(gameViewModel)
     }

@@ -16,7 +16,6 @@
 		8B2D03C22A26715F00CDEBBA /* PlayGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D03C12A26715F00CDEBBA /* PlayGameView.swift */; };
 		8B2D03C42A27302B00CDEBBA /* CircleMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D03C32A27302B00CDEBBA /* CircleMap.swift */; };
 		8B458ADA29F2A52A00857CEA /* GamesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B458AD929F2A52A00857CEA /* GamesListView.swift */; };
-		8B458ADC29F395C600857CEA /* XPLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B458ADB29F395C600857CEA /* XPLevelView.swift */; };
 		8B458ADE29F8002100857CEA /* EditGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B458ADD29F8002100857CEA /* EditGameView.swift */; };
 		8B51A7642A24754C00184C29 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51A7632A24754C00184C29 /* ProfileView.swift */; };
 		8B51A7662A247F4100184C29 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51A7652A247F4100184C29 /* ProfileViewModel.swift */; };
@@ -24,7 +23,10 @@
 		8B66290329E7E6060046DECD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B66290229E7E6060046DECD /* ImagePicker.swift */; };
 		8B66290529EEC2800046DECD /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B66290429EEC2800046DECD /* ImageView.swift */; };
 		8B6D9A462A1492AB00C14CD8 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6D9A452A1492AB00C14CD8 /* ImageProcessor.swift */; };
+		8B86A8E12A2AAD2800900909 /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86A8E02A2AAD2800900909 /* LogInView.swift */; };
+		8B86A8E32A2AAD9100900909 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86A8E22A2AAD9100900909 /* SignUpView.swift */; };
 		8B90DF9529DD59A7008FE03A /* ReusableViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B90DF9429DD59A7008FE03A /* ReusableViews.swift */; };
+		8B9592392A30D9BD00C5EB1A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B9592382A30D9BD00C5EB1A /* AVFoundation.framework */; };
 		8B9823D12A14D715001AFB58 /* AddItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9823D02A14D715001AFB58 /* AddItemsView.swift */; };
 		8BB970F829DA0B7F00D69BCF /* GameDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB970F729DA0B7F00D69BCF /* GameDetailView.swift */; };
 		8BB970FA29DA0BA600D69BCF /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB970F929DA0BA600D69BCF /* Game.swift */; };
@@ -44,7 +46,6 @@
 		8BB9711E29DB3DA100D69BCF /* TeamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711629DB3DA100D69BCF /* TeamViewModel.swift */; };
 		8BB9712029DB3DA100D69BCF /* PlayGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711829DB3DA100D69BCF /* PlayGameViewModel.swift */; };
 		8BB9712329DBECEB00D69BCF /* SignalRClient in Frameworks */ = {isa = PBXBuildFile; productRef = 8BB9712229DBECEB00D69BCF /* SignalRClient */; };
-		8BB9712729DC297900D69BCF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9712629DC297900D69BCF /* LoginView.swift */; };
 		8BB9712A29DC3BBF00D69BCF /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */; };
 		8BBDE0A329D458C600A694B2 /* ScavengerHuntApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE0A229D458C600A694B2 /* ScavengerHuntApp.swift */; };
 		8BBDE0A529D458C600A694B2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE0A429D458C600A694B2 /* RootView.swift */; };
@@ -64,7 +65,6 @@
 		8B2D03C12A26715F00CDEBBA /* PlayGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayGameView.swift; sourceTree = "<group>"; };
 		8B2D03C32A27302B00CDEBBA /* CircleMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleMap.swift; sourceTree = "<group>"; };
 		8B458AD929F2A52A00857CEA /* GamesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesListView.swift; sourceTree = "<group>"; };
-		8B458ADB29F395C600857CEA /* XPLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPLevelView.swift; sourceTree = "<group>"; };
 		8B458ADD29F8002100857CEA /* EditGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGameView.swift; sourceTree = "<group>"; };
 		8B51A7632A24754C00184C29 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		8B51A7652A247F4100184C29 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -72,7 +72,10 @@
 		8B66290229E7E6060046DECD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		8B66290429EEC2800046DECD /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		8B6D9A452A1492AB00C14CD8 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
+		8B86A8E02A2AAD2800900909 /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
+		8B86A8E22A2AAD9100900909 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		8B90DF9429DD59A7008FE03A /* ReusableViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableViews.swift; sourceTree = "<group>"; };
+		8B9592382A30D9BD00C5EB1A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8B9823D02A14D715001AFB58 /* AddItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemsView.swift; sourceTree = "<group>"; };
 		8BB970F729DA0B7F00D69BCF /* GameDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailView.swift; sourceTree = "<group>"; };
 		8BB970F929DA0BA600D69BCF /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
@@ -91,7 +94,6 @@
 		8BB9711529DB3DA100D69BCF /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		8BB9711629DB3DA100D69BCF /* TeamViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewModel.swift; sourceTree = "<group>"; };
 		8BB9711829DB3DA100D69BCF /* PlayGameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayGameViewModel.swift; sourceTree = "<group>"; };
-		8BB9712629DC297900D69BCF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
 		8BBD5FA52A27CA9B00350785 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		8BBD5FA62A27CAA400350785 /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B9592392A30D9BD00C5EB1A /* AVFoundation.framework in Frameworks */,
 				8B18A11429EFAE8F00D841A3 /* NukeUI in Frameworks */,
 				8B18A11629EFAE8F00D841A3 /* NukeVideo in Frameworks */,
 				8B18A11029EFAE8F00D841A3 /* Nuke in Frameworks */,
@@ -181,7 +184,6 @@
 			children = (
 				8B03E16229D471170038CE4E /* DashView.swift */,
 				8BB9710C29DAAA6500D69BCF /* CardView.swift */,
-				8B458ADB29F395C600857CEA /* XPLevelView.swift */,
 			);
 			path = DashTab;
 			sourceTree = "<group>";
@@ -216,9 +218,10 @@
 		8BB9712829DC3BA200D69BCF /* SettingsTab */ = {
 			isa = PBXGroup;
 			children = (
-				8BB9712629DC297900D69BCF /* LoginView.swift */,
 				8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */,
 				8B51A7632A24754C00184C29 /* ProfileView.swift */,
+				8B86A8E02A2AAD2800900909 /* LogInView.swift */,
+				8B86A8E22A2AAD9100900909 /* SignUpView.swift */,
 			);
 			path = SettingsTab;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 		8BCFB9B529E1C4590014422F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B9592382A30D9BD00C5EB1A /* AVFoundation.framework */,
 				8BCFB9B629E1C45A0014422F /* MapKit.framework */,
 			);
 			name = Frameworks;
@@ -397,19 +401,19 @@
 				8B6397E82A1DCC0600D93F71 /* AddItemsViewModel.swift in Sources */,
 				8BCFB9AF29DED76C0014422F /* AddGameView.swift in Sources */,
 				8BB9711029DAC31700D69BCF /* GamesView.swift in Sources */,
-				8BB9712729DC297900D69BCF /* LoginView.swift in Sources */,
+				8B86A8E32A2AAD9100900909 /* SignUpView.swift in Sources */,
 				8BB9710929DAA34A00D69BCF /* Team.swift in Sources */,
 				8B6D9A462A1492AB00C14CD8 /* ImageProcessor.swift in Sources */,
 				8BB970FA29DA0BA600D69BCF /* Game.swift in Sources */,
 				8BB9710D29DAAA6500D69BCF /* CardView.swift in Sources */,
 				8BB970FC29DA10BD00D69BCF /* Modifiers.swift in Sources */,
+				8B86A8E12A2AAD2800900909 /* LogInView.swift in Sources */,
 				8B90DF9529DD59A7008FE03A /* ReusableViews.swift in Sources */,
 				8B1E569029E5658700C1DE36 /* MapIcon.swift in Sources */,
 				8BCFB9B129E15ADD0014422F /* MapView.swift in Sources */,
 				8B51A7662A247F4100184C29 /* ProfileViewModel.swift in Sources */,
 				8BBDE0A529D458C600A694B2 /* RootView.swift in Sources */,
 				8B66290329E7E6060046DECD /* ImagePicker.swift in Sources */,
-				8B458ADC29F395C600857CEA /* XPLevelView.swift in Sources */,
 				8BB9710B29DAA3B300D69BCF /* User.swift in Sources */,
 				8B66290529EEC2800046DECD /* ImageView.swift in Sources */,
 				8BB9710129DA9FCD00D69BCF /* ApiService.swift in Sources */,
@@ -580,6 +584,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -624,6 +629,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

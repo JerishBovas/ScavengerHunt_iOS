@@ -13,18 +13,19 @@ struct RootView: View {
     
     var body: some View {
         VStack{
-            if !authViewModel.isAuthenticated{
-                LoginView(authVM: authViewModel)
-                    .onAppear{
-                        firstCheck = false
-                    }
-            }
-            else if firstCheck{
+            if firstCheck{
                 loggingInSection
             }
-            else{
+            else if authViewModel.isAuthenticated{
                 TabBarView()
             }
+        }
+        .fullScreenCover(isPresented: .constant(!authViewModel.isAuthenticated), content: {
+            LogInView()
+        })
+        .task {
+            try? await authViewModel.refreshToken()
+            firstCheck = false
         }
         .alert(authViewModel.appError?.title ?? "", isPresented: $authViewModel.showAlert) {
             Text("OK")
@@ -36,36 +37,19 @@ struct RootView: View {
 
 extension RootView{
     private var loggingInSection: some View{
-        VStack{
-            VStack(alignment: .center) {
-                Text("Welcome to")
-                    .font(.system(size: 40))
-                    .fontWeight(.bold)
-                    .foregroundColor(.secondary)
-                    .fontDesign(.rounded)
-                Text("Scavenger Hunt")
-                    .font(.system(size: 40))
-                    .fontWeight(.bold)
-                    .fontDesign(.rounded)
-                    .foregroundColor(.accentColor)
-            }
-            .padding(.vertical, 30)
-            HStack{
-                VStack(alignment: .center){
-                    Text("Logging In...")
-                        .font(.largeTitle)
-                        .fontWeight(.medium)
-                        .fontDesign(.rounded)
-                    ProgressView()
-                }
+        VStack(alignment: .center) {
+            Text("Welcome to")
+                .font(.system(size: 40))
+                .fontWeight(.bold)
+                .foregroundColor(.secondary)
+                .fontDesign(.rounded)
+            Text("Scavenger Hunt")
+                .font(.system(size: 40))
+                .fontWeight(.bold)
+                .fontDesign(.rounded)
                 .foregroundColor(.accentColor)
-            }
-            .padding(.top, 100)
-            Spacer()
-        }
-        .task {
-            try? await authViewModel.refreshToken()
-            firstCheck = false
+            ProgressView()
+                .scaleEffect(1.5)
         }
     }
 }

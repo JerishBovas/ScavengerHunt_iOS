@@ -9,49 +9,54 @@ import SwiftUI
 
 struct DashView: View {
     @EnvironmentObject private var vm: DashViewModel
+    @EnvironmentObject private var profileVM: ProfileViewModel
     @Binding var selection: Int
     @State private var firstLoad = true
     @State private var showProfile = false
     @State private var showAlert: Bool = false
     @State private var appError: AppError?
-    @State private var lvlXP: Int = 800
+    @State private var upperLimit: Int = 100
+    @State private var lowerLimit: Int = 0
+    @State private var level: Int = 1
     
     private func shortAddress(address: String) -> String{
         var addressSplit = address.split(separator: ",")
         addressSplit.removeLast()
         return addressSplit.joined(separator: ",")
     }
-    private var progress: CGFloat{
-        CGFloat(vm.user?.score ?? 0)/CGFloat(lvlXP)
-    }
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0){
-                headerSection
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 20){
-                        spotLightSection
-                        topGamesSection
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 8)
-                    gamesNearYouSection
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 32){
+                    spotLightSection
+                        .padding(.top, 20)
+                    topGamesSection
+                }
+                .padding(.horizontal, 20)
+                gamesNearYouSection
+                    .padding(.top, 32)
+            }
+            .padding(.top, 160)
+            .overlay{
+                VStack{
+                    headerSection
+                    Spacer()
                 }
             }
             .navigationDestination(for: Game.self) { game in
                 GameDetailView(game: game)
             }
-            .refreshable {
-                await vm.fetchPage()
+            .navigationDestination(for: User.self) { user in
+                ProfileView(user: user)
             }
-            .sheet(isPresented: $showProfile, content: {
-                ProfileView()
-            })
             .alert(appError?.title ?? "", isPresented: $showAlert) {
                 Text("OK")
             } message: {
                 Text(appError?.message ?? "")
+            }
+            .refreshable {
+                await vm.fetchPage()
             }
             .task {
                 if firstLoad{
@@ -65,55 +70,83 @@ struct DashView: View {
 
 extension DashView{
     private var headerSection: some View{
-        VStack {
+        VStack(spacing: 10) {
             HStack(alignment: .center) {
-                VStack(alignment: .leading){
+                VStack(alignment: .leading, spacing: 0){
                     Text("Welcome Back,")
                         .font(.system(size: 20))
                         .fontWeight(.medium)
                         .fontDesign(.rounded)
                         .foregroundColor(.primary.opacity(0.6))
-                    Text(vm.user?.name ?? "Guest")
-                        .font(.system(size: 30))
+                    Text(profileVM.user?.name ?? "Guest")
+                        .font(.system(size: 34))
                         .fontWeight(.medium)
                         .fontDesign(.rounded)
                         .foregroundColor(.primary)
                 }
                 Spacer()
-                Image("profileImage")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .clipShape(Circle())
-                    .onTapGesture {
-                        showProfile = true
+                if let user = profileVM.user{
+                    NavigationLink(value: user) {
+                        ImageView(url: user.profileImage)
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
                     }
-
+                }
+                else{
+                    Color.random()
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                }
             }
-            ProgressView(value: 400, total: Double(lvlXP))
-                .tint(.primary)
-                .background(.secondary.opacity(0.5))
-            HStack(spacing: 0){
-                Text("Level 4")
-                    .font(.title2)
-                    .fontDesign(.rounded)
-                    .foregroundColor(.primary)
-                Spacer()
-                Text("\(400)")
-                    .fontWeight(.medium)
-                    .font(.footnote)
-                    .foregroundColor(.primary.opacity(0.6))
-                Text(" / \(lvlXP.description) XP")
-                    .font(.footnote)
-                    .foregroundColor(.primary)
-                    .fontWeight(.bold)
+            HStack(spacing: 2){
+                Circle()
+                    .stroke(lineWidth: 4)
+                    .fill(.primary)
+                    .frame(width: 60, height: 60)
+                    .overlay{
+                        Text(level.description)
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .fontDesign(.rounded)
+                    }
+                ProgressView(value: max(min(Double((profileVM.user?.score ?? lowerLimit) - lowerLimit), Double(upperLimit - lowerLimit)), 0), total: Double(upperLimit - lowerLimit))
+                    .tint(.primary)
+                    .background(.secondary.opacity(0.5))
+                    .overlay{
+                        HStack{
+                            Spacer()
+                            VStack{
+                                HStack(alignment: .bottom){
+                                    Text("\(profileVM.user?.score ?? 0)")
+                                    Text("/ \(upperLimit.description)")
+                                }
+                                .font(.headline)
+                                .foregroundColor(.primary.opacity(0.7))
+                                .fontDesign(.rounded)
+                                Spacer()
+                            }
+                            .frame(height: 50)
+                        }
+                    }
+                    .onAppear{
+                        let (level, upperLimit, lowerLimit) = calculateLevelAndCutoff(for: profileVM.user?.score ?? 0)
+                        self.upperLimit = upperLimit
+                        self.lowerLimit = lowerLimit
+                        self.level = level
+                    }
             }
-            .padding(.vertical, 8)
-            .foregroundColor(.secondary)
+            .onChange(of: profileVM.user?.score) { newValue in
+                let (level, upperLimit, lowerLimit) = calculateLevelAndCutoff(for: newValue ?? 0)
+                self.upperLimit = upperLimit
+                self.lowerLimit = lowerLimit
+                self.level = level
+            }
         }
         .padding(.horizontal, 20)
-        .padding(.bottom, 8)
+        .padding(.bottom, 20)
+        .padding(.top, 8)
         .background(
-        LinearGradient(gradient: Gradient(colors: [Color.accentColor.opacity(0.7), Color.accentColor]), startPoint: .topLeading, endPoint: .bottomTrailing))
+        LinearGradient(gradient: Gradient(colors: [Color.accentColor, Color.blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
     }
     
     private var spotLightSection: some View {
@@ -122,31 +155,32 @@ extension DashView{
                 .font(.system(size: 20, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
                 .padding(.bottom, -1)
-            
-            ImageView(url: vm.gotd?.imageName ?? "")
-                .frame(maxHeight: 230)
-                .cornerRadius(8)
-            
             NavigationLink(value: vm.gotd) {
-                HStack{
+                VStack{
                     ImageView(url: vm.gotd?.imageName ?? "")
-                        .frame(width: 50, height: 50)
-                        .cornerRadius(8, corners: .allCorners)
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(vm.gotd?.name ?? "Jerish Bovas")
-                            .font(.title2)
+                        .frame(maxHeight: 230)
+                        .cornerRadius(8)
+                    HStack{
+                        ImageView(url: vm.gotd?.imageName ?? "")
+                            .frame(width: 50, height: 50)
+                            .cornerRadius(8, corners: .allCorners)
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(vm.gotd?.name ?? "Jerish Bovas")
+                                .font(.title2)
+                                .fontWeight(.medium)
+                                .foregroundColor(.primary)
+                            Text(shortAddress(address: vm.gotd?.address ?? "Something something somethign"))
+                                .font(.headline)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
                             .fontWeight(.medium)
-                            .foregroundColor(.primary)
-                        Text(shortAddress(address: vm.gotd?.address ?? "Something something somethign"))
-                            .font(.headline)
                             .foregroundColor(.secondary)
                     }
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
                 }
             }
+            Divider()
         }
         .redacted(reason: vm.gotd == nil ? .placeholder : [])
     }
@@ -226,13 +260,13 @@ extension DashView{
     private var gamesNearYouSection: some View {
         VStack(alignment: .leading) {
             Text("GAMES NEAR YOU")
-                .font(.system(size: 24, weight: .medium, design: .rounded))
+                .font(.system(size: 20, weight: .medium, design: .rounded))
                 .foregroundColor(.secondary)
                 .padding(.leading, 20)
             ScrollView(.horizontal, showsIndicators: false) {
                 let dimension = UIScreen.main.bounds.width - 60
                 LazyHStack {
-                    ForEach([DataService.getGame(), DataService.getGame(), DataService.getGame(), DataService.getGame()]) { game in
+                    ForEach(vm.popularGames ?? [DataService.getGame(), DataService.getGame(), DataService.getGame(), DataService.getGame()]) { game in
                         CardView(game: game, dimension: dimension)
                             .padding(.horizontal, 8)
                     }
@@ -241,12 +275,36 @@ extension DashView{
             }
         }
     }
+    
+    private func calculateLevelAndCutoff(for score: Int) -> (level: Int, upperLimit: Int, lowerLimit: Int) {
+        var level = 1
+        var upperLimit = 100
+        var lowerLimit = 0
+        
+        while score >= upperLimit {
+            lowerLimit = upperLimit
+            level += 1
+            upperLimit *= 2
+        }
+        
+        return (level, upperLimit, lowerLimit)
+    }
 
+}
+struct LinearProgressViewHeightModifier: ViewModifier {
+    var height: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .frame(height: height)
+            .progressViewStyle(LinearProgressViewStyle())
+    }
 }
 
 struct DashView_Previews: PreviewProvider {
     static var previews: some View {
         DashView(selection: .constant(0))
             .environmentObject(DashViewModel())
+            .environmentObject(ProfileViewModel())
     }
 }

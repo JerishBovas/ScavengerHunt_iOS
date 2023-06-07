@@ -22,8 +22,8 @@ class ImageProcessor{
     private let apiService = ApiService()
     
     init(){
-        self.VISION_KEY = ProcessInfo.processInfo.environment["VISION_KEY"] ?? ""
-        self.VISION_ENDPOINT = ProcessInfo.processInfo.environment["VISION_ENDPOINT"] ?? ""
+        self.VISION_KEY = Bundle.main.infoDictionary?["VISION_KEY"] as? String ?? ""
+        self.VISION_ENDPOINT = Bundle.main.infoDictionary?["VISION_ENDPOINT"] as? String ?? ""
     }
     
     public func removeBackground(image: UIImage) async throws-> UIImage{

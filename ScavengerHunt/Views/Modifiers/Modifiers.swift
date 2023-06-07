@@ -46,3 +46,28 @@ extension Color {
     }
 }
 
+struct CustomTextFieldStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 6).stroke(lineWidth: 0.5).fill(.primary.opacity(0.4)))
+            .padding(.bottom, 5)
+    }
+}
+
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+// Add this custom view modifier
+struct DismissKeyboardOnTap: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .gesture(TapGesture().onEnded { _ in
+                UIApplication.shared.endEditing()
+            })
+    }
+}
+

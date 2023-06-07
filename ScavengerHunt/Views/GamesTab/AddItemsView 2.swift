@@ -136,13 +136,6 @@ extension AddItemsView{
                                 await vm.removeBackground()
                                 progressValue = 50
                                 progressText = "Analyzing Image"
-                                guard let _ = vm.croppedImage else{
-                                    vm.appError = AppError(title: "Image Error", message: "Please retake picture and try again.")
-                                    vm.showAlert = true
-                                    vm.image = nil
-                                    isFetching = false
-                                    return
-                                }
                                 await vm.analyzeImage()
                                 progressValue = 90
                                 progressText = "Processing"

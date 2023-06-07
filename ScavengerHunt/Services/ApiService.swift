@@ -114,7 +114,7 @@ class ApiService{
         
         return try await fetchApi(request: request)
     }
-    func put<T:Decodable>(imageData: Data?, data: Data, endpoint: String, accessToken: String) async throws -> T{
+    func put<T:Decodable>(imageData: Data?, data: Data?, endpoint: String, accessToken: String) async throws -> T{
         let boundary = UUID().uuidString
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "PUT"
@@ -122,10 +122,13 @@ class ApiService{
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         var body = Data()
-        body.append("--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"json\"\r\n\r\n".data(using: .utf8)!)
-        body.append(data)
-        body.append("\r\n".data(using: .utf8)!)
+        if let data = data{
+            //add data to the request body
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"json\"\r\n\r\n".data(using: .utf8)!)
+            body.append(data)
+            body.append("\r\n".data(using: .utf8)!)
+        }
 
         if let imageData = imageData{
             // add image data to the request body
@@ -176,28 +179,5 @@ class ApiService{
             print(error)
             throw AppError(title: error.title, message: error.errors.joined(separator: "\n"))
         }
-    }
-    
-    func uploadImage(endpoint: String, request: ImageRequest, accessToken: String) async throws -> ImageResponse{
-        var urlRequest = URLRequest(url: URL(string: endpoint)!)
-        let boundary = "Boundary-\(UUID().uuidString)"
-        
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        urlRequest.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "content-type")
-        
-        var requestData = Data()
-        
-        requestData.append("--\(boundary)\r\n" .data(using: .utf8)!)
-        requestData.append("Content-Disposition: form-data; name=\"ImageFile\"; filename=\"\(request.fileName)\"\r\n" .data(using: .utf8)!)
-        requestData.append("Content-Type: image/jpeg \r\n\r\n" .data(using: .utf8)!)
-        requestData.append(request.imageFile as Data)
-        requestData.append("\r\n--\(boundary)--\r\n" .data(using: .utf8)!)
-        
-        urlRequest.addValue("\(requestData.count)", forHTTPHeaderField: "content-length")
-        
-        urlRequest.httpBody = requestData
-        
-        return try await fetchApi(request: urlRequest)
     }
 }

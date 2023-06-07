@@ -13,7 +13,6 @@ class DashViewModel: ObservableObject{
     private var accessToken: String?
     private var api: ApiService
     
-    @Published var user: User?
     @Published var gotd: Game?
     @Published var leaderBoard: [User]?
     @Published var popularGames: [Game]?
@@ -21,12 +20,6 @@ class DashViewModel: ObservableObject{
     init(){
         self.accessToken = UserDefaults.standard.string(forKey: "accessToken")
         api = ApiService()
-        if let data = UserDefaults.standard.data(forKey: "user"),
-           let use = try? JSONDecoder().decode(User.self, from: data){
-            withAnimation {
-                self.user = use
-            }
-        }
     }
     
     func fetchPage() async{
@@ -52,20 +45,6 @@ class DashViewModel: ObservableObject{
                 }
             }
             print("Page Fetched")
-        }
-        if let accessToken = accessToken{
-            async let fetchedUser: User? = try? await api.get(accessToken: accessToken, endpoint: APIEndpoint.user.description)
-            let user = await fetchedUser
-            DispatchQueue.main.async {
-                if let user = user {
-                    withAnimation(.default) {
-                        self.user = user
-                    }
-                    if let encoded = try? JSONEncoder().encode(user) {
-                        UserDefaults.standard.set(encoded, forKey: "user")
-                    }
-                }
-            }
         }
     }
 }

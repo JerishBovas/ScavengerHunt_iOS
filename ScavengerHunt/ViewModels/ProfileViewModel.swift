@@ -7,13 +7,16 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 class ProfileViewModel: ObservableObject{
     private var accessToken: String?
     private var api: ApiService
     private var imgPro: ImageProcessor
-    @Published var user: User
-    @Published var profileImage: UIImage? = nil
+    @Published var user: User?
+    @Published var profileImage: UIImage?
+    @Published var showAlert: Bool = false
+    @Published var appError: AppError?
     
     init(){
         self.accessToken = UserDefaults.standard.string(forKey: "accessToken")
@@ -21,28 +24,100 @@ class ProfileViewModel: ObservableObject{
         imgPro = ImageProcessor()
         if let data = UserDefaults.standard.data(forKey: "user"),
            let use = try? JSONDecoder().decode(User.self, from: data){
-            self.user = use
-        }
-        else{
-            user = DataService.user
+            withAnimation {
+                self.user = use
+            }
         }
     }
     
-    func setProfileImage() async throws{
-        guard let image = profileImage else {
-            throw AppError(title: "Image format Error", message: "Please verify that your image is in correct format.")
+    func fetchUser() async{
+        if let accessToken = accessToken{
+            async let fetchedUser: User? = try? await api.get(accessToken: accessToken, endpoint: APIEndpoint.user.description)
+            let user = await fetchedUser
+            DispatchQueue.main.async {
+                if let user = user {
+                    withAnimation(.default) {
+                        self.user = user
+                    }
+                    if let encoded = try? JSONEncoder().encode(user) {
+                        UserDefaults.standard.set(encoded, forKey: "user")
+                    }
+                }
+            }
         }
-        guard let compressedImage = imgPro.getCompressedImage(image: image, quality: 256) else {
-            throw AppError(title: "Internal Error", message: "An error occured when processing the Image.")
+    }
+    
+    func signOut(authVM: AuthViewModel){
+        let defaults = UserDefaults.standard
+        defaults.set(false, forKey: "isAuthenticated")
+        defaults.set("", forKey: "accessToken")
+        defaults.set("", forKey: "refreshToken")
+        authVM.accessToken = ""
+        DispatchQueue.main.async {
+            withAnimation {
+                authVM.isAuthenticated = false
+            }
         }
-        guard let accessToken = accessToken else{
-            throw AppError(title: "Authentication Failed", message: "Please try logging in again")
+    }
+    
+    func changeName(name: String) async{
+        do{
+            guard let accessToken = accessToken else{return}
+            if !name.isEmpty{
+                let data = try JSONEncoder().encode(name)
+                let user: User = try await api.put(accessToken: accessToken, body: data, endpoint: APIEndpoint.userNameUpdate.description)
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.user = user
+                    }
+                }
+                if let encoded = try? JSONEncoder().encode(user) {
+                    UserDefaults.standard.set(encoded, forKey: "user")
+                }
+            }
         }
-        
-        let data = ImageRequest(imageFile: compressedImage, fileName: "something.jpeg")
-        
-        let response = try await api.uploadImage(endpoint: APIEndpoint.userProfileImage.description, request: data, accessToken: accessToken)
-        print(response)
+        catch let error as AppError{
+            DispatchQueue.main.async {
+                self.appError = error
+                self.showAlert = true
+            }
+        }catch {
+            DispatchQueue.main.async {
+                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
+                self.showAlert = true
+            }
+        }
+    }
+    
+    func setProfileImage() async{
+        do{
+            guard let image = profileImage,
+                    let compressedImage = imgPro.getCompressedImage(image: image, quality: 256),
+                    let accessToken = accessToken else {
+                throw AppError(title: "Image Error", message: "Please provide a valid image.")
+            }
+            
+            let response: User = try await api.put(imageData: compressedImage, data: nil, endpoint: APIEndpoint.userProfileImage.description, accessToken: accessToken)
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.user = response
+                }
+            }
+            if let encoded = try? JSONEncoder().encode(user) {
+                UserDefaults.standard.set(encoded, forKey: "user")
+            }
+        }
+        catch let error as AppError{
+            DispatchQueue.main.async {
+                self.appError = error
+                self.showAlert = true
+            }
+        }catch {
+            DispatchQueue.main.async {
+                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
+                self.showAlert = true
+            }
+        }
     }
     
     func dateFormatter(dat: String) -> String{

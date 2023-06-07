@@ -244,14 +244,6 @@ struct GameDetailView: View {
                             }
                             Divider()
                             HStack{
-                                Text("Developer")
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                                Text("Electronic Arts")
-                                    .foregroundColor(.primary)
-                            }
-                            Divider()
-                            HStack{
                                 Text("Private Mode")
                                     .foregroundColor(.secondary)
                                 Spacer()
