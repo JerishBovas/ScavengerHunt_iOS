@@ -123,7 +123,7 @@ struct ProfileView: View {
                                     user.name = name
                                 }
                                 if vm.profileImage != nil{
-                                    await vm.setProfileImage()
+                                    user.profileImage = await vm.setProfileImage()
                                 }
                                 isLoading = false
                             }

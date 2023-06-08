@@ -30,6 +30,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>13.3</string>
 	<key>MKDirectionsApplicationSupportedModes</key>
 	<array>
 		<string>MKDirectionsModeBike</string>

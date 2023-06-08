@@ -89,7 +89,7 @@ class ProfileViewModel: ObservableObject{
         }
     }
     
-    func setProfileImage() async{
+    func setProfileImage() async -> String{
         do{
             guard let image = profileImage,
                     let compressedImage = imgPro.getCompressedImage(image: image, quality: 256),
@@ -107,6 +107,7 @@ class ProfileViewModel: ObservableObject{
             if let encoded = try? JSONEncoder().encode(user) {
                 UserDefaults.standard.set(encoded, forKey: "user")
             }
+            return response.profileImage
         }
         catch let error as AppError{
             DispatchQueue.main.async {
@@ -119,6 +120,7 @@ class ProfileViewModel: ObservableObject{
                 self.showAlert = true
             }
         }
+        return ""
     }
     
     func dateFormatter(dat: String) -> String{
