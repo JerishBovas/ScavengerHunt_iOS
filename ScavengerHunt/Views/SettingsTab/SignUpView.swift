@@ -29,6 +29,7 @@ struct SignUpView: View{
         NavigationView {
             ZStack {
                 VStack{
+                    Spacer()
                     VStack(alignment: .center) {
                         Text("Welcome to")
                             .font(.system(size: 40))
@@ -41,7 +42,7 @@ struct SignUpView: View{
                             .fontDesign(.rounded)
                             .foregroundColor(.accentColor)
                     }
-                    .padding(.vertical, 30)
+                    Spacer()
                     VStack(alignment: .leading){
                         TextField("Name", text: $name)
                             .modifier(CustomTextFieldStyle())

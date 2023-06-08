@@ -26,6 +26,7 @@ struct LogInView: View{
         NavigationView {
             ZStack {
                 VStack{
+                    Spacer()
                     VStack(alignment: .center) {
                         Text("Welcome to")
                             .font(.system(size: 40))
@@ -38,7 +39,7 @@ struct LogInView: View{
                             .fontDesign(.rounded)
                             .foregroundColor(.accentColor)
                     }
-                    .padding(.vertical, 30)
+                    Spacer()
                     VStack(alignment: .leading){
                         TextField("Email", text: $email)
                             .modifier(CustomTextFieldStyle())

@@ -94,7 +94,9 @@ struct ProfileView: View {
                 
                 Section {
                     Button {
-                        showConfirmation = true
+                        withAnimation {
+                            showConfirmation = true
+                        }
                     } label: {
                         HStack{
                             Spacer()
@@ -118,6 +120,7 @@ struct ProfileView: View {
                             Task{
                                 if name != user.name{
                                     await vm.changeName(name: name)
+                                    user.name = name
                                 }
                                 if vm.profileImage != nil{
                                     await vm.setProfileImage()

@@ -9,19 +9,23 @@ import SwiftUI
 
 struct RootView: View {
     @State private var firstCheck = true
+    @State private var authNeeded = true
     @EnvironmentObject private var authViewModel: AuthViewModel
     
     var body: some View {
         VStack{
-            if firstCheck{
-                loggingInSection
-            }
-            else if authViewModel.isAuthenticated{
+            if authViewModel.isAuthenticated{
                 TabBarView()
             }
         }
         .fullScreenCover(isPresented: .constant(!authViewModel.isAuthenticated), content: {
-            LogInView()
+            VStack {
+                if firstCheck{
+                    loggingInSection
+                }else {
+                    LogInView()
+                }
+            }
         })
         .task {
             try? await authViewModel.refreshToken()

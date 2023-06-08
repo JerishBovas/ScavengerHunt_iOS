@@ -101,6 +101,7 @@ class ProfileViewModel: ObservableObject{
             DispatchQueue.main.async {
                 withAnimation {
                     self.user = response
+                    self.profileImage = nil
                 }
             }
             if let encoded = try? JSONEncoder().encode(user) {

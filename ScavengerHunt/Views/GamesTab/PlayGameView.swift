@@ -44,13 +44,21 @@ struct PlayGameView: View {
             if vm.result == nil{
                 VStack(){
                     HStack{
-                        Button("Close") {
+                        Button(action: {
                             if showingSection == 1{
-                                showConfirmation = true
+                                withAnimation {
+                                    showConfirmation = true
+                                }
                             }else{
                                 dismiss()
                             }
-                        }
+                        }, label: {
+                            if showingSection == 1{
+                                Text("End")
+                            }else{
+                                Text("Close")
+                            }
+                        })
                         .foregroundColor(.red)
                         .buttonStyle(.borderless)
                         Spacer()
@@ -68,7 +76,9 @@ struct PlayGameView: View {
                     .padding(.horizontal, 20)
                     .alert(isPresented: $showConfirmation) {
                         Alert(title: Text("End Game?"), message: Text("Are you sure you want to End the Game?"), primaryButton: .destructive(Text("Yes")){
-                            dismiss()
+                            vm.endGame(gamePlayId: vm.gamePlay!.id)
+                            vm.gamePlay?.gameEnded = true
+                            vm.stopTimer()
                         }, secondaryButton: .cancel())
                     }
 

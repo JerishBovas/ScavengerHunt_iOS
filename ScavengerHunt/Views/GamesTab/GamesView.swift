@@ -101,7 +101,9 @@ struct GamesView: View {
 extension GamesView{
     private var myGamesList: some View{
         func deleteItems(at offsets: IndexSet) {
-            vm.myGames?.remove(atOffsets: offsets)
+            Task{
+                await vm.deleteGame(at: offsets)
+            }
         }
         return List {
             ForEach(vm.myGames ?? [DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame()]) { game in

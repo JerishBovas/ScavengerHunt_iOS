@@ -20,7 +20,6 @@ class AuthViewModel: ObservableObject{
     
     init() {
         let defauls = UserDefaults.standard
-        self.isAuthenticated = defauls.bool(forKey: "isAuthenticated")
         if let accessToken  = defauls.string(forKey: "accessToken"),
               let refreshToken = defauls.string(forKey: "refreshToken"),
               let tokenExpiry = defauls.object(forKey: "tokenExpiry") {
@@ -71,7 +70,9 @@ class AuthViewModel: ObservableObject{
             
             guard let tokenObj: TokenObject = try await api.post(body: body, endpoint: APIEndpoint.login.description) else {
                 DispatchQueue.main.async {
-                    self.isAuthenticated = false
+                    withAnimation {
+                        self.isAuthenticated = false
+                    }
                 }
                 throw AppError(title: "Log-In Error", message: "Please Login Again")
             }
@@ -83,61 +84,55 @@ class AuthViewModel: ObservableObject{
             defaults.set(true, forKey: "isAuthenticated")
             
             DispatchQueue.main.async {
-                self.isAuthenticated = true
+                withAnimation {
+                    self.isAuthenticated = true
+                }
             }
             self.accessToken = tokenObj.accessToken
             self.refreshToken = tokenObj.refreshToken
             self.tokenExpiry = expiry
         }catch let error as AppError{
             DispatchQueue.main.async {
-                self.appError = error
-                self.showAlert = true
+                withAnimation {
+                    self.appError = error
+                    self.showAlert = true
+                }
             }
         }catch {
             DispatchQueue.main.async {
-                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
-                self.showAlert = true
+                withAnimation {
+                    self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
+                    self.showAlert = true
+                }
             }
         }
     }
     
     public func refreshToken() async throws{
-        do{
-            let defaults = UserDefaults.standard
-            var expiry: Date
-            
-            let body = try JSONEncoder().encode(TokenObject(accessToken: accessToken, refreshToken: refreshToken))
-            
-            guard let tokenObj: TokenObject = try? await ApiService().post(body: body, endpoint: APIEndpoint.refreshToken.description) else{
-                DispatchQueue.main.async {
-                    self.isAuthenticated = false
-                }
-                throw AppError(title: "Log-In Error", message: "Please Login Again")
-            }
-            
-            defaults.set(tokenObj.refreshToken, forKey: "refreshToken")
-            defaults.set(tokenObj.accessToken, forKey: "accessToken")
-            expiry = Date().addingTimeInterval(24 * 60 * 60)
-            defaults.set(expiry, forKey: "tokenExpiry")
-            defaults.set(true, forKey: "isAuthenticated")
-            
-            DispatchQueue.main.async {
-                self.isAuthenticated = true
-            }
-            self.accessToken = tokenObj.accessToken
-            self.refreshToken = tokenObj.refreshToken
-            self.tokenExpiry = expiry
-        }catch let error as AppError{
-            DispatchQueue.main.async {
-                self.appError = error
-                self.showAlert = true
-            }
-        }catch {
-            DispatchQueue.main.async {
-                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
-                self.showAlert = true
-            }
-        }
+		let defaults = UserDefaults.standard
+		var expiry: Date
+		
+		let body = try JSONEncoder().encode(TokenObject(accessToken: accessToken, refreshToken: refreshToken))
+		
+		guard let tokenObj: TokenObject = try? await ApiService().post(body: body, endpoint: APIEndpoint.refreshToken.description) else{
+			DispatchQueue.main.async {
+				self.isAuthenticated = false
+			}
+			return
+		}
+		
+		defaults.set(tokenObj.refreshToken, forKey: "refreshToken")
+		defaults.set(tokenObj.accessToken, forKey: "accessToken")
+		expiry = Date().addingTimeInterval(24 * 60 * 60)
+		defaults.set(expiry, forKey: "tokenExpiry")
+		defaults.set(true, forKey: "isAuthenticated")
+		
+		DispatchQueue.main.async {
+			self.isAuthenticated = true
+		}
+		self.accessToken = tokenObj.accessToken
+		self.refreshToken = tokenObj.refreshToken
+		self.tokenExpiry = expiry
     }
 }
 
