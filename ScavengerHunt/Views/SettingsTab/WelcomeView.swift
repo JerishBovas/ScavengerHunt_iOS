@@ -9,9 +9,6 @@ import SwiftUI
 
 struct WelcomeView: View {
     @EnvironmentObject private var authVM: AuthenticationViewModel
-    @State private var isLogoVisible = false
-    @State private var isTitleVisible = false
-    @State private var isTextVisible = false
     @State private var isSignUpButtonPressed = false
     @State private var isLoginButtonPressed = false
     
@@ -22,16 +19,12 @@ struct WelcomeView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100)
-                    .opacity(isLogoVisible ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 1.0), value: isLogoVisible)
                 Text("Scavenger Hunt")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .fontDesign(.rounded)
-                    .foregroundStyle(LinearGradient(colors: [.cyan, .yellow, .green], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .foregroundStyle(LinearGradient(colors: [.cyan, .purple, .orange, .pink], startPoint: .topLeading, endPoint: .bottomTrailing))
                     .padding(.top, -8)
-                    .opacity(isTitleVisible ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 1.0), value: isTitleVisible)
             }
             Spacer()
             VStack(alignment: .leading, spacing: 8){
@@ -44,10 +37,10 @@ struct WelcomeView: View {
                     VStack(alignment: .leading){
                         Text("AR Exploration")
                             .font(.headline)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.pink)
                         Text("Discover virtual treasures in real-world locations and interact with them in a completely immersive way.")
                             .font(.footnote)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -62,10 +55,10 @@ struct WelcomeView: View {
                     VStack(alignment: .leading){
                         Text("Personalized Hunts")
                             .font(.headline)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.pink)
                         Text("Choose from different themes, locations, and challenges for a unique treasure hunting experience every time.")
                             .font(.footnote)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -80,10 +73,10 @@ struct WelcomeView: View {
                     VStack(alignment: .leading){
                         Text("Social Integration")
                             .font(.headline)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.pink)
                         Text("Compete with your friends, share your scores, and invite others to join the hunt with our app's social features.")
                             .font(.footnote)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -98,22 +91,24 @@ struct WelcomeView: View {
                     VStack(alignment: .leading){
                         Text("Learning with Fun")
                             .font(.headline)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.pink)
                         Text("Each challenge is designed to teach something new - be it historical facts, geography, or scientific wonders.")
                             .font(.footnote)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.primary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.primary, in: RoundedRectangle(cornerRadius: 15, style: .continuous).stroke(lineWidth: 1.0))
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .shadow(radius: 5)
             Spacer()
             Text("Login for a seamless experience across devices")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            VStack(spacing: 16){
+            VStack(spacing: 20){
                 HStack(spacing: 16){
                     NavigationLink(destination: AuthenticationView()
                         .environmentObject(authVM)) {
@@ -129,26 +124,38 @@ struct WelcomeView: View {
                         isLoginButtonPressed = pressing
                     }, perform: { })
                 }
-                Button("Continue without account") {
+                Button(action: {
                     Task{
                         await authVM.signInAnonymously()
                     }
-                }
+                }, label: {
+                    Text("Continue without account")
+                    Image(systemName: "arrow.forward")
+                })
                 .font(.system(size: 18, weight: .medium, design: .default))
                 .foregroundStyle(.primary)
             }
         }
         .padding(.horizontal)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                isLogoVisible = true
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                isTitleVisible = true
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                isTextVisible = true
+        .background(SlantedRectangle())
+    }
+}
+
+extension WelcomeView{
+    private struct SlantedRectangle: View {
+        var body: some View {
+            GeometryReader{ geometry in
+                let width = geometry.size.width
+                let startPoint = (geometry.size.height - width)/2
+                Path{ path in
+                    path.move(to: CGPoint(x: width, y: startPoint))
+                    path.addLine(to: CGPoint(x: width, y: startPoint + width/2))
+                    path.addQuadCurve(to: CGPoint(x: 0, y: startPoint + width), control: CGPoint(x: Int(width/2), y: Int(startPoint) + Int(width/1.6)))
+                    path.addLine(to: CGPoint(x: 0, y: startPoint + width/3))
+                    path.addQuadCurve(to: CGPoint(x: width, y: startPoint), control: CGPoint(x: Int(width/2), y: Int(startPoint) + Int(width/2)))
+                }
+                .fill(.linearGradient(colors: [.purple, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .scaledToFit()
             }
         }
     }

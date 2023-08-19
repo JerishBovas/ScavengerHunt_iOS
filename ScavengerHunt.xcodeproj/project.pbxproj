@@ -67,8 +67,6 @@
 		8BCFB9BB29E1C5010014422F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BCFB9B629E1C45A0014422F /* MapKit.framework */; };
 		8BCFB9BF29E3EC250014422F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCFB9BE29E3EC250014422F /* LocationService.swift */; };
 		8BF8360A2A8EEB0C00A280FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */; };
-		8BF8360C2A8F061100A280FD /* HexagonParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF8360B2A8F061100A280FD /* HexagonParameters.swift */; };
-		8BF8360E2A8F0B3700A280FD /* BadgeBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF8360D2A8F0B3700A280FD /* BadgeBackground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,8 +121,6 @@
 		8BCFB9B629E1C45A0014422F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		8BCFB9BE29E3EC250014422F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8BF8360B2A8F061100A280FD /* HexagonParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagonParameters.swift; sourceTree = "<group>"; };
-		8BF8360D2A8F0B3700A280FD /* BadgeBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeBackground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,8 +158,6 @@
 				8B03E16729D53CC20038CE4E /* HomeTab */,
 				8B03E16629D5371A0038CE4E /* Modifiers */,
 				8B7E43982A7B3D19006FB5B8 /* LaunchScreen.storyboard */,
-				8BF8360B2A8F061100A280FD /* HexagonParameters.swift */,
-				8BF8360D2A8F0B3700A280FD /* BadgeBackground.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -444,7 +438,6 @@
 				8B6397E82A1DCC0600D93F71 /* AddItemsViewModel.swift in Sources */,
 				8BCFB9AF29DED76C0014422F /* AddGameView.swift in Sources */,
 				8BB9711029DAC31700D69BCF /* GamesView.swift in Sources */,
-				8BF8360C2A8F061100A280FD /* HexagonParameters.swift in Sources */,
 				8B86A8E32A2AAD9100900909 /* SignupView.swift in Sources */,
 				8BB9710929DAA34A00D69BCF /* Team.swift in Sources */,
 				8B6D9A462A1492AB00C14CD8 /* ImageProcessor.swift in Sources */,
@@ -471,7 +464,6 @@
 				8BB9711B29DB3DA100D69BCF /* GameViewModel.swift in Sources */,
 				8B23F0032A70121F00EA9C9B /* AuthenticationView.swift in Sources */,
 				8BB9711D29DB3DA100D69BCF /* AuthenticationViewModel.swift in Sources */,
-				8BF8360E2A8F0B3700A280FD /* BadgeBackground.swift in Sources */,
 				8BB9710029DA9FCD00D69BCF /* DataService.swift in Sources */,
 				8B458ADA29F2A52A00857CEA /* GamesListView.swift in Sources */,
 				8BB9710329DAA02200D69BCF /* APIEndpoint.swift in Sources */,
