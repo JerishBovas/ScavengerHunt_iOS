@@ -13,7 +13,7 @@ class ProfileViewModel: ObservableObject{
     private var accessToken: String?
     private var api: ApiService
     private var imgPro: ImageProcessor
-    @Published var user: User?
+    @Published var user: Account?
     @Published var profileImage: UIImage?
     @Published var showAlert: Bool = false
     @Published var appError: AppError?
@@ -23,7 +23,7 @@ class ProfileViewModel: ObservableObject{
         api = ApiService()
         imgPro = ImageProcessor()
         if let data = UserDefaults.standard.data(forKey: "user"),
-           let use = try? JSONDecoder().decode(User.self, from: data){
+           let use = try? JSONDecoder().decode(Account.self, from: data){
             withAnimation {
                 self.user = use
             }
@@ -32,7 +32,7 @@ class ProfileViewModel: ObservableObject{
     
     func fetchUser() async{
         if let accessToken = accessToken{
-            async let fetchedUser: User? = try? await api.get(accessToken: accessToken, endpoint: APIEndpoint.user.description)
+            async let fetchedUser: Account? = try? await api.get(accessToken: accessToken, endpoint: APIEndpoint.user.description)
             let user = await fetchedUser
             DispatchQueue.main.async {
                 if let user = user {
@@ -47,17 +47,8 @@ class ProfileViewModel: ObservableObject{
         }
     }
     
-    func signOut(authVM: AuthViewModel){
-        let defaults = UserDefaults.standard
-        defaults.set(false, forKey: "isAuthenticated")
-        defaults.set("", forKey: "accessToken")
-        defaults.set("", forKey: "refreshToken")
-        authVM.accessToken = ""
-        DispatchQueue.main.async {
-            withAnimation {
-                authVM.isAuthenticated = false
-            }
-        }
+    func signOut(authVM: AuthenticationViewModel){
+        
     }
     
     func changeName(name: String) async{
@@ -65,7 +56,7 @@ class ProfileViewModel: ObservableObject{
             guard let accessToken = accessToken else{return}
             if !name.isEmpty{
                 let data = try JSONEncoder().encode(name)
-                let user: User = try await api.put(accessToken: accessToken, body: data, endpoint: APIEndpoint.userNameUpdate.description)
+                let user: Account = try await api.put(accessToken: accessToken, body: data, endpoint: APIEndpoint.userNameUpdate.description)
                 DispatchQueue.main.async {
                     withAnimation {
                         self.user = user
@@ -97,7 +88,7 @@ class ProfileViewModel: ObservableObject{
                 throw AppError(title: "Image Error", message: "Please provide a valid image.")
             }
             
-            let response: User = try await api.put(imageData: compressedImage, data: nil, endpoint: APIEndpoint.userProfileImage.description, accessToken: accessToken)
+            let response: Account = try await api.put(imageData: compressedImage, data: nil, endpoint: APIEndpoint.userProfileImage.description, accessToken: accessToken)
             DispatchQueue.main.async {
                 withAnimation {
                     self.user = response

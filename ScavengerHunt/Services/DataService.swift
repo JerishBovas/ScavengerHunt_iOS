@@ -37,13 +37,13 @@ class DataService {
         lastUpdated: Date.now.description
     )
     
-    static let user: User = User(id: UUID().uuidString, name: "Jerish Bovas", email: "jerishbovas@gmail.com", profileImage: "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449087925704678.jpeg", score: 1000, games: 0, teams: 0, lastUpdated: Date.now.description)
+    static let user: Account = Account(id: UUID().uuidString, name: "Jerish Bovas", email: "jerishbovas@gmail.com", profileImage: "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449087925704678.jpeg", score: 1000, games: 0, teams: 0, lastUpdated: Date.now.description)
     
     static let team: Team = Team(
         id: "234jo2ro", adminId: "", isOpen: true, title: "Sample", description: "Sample Description", members: 4, teamIcon: "https://scavengerhuntapi.blob.core.windows.net/images/ab82a5bb-c68f-40f9-b2f6-42ea13f0eb1d-8585449087925704678.jpeg"
     )
     
-    static func getUser() -> User{
+    static func getUser() -> Account{
         var user = user
         user.id = UUID().uuidString
         return user

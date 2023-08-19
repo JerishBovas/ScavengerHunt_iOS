@@ -6,232 +6,156 @@
 //
 
 import SwiftUI
+import Combine
+import FirebaseAnalyticsSwift
 import AuthenticationServices
+import GoogleSignInSwift
 
-enum LogInFocusableField: Hashable{
-    case email, password
+private enum FocusableField: Hashable {
+    case email
+    case password
 }
 
-struct LogInView: View{
-    @EnvironmentObject private var authVM: AuthViewModel
-    @State private var showPassword = false
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var showLoading: Bool = false
-    @FocusState private var loginFocus: LogInFocusableField?
-    @State private var emailError: String?
-    @State private var passwordError: String?
+struct LoginView: View {
+    @EnvironmentObject var authVM: AuthenticationViewModel
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) private var colorScheme
+
+    @FocusState private var focus: FocusableField?
+
+    private func signInWithEmailPassword() {
+        Task {
+            if await authVM.signInWithEmailPassword() == true {
+                dismiss()
+            }
+        }
+    }
     
-    var body: some View{
-        NavigationView {
-            ZStack {
-                VStack{
-                    Spacer()
-                    VStack(alignment: .center) {
-                        Text("Welcome to")
-                            .font(.system(size: 40))
-                            .fontWeight(.bold)
-                            .foregroundColor(.secondary)
-                            .fontDesign(.rounded)
-                        Text("Scavenger Hunt")
-                            .font(.system(size: 40))
-                            .fontWeight(.bold)
-                            .fontDesign(.rounded)
-                            .foregroundColor(.accentColor)
+    private func signInWithGoogle() {
+        Task {
+            if await authVM.signInWithGoogle() == true {
+                dismiss()
+            }
+        }
+    }
+
+    var body: some View {
+        VStack(spacing: 16){
+            Text("Login")
+                .font(.title)
+                .fontWeight(.bold)
+            Text("Login to Scavenger Hunt with your existing account")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            HStack {
+                Image(systemName: "at")
+                TextField("Email", text: $authVM.email)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .focused($focus, equals: .email)
+                    .submitLabel(.next)
+                    .onSubmit {
+                        self.focus = .password
                     }
-                    Spacer()
-                    VStack(alignment: .leading){
-                        TextField("Email", text: $email)
-                            .modifier(CustomTextFieldStyle())
-                            .textContentType(.username)
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                            .submitLabel(.next)
-                            .focused($loginFocus, equals: .email)
-                            .onSubmit {
-                                self.loginFocus = .password
-                            }
-                            .onChange(of: email) { newValue in
-                                if !validateEmail(newValue){
-                                    emailError = "Please enter a valid email."
-                                }else{
-                                    emailError = nil
-                                }
-                            }
-                        if let emailErr = emailError{
-                            Text(emailErr)
-                                .font(.footnote)
-                                .foregroundColor(.red)
-                        }
-                        HStack{
-                            if showPassword {
-                                TextField("Password", text: $password)
-                                    .modifier(CustomTextFieldStyle())
-                                    .textContentType(.password)
-                                    .autocapitalization(.none)
-                                    .disableAutocorrection(true)
-                                    .focused($loginFocus, equals: .password)
-                                    .submitLabel(.go)
-                                    .onSubmit {
-                                        login()
-                                    }
-                            } else {
-                                SecureField("Password", text: $password)
-                                    .modifier(CustomTextFieldStyle())
-                                    .textContentType(.password)
-                                    .autocapitalization(.none)
-                                    .disableAutocorrection(true)
-                                    .focused($loginFocus, equals: .password)
-                                    .submitLabel(.go)
-                                    .onSubmit {
-                                        login()
-                                    }
-                            }
-                        }
-                        .onChange(of: password) { newValue in
-                            if !validatePassword(newValue){
-                                passwordError = "Please enter a valid password."
-                            }else{
-                                passwordError = nil
-                            }
-                        }
-                        .overlay {
-                            HStack{
-                                Spacer()
-                                Button(action: {
-                                    showPassword.toggle()
-                                }) {
-                                    Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            .padding()
-                        }
-                        if let passErr = passwordError{
-                            Text(passErr)
-                                .font(.footnote)
-                                .foregroundColor(.red)
-                        }
+            }
+            .font(.headline)
+            .padding(10)
+            .frame(height: 45, alignment: .center)
+            .background(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(lineWidth: 1.0))
+            
+            HStack {
+                Image(systemName: "lock")
+                SecureField("Password", text: $authVM.password)
+                    .focused($focus, equals: .password)
+                    .submitLabel(.go)
+                    .onSubmit {
+                        signInWithEmailPassword()
                     }
-                    .font(.headline)
-                    
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            
-                        }, label: {
-                            Text("Forgot Password?")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                    })
-                    }
-                    Button(action: {
-                        login()
-                    }, label: {
-                        Text("Login")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                            .foregroundColor(.white)
-                            .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.accentColor]), startPoint: .leading, endPoint: .trailing))
-                            .cornerRadius(6)
-                    })
-                    .padding(.top, 8)
-                    NavigationLink(destination: {
-                        SignUpView()
-                    }, label: {
-                        Text("Sign Up")
-                            .font(.title3)
-                            .fontWeight(.medium)
-                    })
-                    .buttonStyle(.borderless)
-                    .padding(.top)
-//                    HStack {
-//                        VStack {
-//                            Divider()
-//                                .background(.secondary)
-//                        }
-//                        Text("OR")
-//                            .foregroundColor(.secondary)
-//                        VStack {
-//                            Divider()
-//                                .background(.secondary)
-//                        }
-//                    }
-//                    .padding(.horizontal, 20)
-//
-//                    SignInWithAppleView()
-//                        .frame(height: 60, alignment: .center)
-//                        .onTapGesture(perform: showAppleLoginView)
-//                        .frame(maxWidth: .infinity)
-//                        .padding(.horizontal, 20)
+            }
+            .font(.headline)
+            .padding(10)
+            .frame(height: 45, alignment: .center)
+            .background(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(lineWidth: 1.0))
+            
+            if !authVM.errorMessage.isEmpty {
+                VStack {
+                    Text(authVM.errorMessage)
+                        .foregroundColor(Color(UIColor.systemRed))
                 }
-                .allowsHitTesting(!showLoading)
-                .modifier(DismissKeyboardOnTap())
-                if showLoading {
+            }
+            
+            Button(action: signInWithEmailPassword) {
+                if authVM.authenticationState != .authenticating {
+                    Text("Login")
+                        .font(.headline)
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                }
+                else {
                     ProgressView()
-                        .scaleEffect(1.5)
-                        .frame(width: 80, height: 80, alignment: .center)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
                 }
             }
-            .padding(20)
-        }
-    }
-}
-
-extension LogInView{
-    private func validateLoginForm() -> String {
-        var errorMessage: String = ""
-        
-        if !validateEmail(email) {
-            errorMessage.append("Please enter a valid email\n")
-        }
-        
-        if !validatePassword(password) {
-            errorMessage.append("Please enter a valid password")
-        }
-        return errorMessage
-    }
-    func validateEmail(_ email: String) -> Bool {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
-    }
-
-    func validatePassword(_ password: String) -> Bool {
-        let passwordRegex = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$"
-        let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
-        return passwordPredicate.evaluate(with: password)
-    }
-    
-    private func login() {
-        let message = validateLoginForm()
-        if message == ""{
-            showLoading = true
-            Task{
-                await authVM.login(email: email, password: password)
-                showLoading = false
+            .disabled(!authVM.isValid)
+            .frame(maxWidth: .infinity)
+            .buttonStyle(.borderedProminent)
+            
+            HStack{
+              VStack { Divider() }
+              Text("or")
+              VStack { Divider() }
             }
-        }else {
-            authVM.appError = AppError(title: "Validation Failed", message: message)
-            authVM.showAlert = true
+            
+            SignInWithAppleButton(.continue) { request in
+              authVM.handleSignInWithAppleRequest(request)
+            } onCompletion: { result in
+              authVM.handleSignInWithAppleCompletion(result)
+            }
+            .signInWithAppleButtonStyle(colorScheme == .light ? .black : .white)
+            .frame(height: 50, alignment: .center)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            
+            Button(action: signInWithGoogle) {
+                HStack(spacing: 5){
+                    Image("Google")
+                        .resizable()
+                        .frame(width: 15, height: 15)
+                    Text("Continue with Google")
+                        .font(.system(size: 19, weight: .medium, design: .default))
+                        .foregroundStyle(.black)
+                }
+                .frame(height: 35, alignment: .center)
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.white)
+            .clipped()
+            .shadow(radius: 2)
+            
+            HStack {
+                Text("Don't have an account yet?")
+                Button(action: { authVM.switchFlow() }) {
+                    Text("Sign up")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.accent)
+                }
+            }
+            .padding([.top, .bottom], 10)
         }
+        .listStyle(.plain)
+        .padding(.horizontal)
+        .analyticsScreen(name: "\(Self.self)")
     }
-    private func showAppleLoginView() {
-        let signInWithAppleViewModel = SignInWithAppleViewModel()
-        let provider = ASAuthorizationAppleIDProvider()
-        let request = provider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = signInWithAppleViewModel
-        controller.performRequests()
-      }
 }
 
-struct LogInView_Previews: PreviewProvider {
+struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LogInView()
-            .environmentObject(AuthViewModel())
+        NavigationView{
+            LoginView()
+                .environmentObject(AuthenticationViewModel())
+        }
     }
 }

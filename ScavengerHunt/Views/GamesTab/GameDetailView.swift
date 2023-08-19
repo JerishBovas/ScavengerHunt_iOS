@@ -289,6 +289,7 @@ struct GameDetailView: View {
                 .padding([.bottom, .horizontal])
             }
         }
+        .background(.background)
         .task{
             await fetchGame()
         }
@@ -306,6 +307,8 @@ struct GameDetailView: View {
         }
         .fullScreenCover(isPresented: $showGamePlaySheet, content: {
             PlayGameView(game: gameDetail)
+                .transition(.scale(scale: 0.1, anchor: .bottom))
+                .zIndex(1.0)
         })
         .sheet(isPresented: $showItemsSheet, onDismiss: {
             Task{

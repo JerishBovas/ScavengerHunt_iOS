@@ -23,10 +23,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>quest.scavengerhunt.app</string>
+			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>navStack</string>
+				<string>com.googleusercontent.apps.266995668173-t1evieoic7kggd12o3hre1q0s7f20tb7</string>
 			</array>
 		</dict>
 	</array>
@@ -43,6 +43,17 @@
 		<string>MKDirectionsModeTaxi</string>
 		<string>MKDirectionsModeTrain</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>192.168.2.183</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 	<key>VISION_ENDPOINT</key>
 	<string>$(VISION_ENDPOINT)</string>
 	<key>VISION_KEY</key>

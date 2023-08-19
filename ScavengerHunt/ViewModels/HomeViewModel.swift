@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 import SwiftUI
 
-class DashViewModel: ObservableObject{
+class HomeViewModel: ObservableObject{
     private var accessToken: String?
     private var api: ApiService
     
     @Published var gotd: Game?
-    @Published var leaderBoard: [User]?
+    @Published var leaderBoard: [Account]?
     @Published var popularGames: [Game]?
     
     init(){
@@ -23,19 +23,20 @@ class DashViewModel: ObservableObject{
     }
     
     func fetchPage() async{
-        async let fetchedLeaderboard: [User]? = try? await api.get(endpoint: APIEndpoint.homeLeaderboard.description)
+        async let fetchedLeaderboard: [Account]? = try? await api.get(endpoint: APIEndpoint.homeLeaderboard.description)
         async let fetchedPopularGames: [Game]? = try? await api.get(endpoint: APIEndpoint.homePopularGames.description)
 
         let leaderBoard = await fetchedLeaderboard
         let popularGames = await fetchedPopularGames
 
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             if let leaderBoard = leaderBoard {
                 withAnimation(.default) {
                     self.leaderBoard = leaderBoard
                 }
             }
-            
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2){
             if let popularGames = popularGames {
                 withAnimation(.default) {
                     self.popularGames = popularGames
@@ -44,7 +45,6 @@ class DashViewModel: ObservableObject{
                     }
                 }
             }
-            print("Page Fetched")
         }
     }
 }

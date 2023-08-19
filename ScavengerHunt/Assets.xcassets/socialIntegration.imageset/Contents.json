@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "bradjer_social_apps_integration_6e911baa-7cd2-4502-8450-4d7096973b6f.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

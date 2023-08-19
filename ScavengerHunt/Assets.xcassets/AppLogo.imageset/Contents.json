@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "My project.png",
+      "filename" : "bradjer_as_a_graphic_designer_you_are_midway_through_your_journ_fa8823f6-c2af-4d08-a126-5e0394663305.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "bradjer_as_a_graphic_designer_you_are_midway_through_your_journ_fa8823f6-c2af-4d08-a126-5e0394663305@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "bradjer_as_a_graphic_designer_you_are_midway_through_your_journ_fa8823f6-c2af-4d08-a126-5e0394663305@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

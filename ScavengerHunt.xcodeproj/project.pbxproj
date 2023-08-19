@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B03E16329D471170038CE4E /* DashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03E16229D471170038CE4E /* DashView.swift */; };
+		8B03E16329D471170038CE4E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03E16229D471170038CE4E /* HomeView.swift */; };
 		8B18A11029EFAE8F00D841A3 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A10F29EFAE8F00D841A3 /* Nuke */; };
 		8B18A11229EFAE8F00D841A3 /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A11129EFAE8F00D841A3 /* NukeExtensions */; };
 		8B18A11429EFAE8F00D841A3 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A11329EFAE8F00D841A3 /* NukeUI */; };
 		8B18A11629EFAE8F00D841A3 /* NukeVideo in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A11529EFAE8F00D841A3 /* NukeVideo */; };
 		8B1E569029E5658700C1DE36 /* MapIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1E568F29E5658700C1DE36 /* MapIcon.swift */; };
+		8B23F0012A7011D000EA9C9B /* AuthenticatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B23F0002A7011D000EA9C9B /* AuthenticatedView.swift */; };
+		8B23F0032A70121F00EA9C9B /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B23F0022A70121F00EA9C9B /* AuthenticationView.swift */; };
 		8B2D03C22A26715F00CDEBBA /* PlayGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D03C12A26715F00CDEBBA /* PlayGameView.swift */; };
 		8B2D03C42A27302B00CDEBBA /* CircleMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D03C32A27302B00CDEBBA /* CircleMap.swift */; };
 		8B458ADA29F2A52A00857CEA /* GamesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B458AD929F2A52A00857CEA /* GamesListView.swift */; };
@@ -23,8 +25,19 @@
 		8B66290329E7E6060046DECD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B66290229E7E6060046DECD /* ImagePicker.swift */; };
 		8B66290529EEC2800046DECD /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B66290429EEC2800046DECD /* ImageView.swift */; };
 		8B6D9A462A1492AB00C14CD8 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6D9A452A1492AB00C14CD8 /* ImageProcessor.swift */; };
-		8B86A8E12A2AAD2800900909 /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86A8E02A2AAD2800900909 /* LogInView.swift */; };
-		8B86A8E32A2AAD9100900909 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86A8E22A2AAD9100900909 /* SignUpView.swift */; };
+		8B72E0E02A785AB2007ED49C /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0DF2A785AB2007ED49C /* FirebaseAnalyticsSwift */; };
+		8B72E0E22A785AB2007ED49C /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0E12A785AB2007ED49C /* FirebaseAppCheck */; };
+		8B72E0E42A785AB2007ED49C /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0E32A785AB2007ED49C /* FirebaseAuth */; };
+		8B72E0E62A785AB2007ED49C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0E52A785AB2007ED49C /* FirebaseCrashlytics */; };
+		8B72E0E82A785AB2007ED49C /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0E72A785AB2007ED49C /* FirebaseFirestoreSwift */; };
+		8B72E0EA2A785AB2007ED49C /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0E92A785AB2007ED49C /* FirebaseFunctions */; };
+		8B72E0EC2A785AB2007ED49C /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0EB2A785AB2007ED49C /* FirebaseStorage */; };
+		8B72E0F02A786972007ED49C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B72E0EF2A786972007ED49C /* WelcomeView.swift */; };
+		8B72E0F32A78B076007ED49C /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0F22A78B076007ED49C /* GoogleSignIn */; };
+		8B72E0F52A78B076007ED49C /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8B72E0F42A78B076007ED49C /* GoogleSignInSwift */; };
+		8B7E43992A7B3D19006FB5B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B7E43982A7B3D19006FB5B8 /* LaunchScreen.storyboard */; };
+		8B86A8E12A2AAD2800900909 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86A8E02A2AAD2800900909 /* LoginView.swift */; };
+		8B86A8E32A2AAD9100900909 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B86A8E22A2AAD9100900909 /* SignupView.swift */; };
 		8B90DF9529DD59A7008FE03A /* ReusableViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B90DF9429DD59A7008FE03A /* ReusableViews.swift */; };
 		8B9592392A30D9BD00C5EB1A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B9592382A30D9BD00C5EB1A /* AVFoundation.framework */; };
 		8B9823D12A14D715001AFB58 /* AddItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9823D02A14D715001AFB58 /* AddItemsView.swift */; };
@@ -37,31 +50,33 @@
 		8BB9710529DAA0A000D69BCF /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9710429DAA0A000D69BCF /* AppError.swift */; };
 		8BB9710729DAA21A00D69BCF /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9710629DAA21A00D69BCF /* Image.swift */; };
 		8BB9710929DAA34A00D69BCF /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9710829DAA34A00D69BCF /* Team.swift */; };
-		8BB9710B29DAA3B300D69BCF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9710A29DAA3B300D69BCF /* User.swift */; };
+		8BB9710B29DAA3B300D69BCF /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9710A29DAA3B300D69BCF /* Account.swift */; };
 		8BB9710D29DAAA6500D69BCF /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9710C29DAAA6500D69BCF /* CardView.swift */; };
 		8BB9711029DAC31700D69BCF /* GamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9710F29DAC31700D69BCF /* GamesView.swift */; };
-		8BB9711A29DB3DA100D69BCF /* DashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711229DB3DA100D69BCF /* DashViewModel.swift */; };
+		8BB9711A29DB3DA100D69BCF /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711229DB3DA100D69BCF /* HomeViewModel.swift */; };
 		8BB9711B29DB3DA100D69BCF /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711329DB3DA100D69BCF /* GameViewModel.swift */; };
-		8BB9711D29DB3DA100D69BCF /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711529DB3DA100D69BCF /* AuthViewModel.swift */; };
+		8BB9711D29DB3DA100D69BCF /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711529DB3DA100D69BCF /* AuthenticationViewModel.swift */; };
 		8BB9711E29DB3DA100D69BCF /* TeamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711629DB3DA100D69BCF /* TeamViewModel.swift */; };
 		8BB9712029DB3DA100D69BCF /* PlayGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9711829DB3DA100D69BCF /* PlayGameViewModel.swift */; };
 		8BB9712329DBECEB00D69BCF /* SignalRClient in Frameworks */ = {isa = PBXBuildFile; productRef = 8BB9712229DBECEB00D69BCF /* SignalRClient */; };
-		8BB9712A29DC3BBF00D69BCF /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */; };
 		8BBDE0A329D458C600A694B2 /* ScavengerHuntApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE0A229D458C600A694B2 /* ScavengerHuntApp.swift */; };
-		8BBDE0A529D458C600A694B2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE0A429D458C600A694B2 /* RootView.swift */; };
 		8BBDE0A729D458C800A694B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BBDE0A629D458C800A694B2 /* Assets.xcassets */; };
 		8BBDE0AA29D458C800A694B2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BBDE0A929D458C800A694B2 /* Preview Assets.xcassets */; };
-		8BCFB9AD29DE8FD70014422F /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCFB9AC29DE8FD70014422F /* TabBarView.swift */; };
 		8BCFB9AF29DED76C0014422F /* AddGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCFB9AE29DED76C0014422F /* AddGameView.swift */; };
 		8BCFB9B129E15ADD0014422F /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCFB9B029E15ADD0014422F /* MapView.swift */; };
 		8BCFB9BB29E1C5010014422F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BCFB9B629E1C45A0014422F /* MapKit.framework */; };
 		8BCFB9BF29E3EC250014422F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCFB9BE29E3EC250014422F /* LocationService.swift */; };
+		8BF8360A2A8EEB0C00A280FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */; };
+		8BF8360C2A8F061100A280FD /* HexagonParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF8360B2A8F061100A280FD /* HexagonParameters.swift */; };
+		8BF8360E2A8F0B3700A280FD /* BadgeBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF8360D2A8F0B3700A280FD /* BadgeBackground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8B03E16229D471170038CE4E /* DashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashView.swift; sourceTree = "<group>"; };
+		8B03E16229D471170038CE4E /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8B07F55F29D45A0500D54F94 /* ScavengerHunt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScavengerHunt.entitlements; sourceTree = "<group>"; };
 		8B1E568F29E5658700C1DE36 /* MapIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapIcon.swift; sourceTree = "<group>"; };
+		8B23F0002A7011D000EA9C9B /* AuthenticatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedView.swift; sourceTree = "<group>"; };
+		8B23F0022A70121F00EA9C9B /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		8B2D03C12A26715F00CDEBBA /* PlayGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayGameView.swift; sourceTree = "<group>"; };
 		8B2D03C32A27302B00CDEBBA /* CircleMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleMap.swift; sourceTree = "<group>"; };
 		8B458AD929F2A52A00857CEA /* GamesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesListView.swift; sourceTree = "<group>"; };
@@ -72,8 +87,10 @@
 		8B66290229E7E6060046DECD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		8B66290429EEC2800046DECD /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		8B6D9A452A1492AB00C14CD8 /* ImageProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessor.swift; sourceTree = "<group>"; };
-		8B86A8E02A2AAD2800900909 /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
-		8B86A8E22A2AAD9100900909 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		8B72E0EF2A786972007ED49C /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		8B7E43982A7B3D19006FB5B8 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8B86A8E02A2AAD2800900909 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		8B86A8E22A2AAD9100900909 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		8B90DF9429DD59A7008FE03A /* ReusableViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableViews.swift; sourceTree = "<group>"; };
 		8B9592382A30D9BD00C5EB1A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8B9823D02A14D715001AFB58 /* AddItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemsView.swift; sourceTree = "<group>"; };
@@ -86,28 +103,28 @@
 		8BB9710429DAA0A000D69BCF /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		8BB9710629DAA21A00D69BCF /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		8BB9710829DAA34A00D69BCF /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
-		8BB9710A29DAA3B300D69BCF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		8BB9710A29DAA3B300D69BCF /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		8BB9710C29DAAA6500D69BCF /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		8BB9710F29DAC31700D69BCF /* GamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesView.swift; sourceTree = "<group>"; };
-		8BB9711229DB3DA100D69BCF /* DashViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashViewModel.swift; sourceTree = "<group>"; };
+		8BB9711229DB3DA100D69BCF /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		8BB9711329DB3DA100D69BCF /* GameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
-		8BB9711529DB3DA100D69BCF /* AuthViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		8BB9711529DB3DA100D69BCF /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		8BB9711629DB3DA100D69BCF /* TeamViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamViewModel.swift; sourceTree = "<group>"; };
 		8BB9711829DB3DA100D69BCF /* PlayGameViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayGameViewModel.swift; sourceTree = "<group>"; };
-		8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
 		8BBD5FA52A27CA9B00350785 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		8BBD5FA62A27CAA400350785 /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
 		8BBDE09F29D458C600A694B2 /* ScavengerHunt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScavengerHunt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BBDE0A229D458C600A694B2 /* ScavengerHuntApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScavengerHuntApp.swift; sourceTree = "<group>"; };
-		8BBDE0A429D458C600A694B2 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		8BBDE0A629D458C800A694B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8BBDE0A929D458C800A694B2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		8BCFB9AC29DE8FD70014422F /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		8BCFB9AE29DED76C0014422F /* AddGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGameView.swift; sourceTree = "<group>"; };
 		8BCFB9B029E15ADD0014422F /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		8BCFB9B429E188CB0014422F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BCFB9B629E1C45A0014422F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		8BCFB9BE29E3EC250014422F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8BF8360B2A8F061100A280FD /* HexagonParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexagonParameters.swift; sourceTree = "<group>"; };
+		8BF8360D2A8F0B3700A280FD /* BadgeBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeBackground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,12 +133,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B9592392A30D9BD00C5EB1A /* AVFoundation.framework in Frameworks */,
+				8B72E0E42A785AB2007ED49C /* FirebaseAuth in Frameworks */,
 				8B18A11429EFAE8F00D841A3 /* NukeUI in Frameworks */,
+				8B72E0F52A78B076007ED49C /* GoogleSignInSwift in Frameworks */,
 				8B18A11629EFAE8F00D841A3 /* NukeVideo in Frameworks */,
 				8B18A11029EFAE8F00D841A3 /* Nuke in Frameworks */,
+				8B72E0F32A78B076007ED49C /* GoogleSignIn in Frameworks */,
+				8B72E0E62A785AB2007ED49C /* FirebaseCrashlytics in Frameworks */,
+				8B72E0E02A785AB2007ED49C /* FirebaseAnalyticsSwift in Frameworks */,
 				8B18A11229EFAE8F00D841A3 /* NukeExtensions in Frameworks */,
 				8BCFB9BB29E1C5010014422F /* MapKit.framework in Frameworks */,
+				8B72E0EA2A785AB2007ED49C /* FirebaseFunctions in Frameworks */,
+				8B72E0E22A785AB2007ED49C /* FirebaseAppCheck in Frameworks */,
+				8B72E0EC2A785AB2007ED49C /* FirebaseStorage in Frameworks */,
 				8BB9712329DBECEB00D69BCF /* SignalRClient in Frameworks */,
+				8B72E0E82A785AB2007ED49C /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,9 +159,11 @@
 			children = (
 				8BB9712829DC3BA200D69BCF /* SettingsTab */,
 				8BB9710E29DAC30700D69BCF /* GamesTab */,
-				8B03E16729D53CC20038CE4E /* DashTab */,
+				8B03E16729D53CC20038CE4E /* HomeTab */,
 				8B03E16629D5371A0038CE4E /* Modifiers */,
-				8BCFB9AC29DE8FD70014422F /* TabBarView.swift */,
+				8B7E43982A7B3D19006FB5B8 /* LaunchScreen.storyboard */,
+				8BF8360B2A8F061100A280FD /* HexagonParameters.swift */,
+				8BF8360D2A8F0B3700A280FD /* BadgeBackground.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -147,7 +175,7 @@
 				8BB9710429DAA0A000D69BCF /* AppError.swift */,
 				8BB9710629DAA21A00D69BCF /* Image.swift */,
 				8BB9710829DAA34A00D69BCF /* Team.swift */,
-				8BB9710A29DAA3B300D69BCF /* User.swift */,
+				8BB9710A29DAA3B300D69BCF /* Account.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -155,10 +183,10 @@
 		8B03E16129D471070038CE4E /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				8BB9711529DB3DA100D69BCF /* AuthViewModel.swift */,
+				8BB9711529DB3DA100D69BCF /* AuthenticationViewModel.swift */,
 				8BB9711829DB3DA100D69BCF /* PlayGameViewModel.swift */,
 				8BB9711329DB3DA100D69BCF /* GameViewModel.swift */,
-				8BB9711229DB3DA100D69BCF /* DashViewModel.swift */,
+				8BB9711229DB3DA100D69BCF /* HomeViewModel.swift */,
 				8BB9711629DB3DA100D69BCF /* TeamViewModel.swift */,
 				8B6397E72A1DCC0600D93F71 /* AddItemsViewModel.swift */,
 				8B51A7652A247F4100184C29 /* ProfileViewModel.swift */,
@@ -179,13 +207,13 @@
 			path = Modifiers;
 			sourceTree = "<group>";
 		};
-		8B03E16729D53CC20038CE4E /* DashTab */ = {
+		8B03E16729D53CC20038CE4E /* HomeTab */ = {
 			isa = PBXGroup;
 			children = (
-				8B03E16229D471170038CE4E /* DashView.swift */,
+				8B03E16229D471170038CE4E /* HomeView.swift */,
 				8BB9710C29DAAA6500D69BCF /* CardView.swift */,
 			);
-			path = DashTab;
+			path = HomeTab;
 			sourceTree = "<group>";
 		};
 		8BB970FD29DA9F9600D69BCF /* Services */ = {
@@ -218,10 +246,12 @@
 		8BB9712829DC3BA200D69BCF /* SettingsTab */ = {
 			isa = PBXGroup;
 			children = (
-				8BB9712929DC3BBF00D69BCF /* SignInWithAppleView.swift */,
 				8B51A7632A24754C00184C29 /* ProfileView.swift */,
-				8B86A8E02A2AAD2800900909 /* LogInView.swift */,
-				8B86A8E22A2AAD9100900909 /* SignUpView.swift */,
+				8B86A8E02A2AAD2800900909 /* LoginView.swift */,
+				8B86A8E22A2AAD9100900909 /* SignupView.swift */,
+				8B23F0002A7011D000EA9C9B /* AuthenticatedView.swift */,
+				8B23F0022A70121F00EA9C9B /* AuthenticationView.swift */,
+				8B72E0EF2A786972007ED49C /* WelcomeView.swift */,
 			);
 			path = SettingsTab;
 			sourceTree = "<group>";
@@ -255,6 +285,7 @@
 		8BBDE0A129D458C600A694B2 /* ScavengerHunt */ = {
 			isa = PBXGroup;
 			children = (
+				8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */,
 				8BBD5FA42A27CA8800350785 /* Configs */,
 				8BCFB9B429E188CB0014422F /* Info.plist */,
 				8BB970FD29DA9F9600D69BCF /* Services */,
@@ -263,7 +294,6 @@
 				8B03E15F29D470F70038CE4E /* Views */,
 				8B07F55F29D45A0500D54F94 /* ScavengerHunt.entitlements */,
 				8BBDE0A229D458C600A694B2 /* ScavengerHuntApp.swift */,
-				8BBDE0A429D458C600A694B2 /* RootView.swift */,
 				8BBDE0A629D458C800A694B2 /* Assets.xcassets */,
 				8BBDE0A829D458C800A694B2 /* Preview Content */,
 			);
@@ -310,6 +340,15 @@
 				8B18A11129EFAE8F00D841A3 /* NukeExtensions */,
 				8B18A11329EFAE8F00D841A3 /* NukeUI */,
 				8B18A11529EFAE8F00D841A3 /* NukeVideo */,
+				8B72E0DF2A785AB2007ED49C /* FirebaseAnalyticsSwift */,
+				8B72E0E12A785AB2007ED49C /* FirebaseAppCheck */,
+				8B72E0E32A785AB2007ED49C /* FirebaseAuth */,
+				8B72E0E52A785AB2007ED49C /* FirebaseCrashlytics */,
+				8B72E0E72A785AB2007ED49C /* FirebaseFirestoreSwift */,
+				8B72E0E92A785AB2007ED49C /* FirebaseFunctions */,
+				8B72E0EB2A785AB2007ED49C /* FirebaseStorage */,
+				8B72E0F22A78B076007ED49C /* GoogleSignIn */,
+				8B72E0F42A78B076007ED49C /* GoogleSignInSwift */,
 			);
 			productName = ScavengerHunt;
 			productReference = 8BBDE09F29D458C600A694B2 /* ScavengerHunt.app */;
@@ -323,7 +362,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					8BBDE09E29D458C600A694B2 = {
 						CreatedOnToolsVersion = 14.2;
@@ -342,6 +381,8 @@
 			packageReferences = (
 				8BB9712129DBECEB00D69BCF /* XCRemoteSwiftPackageReference "SignalR-Client-Swift" */,
 				8B18A10E29EFAE8F00D841A3 /* XCRemoteSwiftPackageReference "Nuke" */,
+				8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				8B72E0F12A78B076007ED49C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 8BBDE0A029D458C600A694B2 /* Products */;
 			projectDirPath = "";
@@ -358,7 +399,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BBDE0AA29D458C800A694B2 /* Preview Assets.xcassets in Resources */,
+				8BF8360A2A8EEB0C00A280FD /* GoogleService-Info.plist in Resources */,
 				8BBDE0A729D458C800A694B2 /* Assets.xcassets in Resources */,
+				8B7E43992A7B3D19006FB5B8 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,42 +434,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B03E16329D471170038CE4E /* DashView.swift in Sources */,
-				8BCFB9AD29DE8FD70014422F /* TabBarView.swift in Sources */,
+				8B23F0012A7011D000EA9C9B /* AuthenticatedView.swift in Sources */,
+				8B03E16329D471170038CE4E /* HomeView.swift in Sources */,
 				8B9823D12A14D715001AFB58 /* AddItemsView.swift in Sources */,
-				8BB9711A29DB3DA100D69BCF /* DashViewModel.swift in Sources */,
+				8BB9711A29DB3DA100D69BCF /* HomeViewModel.swift in Sources */,
 				8BB9710729DAA21A00D69BCF /* Image.swift in Sources */,
 				8B51A7642A24754C00184C29 /* ProfileView.swift in Sources */,
 				8BB9711E29DB3DA100D69BCF /* TeamViewModel.swift in Sources */,
 				8B6397E82A1DCC0600D93F71 /* AddItemsViewModel.swift in Sources */,
 				8BCFB9AF29DED76C0014422F /* AddGameView.swift in Sources */,
 				8BB9711029DAC31700D69BCF /* GamesView.swift in Sources */,
-				8B86A8E32A2AAD9100900909 /* SignUpView.swift in Sources */,
+				8BF8360C2A8F061100A280FD /* HexagonParameters.swift in Sources */,
+				8B86A8E32A2AAD9100900909 /* SignupView.swift in Sources */,
 				8BB9710929DAA34A00D69BCF /* Team.swift in Sources */,
 				8B6D9A462A1492AB00C14CD8 /* ImageProcessor.swift in Sources */,
 				8BB970FA29DA0BA600D69BCF /* Game.swift in Sources */,
 				8BB9710D29DAAA6500D69BCF /* CardView.swift in Sources */,
 				8BB970FC29DA10BD00D69BCF /* Modifiers.swift in Sources */,
-				8B86A8E12A2AAD2800900909 /* LogInView.swift in Sources */,
+				8B86A8E12A2AAD2800900909 /* LoginView.swift in Sources */,
 				8B90DF9529DD59A7008FE03A /* ReusableViews.swift in Sources */,
 				8B1E569029E5658700C1DE36 /* MapIcon.swift in Sources */,
 				8BCFB9B129E15ADD0014422F /* MapView.swift in Sources */,
 				8B51A7662A247F4100184C29 /* ProfileViewModel.swift in Sources */,
-				8BBDE0A529D458C600A694B2 /* RootView.swift in Sources */,
 				8B66290329E7E6060046DECD /* ImagePicker.swift in Sources */,
-				8BB9710B29DAA3B300D69BCF /* User.swift in Sources */,
+				8BB9710B29DAA3B300D69BCF /* Account.swift in Sources */,
 				8B66290529EEC2800046DECD /* ImageView.swift in Sources */,
 				8BB9710129DA9FCD00D69BCF /* ApiService.swift in Sources */,
 				8B2D03C42A27302B00CDEBBA /* CircleMap.swift in Sources */,
 				8BB9712029DB3DA100D69BCF /* PlayGameViewModel.swift in Sources */,
-				8BB9712A29DC3BBF00D69BCF /* SignInWithAppleView.swift in Sources */,
 				8B458ADE29F8002100857CEA /* EditGameView.swift in Sources */,
 				8BB970F829DA0B7F00D69BCF /* GameDetailView.swift in Sources */,
 				8B2D03C22A26715F00CDEBBA /* PlayGameView.swift in Sources */,
+				8B72E0F02A786972007ED49C /* WelcomeView.swift in Sources */,
 				8BBDE0A329D458C600A694B2 /* ScavengerHuntApp.swift in Sources */,
 				8BB9710529DAA0A000D69BCF /* AppError.swift in Sources */,
 				8BB9711B29DB3DA100D69BCF /* GameViewModel.swift in Sources */,
-				8BB9711D29DB3DA100D69BCF /* AuthViewModel.swift in Sources */,
+				8B23F0032A70121F00EA9C9B /* AuthenticationView.swift in Sources */,
+				8BB9711D29DB3DA100D69BCF /* AuthenticationViewModel.swift in Sources */,
+				8BF8360E2A8F0B3700A280FD /* BadgeBackground.swift in Sources */,
 				8BB9710029DA9FCD00D69BCF /* DataService.swift in Sources */,
 				8B458ADA29F2A52A00857CEA /* GamesListView.swift in Sources */,
 				8BB9710329DAA02200D69BCF /* APIEndpoint.swift in Sources */,
@@ -442,6 +487,7 @@
 			baseConfigurationReference = 8BBD5FA52A27CA9B00350785 /* debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -474,6 +520,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -488,7 +535,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -503,6 +550,7 @@
 			baseConfigurationReference = 8BBD5FA62A27CAA400350785 /* release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -535,6 +583,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -543,7 +592,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -578,18 +627,18 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Scavenger Hunt needs your location to show places near you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jerishbovas.scavengerhunt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -623,18 +672,18 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Scavenger Hunt needs your location to show places near you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jerishbovas.scavengerhunt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -675,6 +724,22 @@
 				minimumVersion = 12.0.0;
 			};
 		};
+		8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.12.0;
+			};
+		};
+		8B72E0F12A78B076007ED49C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		8BB9712129DBECEB00D69BCF /* XCRemoteSwiftPackageReference "SignalR-Client-Swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/moozzyk/SignalR-Client-Swift";
@@ -705,6 +770,51 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B18A10E29EFAE8F00D841A3 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeVideo;
+		};
+		8B72E0DF2A785AB2007ED49C /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		8B72E0E12A785AB2007ED49C /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		8B72E0E32A785AB2007ED49C /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		8B72E0E52A785AB2007ED49C /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		8B72E0E72A785AB2007ED49C /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
+		};
+		8B72E0E92A785AB2007ED49C /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+		8B72E0EB2A785AB2007ED49C /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0DE2A785AB2007ED49C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		8B72E0F22A78B076007ED49C /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0F12A78B076007ED49C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		8B72E0F42A78B076007ED49C /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B72E0F12A78B076007ED49C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 		8BB9712229DBECEB00D69BCF /* SignalRClient */ = {
 			isa = XCSwiftPackageProductDependency;

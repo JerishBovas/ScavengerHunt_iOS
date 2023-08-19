@@ -44,6 +44,10 @@ extension Color {
             opacity: randomOpacity ? .random(in: 0...1) : 1
         )
     }
+    static let accentPink = Color(hex: "A432A6")
+    static let accentOrange = Color(hex: "F27C38")
+    static let accentRed = Color(hex: "D93B3B")
+    static let accentBlue = Color(hex: "9AD9D9")
 }
 
 struct CustomTextFieldStyle: ViewModifier {
@@ -70,4 +74,3 @@ struct DismissKeyboardOnTap: ViewModifier {
             })
     }
 }
-

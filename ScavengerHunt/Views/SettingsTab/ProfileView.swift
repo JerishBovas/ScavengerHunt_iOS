@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var authVM: AuthViewModel
+    @EnvironmentObject private var authVM: AuthenticationViewModel
     @EnvironmentObject private var vm: ProfileViewModel
-    @State var user: User
+    @State var user: Account
     @State private var name = ""
     @State private var isEditingProfile = false
     @State private var showConfirmation = false
@@ -112,6 +112,10 @@ struct ProfileView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(
+                LinearGradient(colors: [ Color("PreBackgroundColor"), Color("BackgroundColor"), Color("BackgroundColor")], startPoint: .topTrailing, endPoint: .bottomLeading)
+            )
             .toolbar{
                 if name != user.name || vm.profileImage != nil{
                     ToolbarItem(placement: .confirmationAction) {
@@ -153,7 +157,7 @@ struct ProfileView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView(user: User())
+        ProfileView(user: Account())
     }
 }
 

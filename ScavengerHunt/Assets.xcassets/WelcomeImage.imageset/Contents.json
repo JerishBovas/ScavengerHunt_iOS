@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "bradjer_imagine_a_city_with_high_scrapers_of_different_architec_165533a5-101b-4c25-8b7d-fc007cbc0892.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
