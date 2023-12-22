@@ -24,14 +24,7 @@ struct ScavengerHuntApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                AuthenticatedView(content: {
-                    HomeView()
-                        .environmentObject(ProfileViewModel())
-                        .environmentObject(HomeViewModel())
-                    Spacer()
-                })
-            }
+            AuthenticatedView()
         }
     }
 }

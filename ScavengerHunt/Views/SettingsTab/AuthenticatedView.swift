@@ -8,29 +8,8 @@
 import SwiftUI
 import AuthenticationServices
 
-extension AuthenticatedView where Unauthenticated == EmptyView {
-    init(@ViewBuilder content: @escaping () -> Content) {
-        self.unauthenticated = nil
-        self.content = content
-    }
-}
-
-struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Unauthenticated: View {
+struct AuthenticatedView: View{
     @StateObject private var viewModel = AuthenticationViewModel()
-
-    var unauthenticated: Unauthenticated?
-    @ViewBuilder var content: () -> Content
-
-    public init(unauthenticated: Unauthenticated?, @ViewBuilder content: @escaping () -> Content) {
-        self.unauthenticated = unauthenticated
-        self.content = content
-    }
-
-    public init(@ViewBuilder unauthenticated: @escaping () -> Unauthenticated, @ViewBuilder content: @escaping () -> Content) {
-        self.unauthenticated = unauthenticated()
-        self.content = content
-    }
-
 
     var body: some View {
         VStack{
@@ -39,11 +18,7 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
                 WelcomeView()
             case .authenticated:
                 VStack {
-                    content()
-                    Text("You're logged in as \(viewModel.displayName).")
-                    Button("Tap here to view your profile") {
-                        viewModel.signOut()
-                    }
+                    TabBarView()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: ASAuthorizationAppleIDProvider.credentialRevokedNotification)) { event in
                   viewModel.signOut()
@@ -59,10 +34,6 @@ struct AuthenticatedView<Content, Unauthenticated>: View where Content: View, Un
 
 struct AuthenticatedView_Previews: PreviewProvider {
     static var previews: some View {
-        AuthenticatedView {
-            Text("You're signed in.")
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .background(.yellow)
-        }
+        AuthenticatedView()
     }
 }

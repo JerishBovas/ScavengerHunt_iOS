@@ -11,7 +11,7 @@ struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var authVM: AuthenticationViewModel
     @EnvironmentObject private var vm: ProfileViewModel
-    @State var user: Account
+    @State var user: User
     @State private var name = ""
     @State private var isEditingProfile = false
     @State private var showConfirmation = false
@@ -157,7 +157,7 @@ struct ProfileView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView(user: Account())
+        ProfileView(user: User())
     }
 }
 

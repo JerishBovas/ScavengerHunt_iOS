@@ -9,7 +9,6 @@ import SwiftUI
 import AVFoundation
 
 class AddItemsViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
-    private var accessToken: String?
     @Published var image: UIImage?
     @Published var croppedImage: UIImage?
     @Published var detectedTags: [String]?
@@ -18,10 +17,6 @@ class AddItemsViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelega
     let session = AVCaptureSession()
     private var photoOutput: AVCapturePhotoOutput?
     private var imageProcessor = ImageProcessor()
-    
-    override init() {
-        self.accessToken = UserDefaults.standard.string(forKey: "accessToken")
-    }
     
     func setupCamera() {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -73,11 +68,7 @@ class AddItemsViewModel: NSObject, ObservableObject, AVCapturePhotoCaptureDelega
             }
             
             let data = try! JSONEncoder().encode(Item(name: name))
-            
-            guard let accessT = accessToken else {
-                throw AppError(title: "Authentication Error", message: "Please login in again")
-            }
-            let itemResp: Item = try await ApiService().post(imageData: imageData, data: data, endpoint: APIEndpoint.item(gameId: gameId).description, accessToken: accessT)
+            let itemResp: Item = try await ApiService().post(imageData: imageData, data: data, endpoint: APIEndpoint.item(gameId: gameId).description)
             DispatchQueue.main.async {
                 self.appError = AppError(title: "Item Added", message: "Item added successfully.\nName: \(itemResp.name)")
                 self.showAlert = true

@@ -11,6 +11,8 @@ struct HomeView: View {
     @EnvironmentObject private var vm: HomeViewModel
     @EnvironmentObject private var profileVM: ProfileViewModel
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var scrollOffset: CGFloat = 0
     @State private var firstLoad = true
     @State private var showProfile = false
     @State private var upperLimit: Int = 100
@@ -32,14 +34,34 @@ struct HomeView: View {
     var body: some View {
         NavigationStack{
             GeometryReader{ geo in
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 25){
-                        header(geo: geo)
-                        today
-                        topGames
-                        gamesNearYouSection
+                VStack(spacing: 0){
+                    header(geo: geo)
+                    ScrollView(.vertical) {
+                        LazyVStack(spacing: 12){
+                            today
+                            Divider()
+                                .padding(.vertical, 8)
+                            recommendedForYou
+                            Divider()
+                                .padding(.vertical, 8)
+                            topGames
+                            Divider()
+                                .padding(.vertical, 8)
+                            topPlayers
+                        }
+                        .safeAreaPadding()
+                        .background(GeometryReader { geo in
+                            let offset = -geo.frame(in: .named("scroll")).minY
+                            Color.clear
+                                .preference(key: ScrollViewOffsetPreferenceKey.self,
+                                            value: offset)
+                        })
                     }
-                    .padding(.horizontal)
+                    .scrollIndicators(.hidden)
+                    .coordinateSpace(name: "scroll")
+                    .onPreferenceChange(ScrollViewOffsetPreferenceKey.self, perform: { value in
+                        scrollOffset = value
+                    })
                 }
             }
         }
@@ -52,44 +74,59 @@ struct HomeView: View {
     }
 }
 
+struct ScrollViewOffsetPreferenceKey: PreferenceKey{
+    typealias Value = CGFloat
+    static var defaultValue: CGFloat = CGFloat.zero
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value += nextValue()
+    }
+}
+
 extension HomeView{
     private func header(geo: GeometryProxy) -> some View{
-        VStack(spacing: 20){
-            HStack(alignment: .center){
-                Image("AppLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 60)
+        VStack(spacing: 12){
+            HStack(alignment: .bottom){
+                VStack(alignment: .leading){
+                    Text("\(greetUser()),")
+                        .font(.title3)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.white)
+                        .fontDesign(.rounded)
+                    Text(profileVM.user?.name ?? "Scavenger")
+                        .font(.custom("name", size: 30))
+                        .fontWeight(.semibold)
+                        .fontDesign(.rounded)
+                        .foregroundStyle(.white)
+                }
                 Spacer()
                 if let user = profileVM.user{
                     ImageView(url: user.profileImage)
                         .frame(width: 40, height: 40)
                         .clipShape(Circle())
                 }
-                else{
-                    Circle()
-                        .fill(Color.accentColor.gradient)
-                        .frame(width: 40, height: 40)
-                }
             }
             levelProgress(geo: geo)
+                .frame(maxHeight: 50)
         }
+        .padding(.horizontal)
+        .padding(.bottom)
+        .background(Rectangle()
+            .fill(.accent)
+            .shadow(radius: 5)
+            .ignoresSafeArea(edges: .top))
     }
     
     private func levelProgress(geo: GeometryProxy) -> some View{
-        VStack(spacing: 8){
+        VStack(spacing: 16){
             ZStack{
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(lineWidth: 2.0)
-                    .fill(LinearGradient(colors: [.accentRed, .accentColor], startPoint: .topLeading, endPoint: .bottomTrailing))
-                    .frame(width: max(geo.size.width - 32, 0), height: 16)
-                    .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(.background))
+                    .fill(LinearGradient(colors: [.secondary.opacity(0.5)], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: max(geo.size.width - 32, 0), height: 4)
                 HStack(spacing: 0){
                     Rectangle()
-                        .fill(LinearGradient(gradient: Gradient(colors: [Color.accentRed, Color.accentPink]), startPoint: .leading, endPoint: .trailing))
-                        .frame(width: max(geo.size.width - 38, 0) * max(min(Double((profileVM.user?.score ?? lowerLimit) - lowerLimit), Double(upperLimit - lowerLimit)), 0) / Double(upperLimit - lowerLimit))
+                        .fill(LinearGradient(gradient: Gradient(colors: [.white]), startPoint: .leading, endPoint: .trailing))
+                        .frame(width: max(geo.size.width - 38, 0) * max(min(Double((profileVM.user?.score ?? lowerLimit) - lowerLimit), Double(upperLimit - lowerLimit)), 0) / Double(upperLimit - lowerLimit), height: 5)
                         .cornerRadius(16)
-                        .padding(3)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .animation(.default, value: profileVM.user?.score)
@@ -106,21 +143,19 @@ extension HomeView{
                 Text("LEVEL \(level)")
                     .font(.footnote)
                     .fontWeight(.heavy)
-                    .foregroundStyle(Color.accentRed)
                 Spacer()
-                Text("\(Int(Double((profileVM.user?.score ?? lowerLimit) - lowerLimit) / Double(upperLimit - lowerLimit) * 100)) %")
+                Text("\(profileVM.user?.score ?? 0)")
                     .font(.footnote)
                     .fontWeight(.heavy)
-                    .foregroundColor(.gray)
                 Spacer()
                 Text("LEVEL \(level + 1)")
                     .font(.footnote)
                     .fontWeight(.heavy)
-                    .foregroundColor(.accentColor)
             }
         }
+        .foregroundStyle(.white)
         .redacted(reason: firstLoad ? .placeholder : [])
-        .onChange(of: profileVM.user?.score) { newValue in
+        .onChange(of: profileVM.user?.score) { _, newValue in
             let (level, upperLimit, lowerLimit) = calculateLevelAndCutoff(for: newValue ?? 0)
             withAnimation {
                 self.upperLimit = upperLimit
@@ -130,74 +165,89 @@ extension HomeView{
         }
     }
     
-    private var today: some View {
-        VStack(alignment: .leading) {
-            Text("TODAY")
-                .font(.system(size: 20, weight: .medium, design: .rounded))
-                .foregroundColor(.accentOrange)
-                .padding(.bottom, -1)
-            VStack(spacing: 16){
-                ImageView(url: vm.gotd?.imageName ?? DataService.getGame().imageName)
-                    .frame(maxHeight: 250)
-                    .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(.gray.shadow(.inner(radius: 2)), lineWidth: 1.0))
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                
-                if let game = vm.gotd{
-                    NavigationLink(value: game) {
-                        HStack{
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(game.name)
-                                    .font(.title2)
-                                    .fontWeight(.medium)
-                                    .fontDesign(.rounded)
-                                    .foregroundStyle(Color.accentPink)
-                                Text(shortAddress(address: game.address))
-                                    .font(.headline)
-                                    .foregroundStyle(Color.secondary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .fontWeight(.medium)
-                                .foregroundColor(.secondary)
-                        }
+    private var recommendedForYou: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("RECOMMENDED FOR YOU")
+                .font(.system(size: 23, weight: .medium, design: .rounded))
+                .foregroundStyle(.primary)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 16) {
+                    ForEach(vm.popularGames ?? [DataService.getGame(), DataService.getGame(), DataService.getGame(), DataService.getGame()]) { game in
+                        CardView(game: game)
                     }
-                    .transition(.move(edge: .top))
-                    .zIndex(-1)
                 }
             }
-            .padding()
-            .background(RoundedRectangle(cornerRadius: 15, style: .continuous).stroke(lineWidth: 1).fill(LinearGradient(colors: [.accentRed, .accentColor], startPoint: .topLeading, endPoint: .bottomTrailing)))
-            .animation(.spring(duration: 1, bounce: 0.2, blendDuration: 1), value: vm.gotd)
+            .redacted(reason: vm.popularGames == nil ? .placeholder : [])
         }
-        .redacted(reason: vm.gotd == nil ? .placeholder : [])
+    }
+    
+    private var today: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("TOP TODAY")
+                .font(.system(size: 23, weight: .medium, design: .rounded))
+                .foregroundStyle(.primary)
+            NavigationLink(value: vm.gotd) {
+                VStack {
+                    ImageView(url: vm.gotd?.imageName ?? DataService.getGame().imageName)
+                        .frame(maxHeight: 200)
+                        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(.gray.opacity(0.4).shadow(.inner(radius: 1)),lineWidth: 1.0))
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                        .blendMode(colorScheme == .dark ? .lighten : .darken)
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(vm.gotd?.name ?? "")
+                                .font(.title3)
+                                .fontWeight(.medium)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(Color.primary)
+                                .lineLimit(1)
+                            Text(vm.gotd?.address ?? "")
+                                .font(.footnote)
+                                .fontWeight(.medium)
+                                .fontDesign(.rounded)
+                                .foregroundColor(Color.secondary)
+                                .lineLimit(1)
+                        }
+                        Spacer()
+                        Text(vm.gotd?.ratings.description ?? "0.0")
+                            .foregroundStyle(Color.primary)
+                            .font(.footnote)
+                            .fontWeight(.bold)
+                            .padding(8)
+                            .background(.regularMaterial, in: Circle())
+                    }
+                }
+            }
+            .redacted(reason: vm.gotd == nil ? .placeholder : [])
+        }
     }
 
     
     private var topGames: some View {
-        return VStack(alignment: .leading, spacing: 8) {
+        return VStack(alignment: .leading, spacing: 16) {
             Text("TOP GAMES")
-                .font(.system(size: 20, weight: .medium, design: .rounded))
-                .foregroundColor(.accentOrange)
-            Rectangle()
-                .fill(
-                    LinearGradient(colors: [.accentRed, .accentColor], startPoint: .topLeading, endPoint: .bottomTrailing)
-                )
-                .frame(height: 1)
-            LazyVStack(spacing: 12){
+                .font(.system(size: 23, weight: .medium, design: .rounded))
+                .foregroundStyle(.primary)
+            VStack(spacing: 12){
                 ForEach(vm.popularGames ?? [DataService.getGame(), DataService.getGame(), DataService.getGame(), DataService.getGame()]) { game in
                     HStack(alignment: .center, spacing: 16) {
                         ImageView(url: game.imageName)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 45, height: 45)
                             .cornerRadius(8)
                         VStack(alignment: .leading, spacing: 3) {
                             Text(game.name)
-                                .font(.title2)
+                                .font(.title3)
+                                .fontDesign(.rounded)
                                 .fontWeight(.medium)
-                                .foregroundStyle(Color.accentPink)
+                                .foregroundStyle(Color.primary)
+                                .lineLimit(1)
 
-                            Text(shortAddress(address: game.address))
-                                .font(.headline)
+                            Text(game.address)
+                                .font(.footnote)
+                                .fontWeight(.medium)
+                                .fontDesign(.rounded)
                                 .foregroundStyle(Color.secondary.gradient)
+                                .lineLimit(1)
                         }
                         Spacer()
                         NavigationLink("View", value: game)
@@ -205,35 +255,33 @@ extension HomeView{
                         .buttonStyle(.borderedProminent)
                         .buttonBorderShape(.capsule)
                     }
-                    Rectangle()
-                        .fill(
-                            LinearGradient(colors: [.accentRed, .accentColor], startPoint: .topLeading, endPoint: .bottomTrailing)
-                        )
-                        .frame(height: 1)
+                    Divider()
                         .padding(.leading, 66)
                 }
             }
-        }
             .redacted(reason: vm.popularGames == nil ? .placeholder : [])
+        }
     }
 
     
-    private var topPlayersSection: some View {
-        VStack(alignment: .leading) {
+    private var topPlayers: some View {
+        VStack(alignment: .leading, spacing: 16) {
             Text("TOP PLAYERS")
-                .font(.system(size: 24, weight: .medium, design: .rounded))
-                .foregroundColor(.accentOrange)
-
+                .font(.system(size: 23, weight: .medium, design: .rounded))
+                .foregroundStyle(.primary)
             LazyVStack(spacing: 8) {
                 ForEach(vm.leaderBoard ?? [DataService.getUser(), DataService.getUser(), DataService.getUser(), DataService.getUser()]) { user in
-                    HStack(spacing: 10) {
+                    HStack(spacing: 16) {
                         ImageView(url: user.profileImage)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 40, height: 40)
                             .clipShape(Circle())
 
                         Text(user.name)
-                            .font(.system(size: 30, weight: .medium, design: .rounded))
-                            .foregroundColor(.primary)
+                            .font(.title3)
+                            .fontDesign(.rounded)
+                            .fontWeight(.medium)
+                            .foregroundStyle(Color.primary)
+                            .lineLimit(1)
 
                         Spacer()
 
@@ -242,33 +290,29 @@ extension HomeView{
                             .foregroundColor(.accentColor)
                     }
                     Divider()
-                        .padding(.leading, 60)
+                        .padding(.leading, 66)
                 }
-                    .redacted(reason: vm.leaderBoard == nil ? .placeholder : [])
             }
+            .redacted(reason: vm.leaderBoard == nil ? .placeholder : [])
         }
     }
 
-    
-    private var gamesNearYouSection: some View {
-        VStack(alignment: .leading) {
-            Text("GAMES NEAR YOU")
-                .font(.system(size: 20, weight: .medium, design: .rounded))
-                .foregroundColor(.accentOrange)
-                .padding(.leading, 20)
-            ScrollView(.horizontal, showsIndicators: false) {
-                let dimension = UIScreen.main.bounds.width - 60
-                LazyHStack {
-                    ForEach(vm.popularGames ?? [DataService.getGame(), DataService.getGame(), DataService.getGame(), DataService.getGame()]) { game in
-                        CardView(game: game, dimension: dimension)
-                            .padding(.horizontal, 8)
-                    }
-                }
-                .padding(.horizontal, 8)
-            }
+    func greetUser() -> String {
+        let hour = Calendar.current.component(.hour, from: Date())
+
+        switch hour {
+        case 5...11:
+            return "Good Morning"
+        case 12...16:
+            return "Good Afternoon"
+        case 17...20:
+            return "Good Evening"
+        case 21...23:
+            return "Good Night"
+        default:
+            return "Hello"
         }
     }
-
     
     private func calculateLevelAndCutoff(for score: Int) -> (level: Int, upperLimit: Int, lowerLimit: Int) {
         var level = 1

@@ -18,7 +18,7 @@ struct MapView: View{
     
     var body: some View{
         VStack {
-            Map(coordinateRegion: $completer.searchRegion, interactionModes: .all, showsUserLocation: true, userTrackingMode: .constant(.none))
+            Map(bounds: .init(centerCoordinateBounds: completer.searchRegion), interactionModes: .all)
             .overlay(content: {
                 MapIcon()
             })

@@ -10,39 +10,20 @@ import UIKit
 import SwiftUI
 
 class ProfileViewModel: ObservableObject{
-    private var accessToken: String?
     private var api: ApiService
     private var imgPro: ImageProcessor
-    @Published var user: Account?
+    @Published var user: User?
     @Published var profileImage: UIImage?
     @Published var showAlert: Bool = false
     @Published var appError: AppError?
     
     init(){
-        self.accessToken = UserDefaults.standard.string(forKey: "accessToken")
         api = ApiService()
         imgPro = ImageProcessor()
         if let data = UserDefaults.standard.data(forKey: "user"),
-           let use = try? JSONDecoder().decode(Account.self, from: data){
+           let use = try? JSONDecoder().decode(User.self, from: data){
             withAnimation {
                 self.user = use
-            }
-        }
-    }
-    
-    func fetchUser() async{
-        if let accessToken = accessToken{
-            async let fetchedUser: Account? = try? await api.get(accessToken: accessToken, endpoint: APIEndpoint.user.description)
-            let user = await fetchedUser
-            DispatchQueue.main.async {
-                if let user = user {
-                    withAnimation(.default) {
-                        self.user = user
-                    }
-                    if let encoded = try? JSONEncoder().encode(user) {
-                        UserDefaults.standard.set(encoded, forKey: "user")
-                    }
-                }
             }
         }
     }
@@ -53,10 +34,9 @@ class ProfileViewModel: ObservableObject{
     
     func changeName(name: String) async{
         do{
-            guard let accessToken = accessToken else{return}
             if !name.isEmpty{
                 let data = try JSONEncoder().encode(name)
-                let user: Account = try await api.put(accessToken: accessToken, body: data, endpoint: APIEndpoint.userNameUpdate.description)
+                let user: User = try await api.put(body: data, endpoint: APIEndpoint.userNameUpdate.description)
                 DispatchQueue.main.async {
                     withAnimation {
                         self.user = user
@@ -83,12 +63,12 @@ class ProfileViewModel: ObservableObject{
     func setProfileImage() async -> String{
         do{
             guard let image = profileImage,
-                    let compressedImage = imgPro.getCompressedImage(image: image, quality: 256),
-                    let accessToken = accessToken else {
+                    let compressedImage = imgPro.getCompressedImage(image: image, quality: 256)
+                    else {
                 throw AppError(title: "Image Error", message: "Please provide a valid image.")
             }
             
-            let response: Account = try await api.put(imageData: compressedImage, data: nil, endpoint: APIEndpoint.userProfileImage.description, accessToken: accessToken)
+            let response: User = try await api.put(imageData: compressedImage, data: nil, endpoint: APIEndpoint.userProfileImage.description)
             DispatchQueue.main.async {
                 withAnimation {
                     self.user = response

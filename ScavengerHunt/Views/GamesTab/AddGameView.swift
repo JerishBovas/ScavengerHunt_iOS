@@ -38,7 +38,7 @@ struct AddGameView: View {
                     TextField("Description", text: $game.description, axis: .vertical)
                         .focused($isDescriptionFocused)
                         .submitLabel(.done)
-                        .onChange(of: game.description) { newValue in
+                        .onChange(of: game.description) { _, newValue in
                             if let last = newValue.last, last == "\n" {
                                 game.description.removeLast()
                                 isDescriptionFocused = false
@@ -51,7 +51,7 @@ struct AddGameView: View {
                         TextField("Address", text: $game.address, axis: .vertical)
                             .focused($isAddressFocused)
                             .submitLabel(.done)
-                            .onChange(of: game.address) { newValue in
+                            .onChange(of: game.address) { _, newValue in
                                 if let last = newValue.last, last == "\n" {
                                     game.address.removeLast()
                                     isAddressFocused = false

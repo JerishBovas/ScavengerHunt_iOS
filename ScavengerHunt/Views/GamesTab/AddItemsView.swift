@@ -11,7 +11,7 @@ import AVFoundation
 struct AddItemsView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var vm: AddItemsViewModel = AddItemsViewModel()
-    var game: GameDetail
+    var game: Game
     @State private var isFetching: Bool = false
     @State private var progressValue: Double = 0.0
     @State private var progressText: String = "Processing"
@@ -177,6 +177,6 @@ extension AddItemsView{
 
 struct AddItemsView_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemsView(game: DataService.gameDetail)
+        AddItemsView(game: DataService.game)
     }
 }

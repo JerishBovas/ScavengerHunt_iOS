@@ -14,7 +14,7 @@ class HomeViewModel: ObservableObject{
     private var api: ApiService
     
     @Published var gotd: Game?
-    @Published var leaderBoard: [Account]?
+    @Published var leaderBoard: [User]?
     @Published var popularGames: [Game]?
     
     init(){
@@ -23,7 +23,7 @@ class HomeViewModel: ObservableObject{
     }
     
     func fetchPage() async{
-        async let fetchedLeaderboard: [Account]? = try? await api.get(endpoint: APIEndpoint.homeLeaderboard.description)
+        async let fetchedLeaderboard: [User]? = try? await api.get(endpoint: APIEndpoint.homeLeaderboard.description)
         async let fetchedPopularGames: [Game]? = try? await api.get(endpoint: APIEndpoint.homePopularGames.description)
 
         let leaderBoard = await fetchedLeaderboard
@@ -41,7 +41,7 @@ class HomeViewModel: ObservableObject{
                 withAnimation(.default) {
                     self.popularGames = popularGames
                     if !popularGames.isEmpty{
-                        self.gotd = popularGames[0]
+                        self.gotd = DataService.game
                     }
                 }
             }

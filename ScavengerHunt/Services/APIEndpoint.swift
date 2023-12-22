@@ -11,7 +11,7 @@ enum APIEndpoint : CustomStringConvertible{
     case register, login, refreshToken, revokeToken, resetPassword
     case users, user, userProfileImage, userNameUpdate
     case homeLeaderboard, homePopularGames
-    case game, gameId(id: String), gameUserId(id: String, userId: String), gameItemId(id: String, itemId: String), uploadGameImage
+    case game, gameId(id: String), gameUserId(id: String, userId: String), gameItemId(id: String, itemId: String), uploadGameImage, search(query: String), searchComplete(query: String)
     case team, teamId(id: String), uploadTeamImage
     case item(gameId: String)
     
@@ -42,6 +42,8 @@ enum APIEndpoint : CustomStringConvertible{
         case .gameUserId(let id, let userId) : return "\(DOMAIN_URL)/v1/games/\(id)/?userid=\(userId)"
         case .gameItemId(let id, let itemId) : return "\(DOMAIN_URL)/v1/games/\(id)/\(itemId)"
         case .uploadGameImage : return "\(DOMAIN_URL)/v1/games/image"
+        case .searchComplete(let query) : return "\(DOMAIN_URL)/v1/games/searchComplete/?query=\(query)"
+        case .search(let query) : return "\(DOMAIN_URL)/v1/games/search/?query=\(query)"
             
         case .item(let gameId) : return "\(DOMAIN_URL)/v1/games/\(gameId)/items"
         

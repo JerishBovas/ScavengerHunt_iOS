@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 struct ErrorObject: Decodable, Error{
     var title: String
@@ -16,13 +17,10 @@ struct ErrorObject: Decodable, Error{
 class ApiService{
     
     func get<T: Decodable>(endpoint: String) async throws -> T{
-        var request = URLRequest(url: URL(string: endpoint)!)
-        request.httpMethod = "GET"
-        
-        return try await fetchApi(request: request)
-    }
-    
-    func get<T: Decodable>(accessToken: String, endpoint: String) async throws -> T{
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -31,15 +29,11 @@ class ApiService{
     }
     
     func post(body: Data, endpoint: String) async throws{
-        var request = URLRequest(url: URL(string: endpoint)!)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
         
-        try await fetchApi(request: request)
-    }
-    
-    func post(accessToken: String, body: Data, endpoint: String) async throws{
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -50,15 +44,11 @@ class ApiService{
     }
     
     func post<T: Decodable>(body: Data, endpoint: String) async throws -> T{
-        var request = URLRequest(url: URL(string: endpoint)!)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
         
-        return try await fetchApi(request: request)
-    }
-    
-    func post<T: Decodable>(accessToken: String, body: Data, endpoint: String) async throws -> T{
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -68,7 +58,12 @@ class ApiService{
         return try await fetchApi(request: request)
     }
     
-    func post<T:Decodable>(imageData: Data, data: Data, endpoint: String, accessToken: String) async throws -> T{
+    func post<T:Decodable>(imageData: Data, data: Data, endpoint: String) async throws -> T{
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
+        
         let boundary = UUID().uuidString
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "POST"
@@ -96,7 +91,12 @@ class ApiService{
         return try await fetchApi(request: request)
     }
     
-    func put(accessToken: String, body: Data, endpoint: String) async throws{
+    func put(body: Data, endpoint: String) async throws{
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
+        
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "PUT"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -105,7 +105,12 @@ class ApiService{
         
         return try await fetchApi(request: request)
     }
-    func put<T:Decodable>(accessToken: String, body: Data, endpoint: String) async throws -> T{
+    func put<T:Decodable>(body: Data, endpoint: String) async throws -> T{
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
+        
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "PUT"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
@@ -114,7 +119,12 @@ class ApiService{
         
         return try await fetchApi(request: request)
     }
-    func put<T:Decodable>(imageData: Data?, data: Data?, endpoint: String, accessToken: String) async throws -> T{
+    func put<T:Decodable>(imageData: Data?, data: Data?, endpoint: String) async throws -> T{
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
+        
         let boundary = UUID().uuidString
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "PUT"
@@ -147,7 +157,12 @@ class ApiService{
         return try await fetchApi(request: request)
     }
     
-    func delete(accessToken: String, endpoint: String) async throws{
+    func delete(endpoint: String) async throws{
+        let currentUser = Auth.auth().currentUser
+        guard let accessToken = try await currentUser?.getIDToken() else{
+            throw ErrorObject(title: "Invalid Credential", status: 403, errors: ["Please login again"])
+        }
+        
         var request = URLRequest(url: URL(string: endpoint)!)
         request.httpMethod = "DELETE"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")

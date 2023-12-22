@@ -13,20 +13,78 @@ struct WelcomeView: View {
     @State private var isLoginButtonPressed = false
     
     var body: some View {
-        VStack(spacing: 16){
+        VStack(spacing: 48){
             VStack(spacing: 0){
-                Image("AppLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100)
+                Text("Welcome to")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .fontDesign(.rounded)
                 Text("Scavenger Hunt")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .fontDesign(.rounded)
-                    .foregroundStyle(LinearGradient(colors: [.cyan, .purple, .orange, .pink], startPoint: .topLeading, endPoint: .bottomTrailing))
-                    .padding(.top, -8)
+                    .foregroundStyle(LinearGradient(stops: [.init(color: .cyan, location: 0.1), .init(color: .purple, location: 0.5), .init(color: .red, location: 1.0)], startPoint: .topLeading, endPoint: .bottomTrailing))
             }
-            Spacer()
+            FeaturesView()
+            VStack{
+                Text("Sign In for a seamless experience across devices")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                HStack(spacing: 16){
+                    NavigationLink(destination: AuthenticationView()
+                        .environmentObject(authVM)) {
+                        Text("Sign In")
+                            .font(.title3)
+                            .fontWeight(.medium)
+                            .frame(maxWidth: .infinity, maxHeight: 30)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .scaleEffect(isLoginButtonPressed ? 1.1 : 1.0)
+                    .animation(.easeInOut(duration: 0.2), value: isLoginButtonPressed)
+                    .onLongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity, pressing: { pressing in
+                        isLoginButtonPressed = pressing
+                    }, perform: { })
+                }
+                Button(action: {
+                    Task{
+                        await authVM.signInAnonymously()
+                    }
+                }, label: {
+                    Text("Continue without account")
+                    Image(systemName: "arrow.forward")
+                })
+                .font(.system(size: 18, weight: .medium, design: .default))
+                .foregroundStyle(.primary)
+                .padding(.top)
+            }
+        }
+        .padding(.horizontal)
+        .frame(maxHeight: .infinity, alignment: .bottom)
+        .background(SlantedRectangle())
+    }
+}
+
+extension WelcomeView{
+    private struct SlantedRectangle: View {
+        var body: some View {
+            GeometryReader{ geometry in
+                let width = geometry.size.width
+                let startPoint = (geometry.size.height - width)/2
+                Path{ path in
+                    path.move(to: CGPoint(x: width, y: startPoint))
+                    path.addLine(to: CGPoint(x: width, y: startPoint + width/2))
+                    path.addQuadCurve(to: CGPoint(x: 0, y: startPoint + width), control: CGPoint(x: Int(width/2), y: Int(startPoint) + Int(width/1.6)))
+                    path.addLine(to: CGPoint(x: 0, y: startPoint + width/3))
+                    path.addQuadCurve(to: CGPoint(x: width, y: startPoint), control: CGPoint(x: Int(width/2), y: Int(startPoint) + Int(width/2)))
+                }
+                .fill(.linearGradient(colors: [.purple, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .scaledToFit()
+            }
+        }
+    }
+    
+    private struct FeaturesView: View {
+        var body: some View {
             VStack(alignment: .leading, spacing: 8){
                 HStack(spacing: 16){
                     Image("arGame")
@@ -104,59 +162,6 @@ struct WelcomeView: View {
             .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .shadow(radius: 5)
-            Spacer()
-            Text("Login for a seamless experience across devices")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            VStack(spacing: 20){
-                HStack(spacing: 16){
-                    NavigationLink(destination: AuthenticationView()
-                        .environmentObject(authVM)) {
-                        Text("Log In")
-                            .font(.title3)
-                            .fontWeight(.medium)
-                            .frame(maxWidth: .infinity, maxHeight: 30)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .scaleEffect(isLoginButtonPressed ? 1.1 : 1.0)
-                    .animation(.easeInOut(duration: 0.2), value: isLoginButtonPressed)
-                    .onLongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity, pressing: { pressing in
-                        isLoginButtonPressed = pressing
-                    }, perform: { })
-                }
-                Button(action: {
-                    Task{
-                        await authVM.signInAnonymously()
-                    }
-                }, label: {
-                    Text("Continue without account")
-                    Image(systemName: "arrow.forward")
-                })
-                .font(.system(size: 18, weight: .medium, design: .default))
-                .foregroundStyle(.primary)
-            }
-        }
-        .padding(.horizontal)
-        .background(SlantedRectangle())
-    }
-}
-
-extension WelcomeView{
-    private struct SlantedRectangle: View {
-        var body: some View {
-            GeometryReader{ geometry in
-                let width = geometry.size.width
-                let startPoint = (geometry.size.height - width)/2
-                Path{ path in
-                    path.move(to: CGPoint(x: width, y: startPoint))
-                    path.addLine(to: CGPoint(x: width, y: startPoint + width/2))
-                    path.addQuadCurve(to: CGPoint(x: 0, y: startPoint + width), control: CGPoint(x: Int(width/2), y: Int(startPoint) + Int(width/1.6)))
-                    path.addLine(to: CGPoint(x: 0, y: startPoint + width/3))
-                    path.addQuadCurve(to: CGPoint(x: width, y: startPoint), control: CGPoint(x: Int(width/2), y: Int(startPoint) + Int(width/2)))
-                }
-                .fill(.linearGradient(colors: [.purple, .red], startPoint: .topLeading, endPoint: .bottomTrailing))
-                .scaledToFit()
-            }
         }
     }
 }

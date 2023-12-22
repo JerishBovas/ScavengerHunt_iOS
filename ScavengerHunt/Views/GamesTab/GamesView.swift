@@ -1,171 +1,226 @@
 //
-//  GamesView.swift
+//  GamesMapView.swift
 //  ScavengerHunt
 //
-//  Created by Jerish Bovas on 2023-04-03.
+//  Created by Jerish Bovas on 10/19/23.
 //
 
 import SwiftUI
+import MapKit
 
-enum GameTabEnum: String, CaseIterable, Identifiable {
-    case myGames = "My Games"
-    case communityGames = "Community Games"
-    
-    var id: String { rawValue }
+enum FocusedField {
+    case field
 }
 
 struct GamesView: View {
     @EnvironmentObject private var vm: GameViewModel
-    @Binding var selection: Int
-    @State private var tabSelection: GameTabEnum = .myGames
-    @State private var searchString: String = ""
-    @State private var showSheet = false
-    @State private var gameUserSource: GameDetail?
-    @State private var gameSource: GameDetail?
-    var sortNames = ["Name", "Country", "Ratings", "Difficulty"]
-    @State private var sortSelection: String = "Name"
-    var perPage = ["10 Games", "20 Games", "30 Games", "40 Games"]
-    @State private var pageSelection: String = "10 Games"
+    @Environment(\.colorScheme) private var colorScheme
+    @State private var searchedText: String = ""
+    @State private var selectedGameIndex: Int = 0
+    @State private var showSearchResult: Bool = false
+    @State private var showTabList: Bool = true
+    @State private var mapCameraPosition: MapCameraPosition = .region(.init(center: CLLocationCoordinate2D(latitude: 43.6532, longitude: -79.3832), latitudinalMeters: 500, longitudinalMeters: 500))
+    @State private var showDetails: Bool = false
+    
+    @Namespace private var animationNamespace
     
     var body: some View {
-        NavigationStack{
-            VStack{
-                VStack(spacing: 8){
-                    Picker("Games Tab", selection: $tabSelection) {
-                        ForEach(GameTabEnum.allCases) {
-                            Text($0.rawValue)
-                                .tag($0)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
-                .padding(.horizontal, 20)
-                VStack{
-                    if tabSelection == .myGames{
-                        myGamesList
-                            .tag(GameTabEnum.myGames)
-                            .transition(.move(edge: .leading))
-                    }
-                    else{
-                        communityGamesList
-                            .tag(GameTabEnum.communityGames)
-                            .transition(.move(edge: .trailing))
+        NavigationStack {
+            ZStack{
+                mapSection
+                VStack {
+                    searchBarSection
+                    Spacer()
+                    if vm.games.count > 0{
+                        gamesSection
                     }
                 }
-                .animation(.default, value: tabSelection)
-                .tabViewStyle(.page(indexDisplayMode: .never))
-                .navigationDestination(for: Game.self){ game in
-                    GameDetailView(game: game)
+                .animation(.spring(.smooth(duration: 0.5)), value: showTabList)
+                if showSearchResult{
+                    SearchBar(showSearchResult: $showSearchResult, animationNamespace: animationNamespace, searchedText: $searchedText)
                 }
             }
-            .toolbar{
-                if tabSelection == .myGames{
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        EditButton()
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            showSheet = true
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                    }
-                }
-            }
+            .animation(.default, value: showSearchResult)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
             .task {
-                if vm.myGames == nil{
-                    await vm.getMyGames()
-                }
-                if vm.games == nil{
-                    await vm.getGames()
-                }
+                await vm.getGames()
             }
-            .sheet(isPresented: $showSheet, content: {
-                AddGameView(){ game, image in
-                    try await vm.addGame(game: game, uiImage: image)
-                }
-            })
-            .searchable(text: $searchString)
-            .navigationTitle("Games")
-            .navigationBarTitleDisplayMode(.inline)
-            .alert(vm.appError?.title ?? "", isPresented: $vm.showAlert) {
-                Text("OK")
-            } message: {
-                Text(vm.appError?.message ?? "")
+            .onChange(of: vm.games) {
+                selectedGameIndex = 0
             }
         }
-        .environmentObject(vm)
     }
 }
 
 extension GamesView{
-    private var myGamesList: some View{
-        func deleteItems(at offsets: IndexSet) {
-            Task{
-                await vm.deleteGame(at: offsets)
+    private var mapSection: some View{
+        Map(position: $mapCameraPosition, interactionModes: .all, selection: .constant(5)) {
+            ForEach(vm.games) { game in
+                Marker(game.name, coordinate: CLLocationCoordinate2D(latitude: game.coordinate.latitude, longitude: game.coordinate.longitude))
             }
         }
-        return List {
-            ForEach(vm.myGames ?? [DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame()]) { game in
-                NavigationLink(value: game) {
-                    HStack(spacing: 10){
-                        ImageView(url: game.imageName)
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(8, corners: .allCorners)
-                        VStack(alignment: .leading, spacing: 3){
-                            Text(game.name)
-                                .font(.title2)
-                                .fontWeight(.medium)
-                                .foregroundColor(.primary)
-                            Text(game.address)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .redacted(reason: vm.myGames == nil ? .placeholder : [])
-                }
+        .onTapGesture {
+            showTabList.toggle()
+        }
+        .onChange(of: selectedGameIndex) { _, newValue in
+            withAnimation(.easeInOut(duration: 1.0)) {
+                mapCameraPosition = .region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: vm.games[newValue].coordinate.latitude, longitude: vm.games[newValue].coordinate.longitude), latitudinalMeters: 500, longitudinalMeters: 500))
             }
-            .onDelete(perform: deleteItems)
         }
-        .refreshable {
-            await vm.getMyGames()
-        }
-        .listStyle(.plain)
     }
-    private var communityGamesList: some View{
-        List {
-            ForEach(vm.games ?? [DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame(),DataService.getGame()]) { game in
-                NavigationLink(value: game) {
-                    HStack(spacing: 10){
-                        ImageView(url: game.imageName)
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(8, corners: .allCorners)
-                        VStack(alignment: .leading, spacing: 3){
-                            Text(game.name)
-                                .font(.title2)
-                                .fontWeight(.medium)
-                                .foregroundColor(.primary)
-                            Text(game.address)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    .redacted(reason: vm.games == nil ? .placeholder : [])
-                }
+    
+    private var searchBarSection: some View{
+        VStack {
+            HStack{
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+                Text(searchedText == "" ? "Search Games" : searchedText)
+                    .font(.title3)
+                    .foregroundStyle(searchedText == "" ? .secondary : .primary)
+                    .matchedGeometryEffect(id: "searchField", in: animationNamespace)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+            .font(.title3)
+            .padding()
+            
+        }
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 15))
+        .offset(y: showTabList ? 0 : -300)
+        .onTapGesture {
+            showSearchResult = true
+        }
+        .shadow(color: Color.black.opacity(0.5), radius: 20)
+        .padding()
+    }
+    
+    private var gamesSection: some View{
+        TabView(selection: $selectedGameIndex) {
+            ForEach(Array(vm.games.enumerated()), id: \.1) { index, game in
+                GameCardView(game: game, showTabList: $showTabList, showDetails: $showDetails)
+                    .padding()
+                    .tag(index)
             }
         }
-        .refreshable {
-            await vm.getGames()
+        .offset(y: showTabList ? 0 : 800)
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .frame(maxHeight: showDetails ? 500 : 300)
+        .onAppear{
+            mapCameraPosition = .region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: vm.games[selectedGameIndex].coordinate.latitude, longitude: vm.games[selectedGameIndex].coordinate.longitude), latitudinalMeters: 500, longitudinalMeters: 500))
         }
-        .listStyle(.plain)
     }
 }
 
-struct GamesView_Previews: PreviewProvider {
-    static var previews: some View {
-        GamesView(selection: .constant(0))
-            .environmentObject(GameViewModel())
+struct GameCardView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    let game: Game
+    @Binding var showTabList: Bool
+    @Binding var showDetails: Bool
+    @Namespace private var cardViewNamespace
+    @State private var showGameSheet = false
+    @State private var showGamePlaySheet = false
+    
+    var body: some View {
+        ZStack{
+            if showDetails {
+                GameDetailView(game: game, animationNamespace: cardViewNamespace, showDetails: $showDetails)
+            }
+            else{
+                GameDetailViewSmall(game: game, animationNamespace: cardViewNamespace, showDetails: $showDetails)
+            }
+        }
     }
 }
+
+struct SearchBar: View {
+    @EnvironmentObject private var vm: GameViewModel
+    @Environment(\.colorScheme) private var colorScheme
+    @Binding var showSearchResult: Bool
+    let animationNamespace: Namespace.ID
+    @Binding var searchedText: String
+    @State private var searchText: String = ""
+    @FocusState private var focusedField: FocusedField?
+    
+    var body: some View {
+        VStack{
+            VStack {
+                HStack{
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    TextField("Search Games", text: $searchText)
+                        .matchedGeometryEffect(id: "searchField", in: animationNamespace, isSource: true)
+                        .focused($focusedField, equals: .field)
+                        .onChange(of: searchText) { _, newValue in
+                            Task{
+                                await vm.searchComplete(query: newValue)
+                            }
+                        }
+                        .submitLabel(.search)
+                        .onSubmit {
+                            Task{
+                                await vm.search(query: searchText)
+                                withAnimation {
+                                    searchedText = String(searchText.split(separator: ",")[0])
+                                    focusedField = nil
+                                    showSearchResult = false
+                                }
+                            }
+                        }
+                    Button("Cancel") {
+                        withAnimation {
+                            focusedField = nil
+                            showSearchResult = false
+                            searchedText = ""
+                        }
+                    }
+                }
+                .font(.title3)
+                .padding()
+                .onAppear{
+                    withAnimation {
+                        focusedField = .field
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(colorScheme == .light ? .ultraThinMaterial : .regularMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .padding()
+            
+            ScrollView(showsIndicators: false) {
+                ForEach(vm.searchCompletion, id: \.self){ result in
+                    Divider()
+                    VStack(alignment: .leading){
+                        Button {
+                            Task{
+                                await vm.search(query: result)
+                                withAnimation {
+                                    searchText = result
+                                    focusedField = nil
+                                    searchedText = String(searchText.split(separator: ",")[0])
+                                    showSearchResult = false
+                                }
+                            }
+                        } label: {
+                            Text(result)
+                                .font(.headline)
+                                .foregroundStyle(.gray)
+                                .lineLimit(1)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                    }
+                    .font(.title3)
+                }
+            }
+            .padding(.horizontal)
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .background()
+    }
+}
+
+#Preview {
+    GamesView()
+        .environmentObject(GameViewModel())
+}
+

@@ -30,3 +30,5 @@ xcuserdata/
 .DS_Store
 
 GoogleService-Info.plist
+
+*.mlmodel

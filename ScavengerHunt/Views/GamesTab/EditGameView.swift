@@ -12,7 +12,7 @@ import MapKit
 struct EditGameView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var vm: GameViewModel
-    @State var game: GameDetail
+    @State var game: Game
     @State private var uiImage: UIImage?
     @StateObject private var completer = MapSearchCompleter()
     @State private var tag: String = ""
@@ -38,7 +38,7 @@ struct EditGameView: View {
                     TextField("Description", text: $game.description, axis: .vertical)
                         .focused($isDescriptionFocused)
                         .submitLabel(.done)
-                        .onChange(of: game.description) { newValue in
+                        .onChange(of: game.description) { _, newValue in
                             if let last = newValue.last, last == "\n" {
                                 game.description.removeLast()
                                 isDescriptionFocused = false
@@ -50,7 +50,7 @@ struct EditGameView: View {
                     TextField("Address", text: $game.address, axis: .vertical)
                         .focused($isAddressFocused)
                         .submitLabel(.done)
-                        .onChange(of: game.address) { newValue in
+                        .onChange(of: game.address) { _, newValue in
                             if let last = newValue.last, last == "\n" {
                                 game.address.removeLast()
                                 isAddressFocused = false
@@ -125,7 +125,7 @@ struct EditGameView: View {
                 }
             }
             .disabled(isAdding)
-            .navigationDestination(for: GameDetail.self) { newGame in
+            .navigationDestination(for: Game.self) { newGame in
                 MapView(newGame: NewGame(), completer: completer)
                     .onDisappear{
                         if let place = completer.place{
@@ -172,6 +172,6 @@ struct EditGameView: View {
 
 struct EditGameView_Previews: PreviewProvider {
     static var previews: some View {
-        EditGameView(game: GameDetail())
+        EditGameView(game: Game())
     }
 }

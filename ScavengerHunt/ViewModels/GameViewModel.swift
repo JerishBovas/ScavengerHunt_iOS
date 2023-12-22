@@ -11,56 +11,25 @@ import SwiftUI
 import CoreLocation
 
 class GameViewModel: ObservableObject {
-    private var accessToken: String?
     @Published var showAlert: Bool = false
     @Published var appError: AppError?
-    @Published var games: [Game]?
-    @Published var myGames: [Game]?
+    @Published var games: [Game] = []
+    @Published var searchCompletion: [String] = []
     private let api: ApiService
     private let lib: ImageProcessor
     var temperature: Double?
     var uvIndex: Int?
     
     init() {
-        self.accessToken = UserDefaults.standard.string(forKey: "accessToken")
-        self.games = nil
         self.api = ApiService()
         self.lib = ImageProcessor()
         self.temperature = nil
         self.uvIndex = nil
     }
     
-    func getMyGames() async{
-        do{
-            guard let accessToken = accessToken else{
-                throw AppError(title: "Authentication Failed", message: "Please try logging in again")
-            }
-            let games: [Game] = try await api.get(accessToken: accessToken, endpoint: APIEndpoint.game.description + "?category=user&count=25")
-            print("Games fetched")
-            DispatchQueue.main.async {
-                withAnimation {
-                    self.myGames = games
-                }
-            }
-        }catch let error as AppError{
-            DispatchQueue.main.async {
-                self.appError = error
-                self.showAlert = true
-            }
-        }catch {
-            DispatchQueue.main.async {
-                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
-                self.showAlert = true
-            }
-        }
-    }
-    
     func getGames() async{
         do{
-            guard let accessToken = accessToken else{
-                throw AppError(title: "Authentication Failed", message: "Please try logging in again")
-            }
-            let games: [Game] = try await api.get(accessToken: accessToken, endpoint: APIEndpoint.game.description + "?category=other&count=25")
+            let games: [Game] = try await api.get(endpoint: APIEndpoint.game.description + "?category=all&count=25")
             print("Games fetched")
             DispatchQueue.main.async {
                 withAnimation {
@@ -80,12 +49,9 @@ class GameViewModel: ObservableObject {
         }
     }
     
-    func getGame(game: Game) async -> GameDetail?{
+    func getGame(game: Game) async -> Game?{
         do{
-            guard let accessToken = accessToken else{
-                throw AppError(title: "Authentication Failed", message: "Please try logging in again")
-            }
-            let game: GameDetail = try await api.get(accessToken: accessToken, endpoint: APIEndpoint.gameUserId(id: game.id, userId: game.userId).description)
+            let game: Game = try await api.get(endpoint: APIEndpoint.gameUserId(id: game.id, userId: game.userId).description)
             return game
         }catch let error as AppError{
             DispatchQueue.main.async {
@@ -105,31 +71,24 @@ class GameViewModel: ObservableObject {
         guard let imageData = lib.getCompressedImage(image: uiImage, quality: 256) else {
             throw AppError(title: "Data Error", message: "Given data not in correct format")
         }
-        guard let accessToken = accessToken else{
-            throw AppError(title: "Authentication Failed", message: "Please try logging in again")
-        }
         let gameData = try! JSONEncoder().encode(game)
         
-        let gameResp: Game = try await api.post(imageData: imageData, data: gameData, endpoint: APIEndpoint.game.description, accessToken: accessToken)
+        let gameResp: Game = try await api.post(imageData: imageData, data: gameData, endpoint: APIEndpoint.game.description)
         DispatchQueue.main.async {
             withAnimation {
-                self.myGames?.insert(gameResp, at: 0)
+                self.games.insert(gameResp, at: 0)
             }
         }
     }
     
-    func updateGame(game: GameDetail, uiImage: UIImage?) async{
+    func updateGame(game: Game, uiImage: UIImage?) async{
         do{
             try validateGame(game: game)
             var imageData: Data? = nil
             if let image = uiImage{ imageData = lib.getCompressedImage(image: image, quality: 256)}
             let gameData = try! JSONEncoder().encode(game)
             
-            guard let accessToken = accessToken else{
-                throw AppError(title: "Authentication Failed", message: "Please try logging in again")
-            }
-            
-            let _:GameDetail = try await api.put(imageData: imageData, data: gameData, endpoint: APIEndpoint.gameUserId(id: game.id, userId: game.userId).description, accessToken: accessToken)
+            let _:Game = try await api.put(imageData: imageData, data: gameData, endpoint: APIEndpoint.gameUserId(id: game.id, userId: game.userId).description)
         }catch let error as AppError{
             DispatchQueue.main.async {
                 self.appError = error
@@ -143,39 +102,35 @@ class GameViewModel: ObservableObject {
         }
     }
     
-    func deleteGame(at offsets: IndexSet) async{
-        do{
-            guard let accessToken = accessToken else{
-                throw AppError(title: "Authentication Failed", message: "Please try logging in again")
-            }
-            
-            var gameId = ""
-            for i in offsets.makeIterator() {
-                let theItem = myGames?[i]
-                gameId = theItem?.id ?? ""
-            }
-            guard !gameId.isEmpty else{return}
-            DispatchQueue.main.async {
-                withAnimation {
-                    self.myGames?.remove(atOffsets: offsets)
-                }
-            }
-            
-            try await api.delete(accessToken: accessToken, endpoint: APIEndpoint.gameId(id: gameId).description)
-        }catch let error as AppError{
-            DispatchQueue.main.async {
-                self.appError = error
-                self.showAlert = true
-            }
-        }catch {
-            DispatchQueue.main.async {
-                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
-                self.showAlert = true
-            }
-        }
-    }
+//    func deleteGame(at offsets: IndexSet) async{
+//        do{
+//            var gameId = ""
+//            for i in offsets.makeIterator() {
+//                let theItem = myGames?[i]
+//                gameId = theItem?.id ?? ""
+//            }
+//            guard !gameId.isEmpty else{return}
+//            DispatchQueue.main.async {
+//                withAnimation {
+//                    self.myGames?.remove(atOffsets: offsets)
+//                }
+//            }
+//            
+//            try await api.delete(endpoint: APIEndpoint.gameId(id: gameId).description)
+//        }catch let error as AppError{
+//            DispatchQueue.main.async {
+//                self.appError = error
+//                self.showAlert = true
+//            }
+//        }catch {
+//            DispatchQueue.main.async {
+//                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
+//                self.showAlert = true
+//            }
+//        }
+//    }
     
-    private func validateGame(game: GameDetail) throws {
+    private func validateGame(game: Game) throws {
         // Validate game name
         if game.name.trimmingCharacters(in: .whitespaces).isEmpty {
             throw AppError(title: "Invalid Name", message: "Please enter a valid game name.")
@@ -219,6 +174,51 @@ class GameViewModel: ObservableObject {
             return dateFormatterPrint.string(from: date)
         }else {
             return "There was an error decoding the string"
+        }
+    }
+    
+    func searchComplete(query: String) async{
+        do{
+            let result: [String] = try await api.get(endpoint: APIEndpoint.searchComplete(query: query).description)
+            print("Search Tokens fetched")
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.searchCompletion = result
+                }
+            }
+        }catch let error as AppError{
+            DispatchQueue.main.async {
+                self.appError = error
+                self.showAlert = true
+            }
+        }catch {
+            DispatchQueue.main.async {
+                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
+                self.showAlert = true
+            }
+        }
+    }
+    
+    func search(query: String) async{
+        do{
+            let result: [Game] = try await api.get(endpoint: APIEndpoint.search(query: query).description)
+            print("Games fetched")
+            print(result)
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.games = result
+                }
+            }
+        }catch let error as AppError{
+            DispatchQueue.main.async {
+                self.appError = error
+                self.showAlert = true
+            }
+        }catch {
+            DispatchQueue.main.async {
+                self.appError = AppError(title: "An error occured.", message: error.localizedDescription)
+                self.showAlert = true
+            }
         }
     }
 }

@@ -8,48 +8,37 @@
 import SwiftUI
 
 struct CardView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @State var game: Game
-    @State var dimension: CGFloat
     
     var body: some View {
-        ImageView(url: game.imageName)
-            .frame(width: dimension, height: dimension)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
-            .overlay {
+        NavigationLink(value: game) {
+            VStack(alignment: .leading){
+                ImageView(url: game.imageName)
+                    .frame(width: 250, height: 160)
+                    .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(.gray.opacity(0.4).shadow(.inner(radius: 1)),lineWidth: 1.0))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .blendMode(colorScheme == .dark ? .lighten : .darken)
                 VStack(alignment: .leading){
-                    Spacer()
-                    NavigationLink(value: game, label: {
-                        HStack{
-                            ImageView(url: game.imageName)
-                                .frame(width: 50, height: 50)
-                                .cornerRadius(8)
-                            VStack(alignment: .leading, spacing: 5){
-                                Text(game.name)
-                                    .font(.title3)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.primary)
-                                Text(game.address)
-                                    .font(.footnote)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.secondary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .fontWeight(.medium)
-                                .foregroundColor(.secondary)
-                        }
-                    })
-                    .padding()
-                    .background(.regularMaterial)
-                    .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                    Text(game.name)
+                        .font(.title3)
+                        .fontWeight(.medium)
+                        .foregroundColor(Color.primary)
+                        .lineLimit(1)
+                    Text(game.address)
+                        .font(.footnote)
+                        .fontWeight(.medium)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
                 }
             }
-        
+        }
     }
 }
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(game: DataService.game, dimension: UIScreen.main.bounds.width - 60)
+        CardView(game: DataService.game)
     }
 }
