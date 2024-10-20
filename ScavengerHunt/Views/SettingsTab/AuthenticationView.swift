@@ -16,10 +16,8 @@ struct AuthenticationView: View {
       switch viewModel.flow {
       case .login:
         LoginView()
-          .environmentObject(viewModel)
       case .signUp:
         SignupView()
-          .environmentObject(viewModel)
       }
     }
   }

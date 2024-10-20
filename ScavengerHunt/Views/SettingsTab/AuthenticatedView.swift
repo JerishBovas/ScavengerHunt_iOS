@@ -9,31 +9,32 @@ import SwiftUI
 import AuthenticationServices
 
 struct AuthenticatedView: View{
-    @StateObject private var viewModel = AuthenticationViewModel()
+    @StateObject private var authVM = AuthenticationViewModel()
 
     var body: some View {
         VStack{
-            switch viewModel.authenticationState {
+            switch authVM.authenticationState {
             case .unauthenticated, .authenticating:
-                WelcomeView()
+                AuthenticationView()
             case .authenticated:
                 VStack {
                     TabBarView()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: ASAuthorizationAppleIDProvider.credentialRevokedNotification)) { event in
-                  viewModel.signOut()
+                  authVM.signOut()
                   if let userInfo = event.userInfo, let info = userInfo["info"] {
                     print(info)
                   }
                 }
             }
         }
-        .environmentObject(viewModel)
+        .environmentObject(authVM)
     }
 }
 
 struct AuthenticatedView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticatedView()
+            .environmentObject(AuthenticationViewModel())
     }
 }

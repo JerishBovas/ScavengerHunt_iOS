@@ -155,9 +155,9 @@ struct ProfileView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView(user: User())
-    }
+#Preview {
+    ProfileView(user: User())
+        .environmentObject(AuthenticationViewModel())
+        .environmentObject(ProfileViewModel())
 }
 

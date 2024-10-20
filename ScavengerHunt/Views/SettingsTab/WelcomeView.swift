@@ -31,31 +31,24 @@ struct WelcomeView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                 HStack(spacing: 16){
-                    NavigationLink(destination: AuthenticationView()
-                        .environmentObject(authVM)) {
-                        Text("Sign In")
+                    NavigationLink(destination: AuthenticationView()) {
+                        Text("Continue to Sign In")
                             .font(.title3)
                             .fontWeight(.medium)
                             .frame(maxWidth: .infinity, maxHeight: 30)
                     }
                     .buttonStyle(.borderedProminent)
-                    .scaleEffect(isLoginButtonPressed ? 1.1 : 1.0)
-                    .animation(.easeInOut(duration: 0.2), value: isLoginButtonPressed)
-                    .onLongPressGesture(minimumDuration: .infinity, maximumDistance: .infinity, pressing: { pressing in
-                        isLoginButtonPressed = pressing
-                    }, perform: { })
                 }
                 Button(action: {
                     Task{
                         await authVM.signInAnonymously()
                     }
                 }, label: {
-                    Text("Continue without account")
-                    Image(systemName: "arrow.forward")
+                    Text("Skip")
                 })
                 .font(.system(size: 18, weight: .medium, design: .default))
-                .foregroundStyle(.primary)
-                .padding(.top)
+                .foregroundStyle(.accent)
+                .padding(.top, 10)
             }
         }
         .padding(.horizontal)
@@ -159,18 +152,16 @@ extension WelcomeView{
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.regularMaterial)
+            .background(.background)
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .shadow(radius: 5)
         }
     }
 }
 
-struct WelcomeView_Preview: PreviewProvider{
-    static var previews: some View{
-        NavigationView{
-            WelcomeView()
-                .environmentObject(AuthenticationViewModel())
-        }
+#Preview{
+    NavigationView{
+        WelcomeView()
+            .environmentObject(AuthenticationViewModel())
     }
 }

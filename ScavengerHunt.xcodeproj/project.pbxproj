@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8B03E16329D471170038CE4E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B03E16229D471170038CE4E /* HomeView.swift */; };
+		8B093A072C7AE0180064B983 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B093A062C7AE0180064B983 /* GoogleService-Info.plist */; };
+		8B093A092C7AE0F00064B983 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 8B093A082C7AE0F00064B983 /* MobileNetV2.mlmodel */; };
+		8B093A0B2C7AE0F70064B983 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 8B093A0A2C7AE0F70064B983 /* YOLOv3.mlmodel */; };
 		8B18A11029EFAE8F00D841A3 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A10F29EFAE8F00D841A3 /* Nuke */; };
 		8B18A11229EFAE8F00D841A3 /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A11129EFAE8F00D841A3 /* NukeExtensions */; };
 		8B18A11429EFAE8F00D841A3 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B18A11329EFAE8F00D841A3 /* NukeUI */; };
@@ -22,8 +25,6 @@
 		8B458ADE29F8002100857CEA /* EditGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B458ADD29F8002100857CEA /* EditGameView.swift */; };
 		8B51A7642A24754C00184C29 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51A7632A24754C00184C29 /* ProfileView.swift */; };
 		8B51A7662A247F4100184C29 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51A7652A247F4100184C29 /* ProfileViewModel.swift */; };
-		8B5FFBDA2B353AA600562641 /* MobileNetV2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 8B5FFBD92B353AA600562641 /* MobileNetV2.mlmodel */; };
-		8B5FFBDC2B353DFA00562641 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 8B5FFBDB2B353DFA00562641 /* YOLOv3.mlmodel */; };
 		8B5FFBDE2B35DBB000562641 /* LiveGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5FFBDD2B35DBB000562641 /* LiveGameViewModel.swift */; };
 		8B6397E82A1DCC0600D93F71 /* AddItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6397E72A1DCC0600D93F71 /* AddItemsViewModel.swift */; };
 		8B66290329E7E6060046DECD /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B66290229E7E6060046DECD /* ImagePicker.swift */; };
@@ -72,12 +73,14 @@
 		8BCFB9BB29E1C5010014422F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BCFB9B629E1C45A0014422F /* MapKit.framework */; };
 		8BCFB9BF29E3EC250014422F /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCFB9BE29E3EC250014422F /* LocationService.swift */; };
 		8BD2FBCF2B180BD50046D46B /* VideoCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2FBCE2B180BD50046D46B /* VideoCaptureView.swift */; };
-		8BF8360A2A8EEB0C00A280FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8B03E16229D471170038CE4E /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8B07F55F29D45A0500D54F94 /* ScavengerHunt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScavengerHunt.entitlements; sourceTree = "<group>"; };
+		8B093A062C7AE0180064B983 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8B093A082C7AE0F00064B983 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
+		8B093A0A2C7AE0F70064B983 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
 		8B1E568F29E5658700C1DE36 /* MapIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapIcon.swift; sourceTree = "<group>"; };
 		8B23F0002A7011D000EA9C9B /* AuthenticatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedView.swift; sourceTree = "<group>"; };
 		8B23F0022A70121F00EA9C9B /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
@@ -88,8 +91,6 @@
 		8B458ADD29F8002100857CEA /* EditGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGameView.swift; sourceTree = "<group>"; };
 		8B51A7632A24754C00184C29 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		8B51A7652A247F4100184C29 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
-		8B5FFBD92B353AA600562641 /* MobileNetV2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = MobileNetV2.mlmodel; sourceTree = "<group>"; };
-		8B5FFBDB2B353DFA00562641 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
 		8B5FFBDD2B35DBB000562641 /* LiveGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveGameViewModel.swift; sourceTree = "<group>"; };
 		8B6397E72A1DCC0600D93F71 /* AddItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemsViewModel.swift; sourceTree = "<group>"; };
 		8B66290229E7E6060046DECD /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -132,7 +133,6 @@
 		8BCFB9B629E1C45A0014422F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		8BCFB9BE29E3EC250014422F /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		8BD2FBCE2B180BD50046D46B /* VideoCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCaptureView.swift; sourceTree = "<group>"; };
-		8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,8 +171,8 @@
 				8B03E16629D5371A0038CE4E /* Modifiers */,
 				8B7E43982A7B3D19006FB5B8 /* LaunchScreen.storyboard */,
 				8B3558BF2A9172F1007267EF /* TabBarView.swift */,
-				8B5FFBD92B353AA600562641 /* MobileNetV2.mlmodel */,
-				8B5FFBDB2B353DFA00562641 /* YOLOv3.mlmodel */,
+				8B093A082C7AE0F00064B983 /* MobileNetV2.mlmodel */,
+				8B093A0A2C7AE0F70064B983 /* YOLOv3.mlmodel */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -297,7 +297,7 @@
 		8BBDE0A129D458C600A694B2 /* ScavengerHunt */ = {
 			isa = PBXGroup;
 			children = (
-				8BF836092A8EEB0B00A280FD /* GoogleService-Info.plist */,
+				8B093A062C7AE0180064B983 /* GoogleService-Info.plist */,
 				8BBD5FA42A27CA8800350785 /* Configs */,
 				8BCFB9B429E188CB0014422F /* Info.plist */,
 				8BB970FD29DA9F9600D69BCF /* Services */,
@@ -411,7 +411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BBDE0AA29D458C800A694B2 /* Preview Assets.xcassets in Resources */,
-				8BF8360A2A8EEB0C00A280FD /* GoogleService-Info.plist in Resources */,
+				8B093A072C7AE0180064B983 /* GoogleService-Info.plist in Resources */,
 				8BBDE0A729D458C800A694B2 /* Assets.xcassets in Resources */,
 				8B7E43992A7B3D19006FB5B8 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -464,7 +464,7 @@
 				8BB970FA29DA0BA600D69BCF /* Game.swift in Sources */,
 				8BB9710D29DAAA6500D69BCF /* CardView.swift in Sources */,
 				8BB970FC29DA10BD00D69BCF /* Modifiers.swift in Sources */,
-				8B5FFBDA2B353AA600562641 /* MobileNetV2.mlmodel in Sources */,
+				8B093A092C7AE0F00064B983 /* MobileNetV2.mlmodel in Sources */,
 				8B86A8E12A2AAD2800900909 /* LoginView.swift in Sources */,
 				8B90DF9529DD59A7008FE03A /* ReusableViews.swift in Sources */,
 				8B1E569029E5658700C1DE36 /* MapIcon.swift in Sources */,
@@ -476,7 +476,7 @@
 				8B66290529EEC2800046DECD /* ImageView.swift in Sources */,
 				8BB9710129DA9FCD00D69BCF /* ApiService.swift in Sources */,
 				8B2D03C42A27302B00CDEBBA /* CircleMap.swift in Sources */,
-				8B5FFBDC2B353DFA00562641 /* YOLOv3.mlmodel in Sources */,
+				8B093A0B2C7AE0F70064B983 /* YOLOv3.mlmodel in Sources */,
 				8BB9712029DB3DA100D69BCF /* PlayGameViewModel.swift in Sources */,
 				8B458ADE29F8002100857CEA /* EditGameView.swift in Sources */,
 				8BB970F829DA0B7F00D69BCF /* GameDetailView.swift in Sources */,
@@ -624,6 +624,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ScavengerHunt/ScavengerHunt.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ScavengerHunt/Preview Content\"";
@@ -647,8 +648,8 @@
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -670,6 +671,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ScavengerHunt/ScavengerHunt.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ScavengerHunt/Preview Content\"";
@@ -693,8 +695,8 @@
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
